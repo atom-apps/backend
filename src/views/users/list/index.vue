@@ -3,10 +3,12 @@
     <Breadcrumb :items="['menu.list', 'menu.list.searchTable']" />
 
     <a-card class="general-card" title="用户列表">
+      <Query ref="queryForm" @search="search" />
+
       <a-row style="margin-bottom: 16px">
         <a-col :span="12">
           <a-space>
-            <ActionCreate :to="{'name':'Workplace'}"/>
+            <ActionCreate :to="{ 'name': 'Workplace' }" />
             <ActionImport />
           </a-space>
         </a-col>
@@ -14,12 +16,12 @@
           <ActionExport />
           <ActionRefresh @click="search" />
           <ActionDensity v-model:size="size" />
-          <ActionColumn :columns="columns" v-model:clone="tableColumns"/>
+          <ActionColumn :columns="columns" v-model:clone="tableColumns" />
         </a-col>
       </a-row>
 
-      <a-table row-key="id" :loading="loading" :pagination="pagination" :columns="tableColumns"
-        :data="renderData" :bordered="false" :size="size" @page-change="onPageChange">
+      <a-table row-key="id" :loading="loading" :pagination="pagination" :columns="tableColumns" :data="renderData"
+        :bordered="false" :size="size" @page-change="onPageChange">
       </a-table>
     </a-card>
   </div>
@@ -32,10 +34,11 @@ import { SizeProps } from '@/components/table/types';
 import useLoading from "@/hooks/loading";
 import { Pagination } from "@/types/global";
 import type { TableColumnData } from "@arco-design/web-vue/es/table/interface";
-import { computed, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref } from "vue";
+import Query from "./query.vue";
 
 const size = ref<SizeProps>("large");
-
+const queryForm = ref();
 
 const columns = computed<TableColumnData[]>(() => [
   { title: "ID", dataIndex: "id", slotName: "index" },
@@ -54,20 +57,9 @@ const columns = computed<TableColumnData[]>(() => [
 const tableColumns = ref(columns);
 
 
-const generateFormModel = () => {
-  return {
-    number: "",
-  };
-};
-const formModel = ref(generateFormModel());
-const reset = () => {
-  formModel.value = generateFormModel();
-};
 const search = () => {
-  fetchData(({ ...basePagination, ...formModel.value } as unknown) as UserListQuery);
+  fetchData(({ ...basePagination, ...queryForm.value?.formModel } as unknown) as UserListQuery);
 };
-
-
 
 const { loading, setLoading } = useLoading(true);
 const renderData = ref<UserItem[]>([]);
@@ -96,7 +88,9 @@ const onPageChange = (page: number) => {
   fetchData({ ...basePagination, page });
 };
 
-fetchData();
+onMounted(() => {
+  fetchData();
+});
 
 </script>
 

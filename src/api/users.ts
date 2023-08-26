@@ -30,5 +30,5 @@ export interface UserItem {
 
 
 export function queryUserList(params: UserListQuery) {
-  return axios.get<PaginationResp<UserItem>>('/v1/users');
+  return axios.get<PaginationResp<UserItem>>('/v1/users', { params });
 }
