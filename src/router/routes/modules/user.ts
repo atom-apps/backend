@@ -2,24 +2,23 @@ import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
 const DASHBOARD: AppRouteRecordRaw = {
-  path: '/dashboard',
-  name: 'dashboard',
+  path: '/users',
+  name: 'user',
   component: DEFAULT_LAYOUT,
   meta: {
-    locale: 'menu.dashboard',
+    locale: 'menu.users',
     requiresAuth: true,
-    icon: 'icon-dashboard',
+    icon: 'icon-user',
     order: 0,
   },
   children: [
     {
-      path: 'workplace',
-      name: 'Workplace',
-      component: () => import('@/views/dashboard/workplace/index.vue'),
+      path: '',
+      name: 'UserList',
+      component: () => import('@/views/users/list/index.vue'),
       meta: {
-        locale: 'menu.dashboard.workplace',
+        locale: 'menu.users.list',
         requiresAuth: true,
-    icon: 'icon-computer',
       },
     },
   ],

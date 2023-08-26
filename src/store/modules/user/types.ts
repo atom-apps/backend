@@ -10,4 +10,5 @@ export interface UserProfile {
   phone?: string;
   displayName?: string;
   avatar?: string;
+  status?: string;
 }

@@ -25,4 +25,8 @@ export default {
   ...localeMessageBox,
   ...localeLogin,
   ...localeWorkplace,
+
+  // users
+  'menu.users': '用户管理',
+  'menu.users.list': '用户列表',
 };
