@@ -9,7 +9,7 @@
               <icon-drag-arrow />
             </div>
             <div>
-              <a-checkbox v-model="item.checked" @change="handleChange($event, item as TableColumnData, index)" />
+              <a-checkbox v-model="item.checked" @change="handleChange" />
             </div>
             <div class="ml-2 cursor-pointer">
               {{ item.title === "#" ? "序列号" : item.title }}
@@ -45,15 +45,7 @@ const emit = defineEmits(['update:clone']);
 
 const showColumns = ref<Column[]>([]);
 
-
-const handleChange = (
-  checked: boolean | (string | boolean | number)[],
-  column: Column,
-  index: number
-) => {
-  emit('update:clone', showColumns.value.filter((item) => item.checked ))
-};
-
+const handleChange = () => emit('update:clone', showColumns.value.filter((item) => item.checked ))
 const popupVisibleChange = (val: boolean) => {
   if (val) {
     nextTick(() => {
