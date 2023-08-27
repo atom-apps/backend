@@ -4,7 +4,7 @@
       <div class="action-icon"><icon-settings size="18" /></div>
       <template #content>
         <div id="tableSetting">
-          <div v-for="(item, index) in showColumns" :key="item.dataIndex" class="setting">
+          <div v-for="(item, index) in showColumns" :key="item.dataIndex" class="flex items-center">
             <div style="margin-right: 4px; cursor: move">
               <icon-drag-arrow />
             </div>
@@ -14,7 +14,7 @@
                 ">
               </a-checkbox>
             </div>
-            <div class="title">
+            <div class="ml-2 cursor-pointer">
               {{ item.title === "#" ? "序列号" : item.title }}
             </div>
           </div>
@@ -61,8 +61,7 @@ const handleChange = (
   } else {
     cloneColumns.value.splice(index, 0, column);
   }
-  emit('update:clone', cloneColumns.value as Column[]);
-  console.log(props.columns,"12313", cloneColumns.value)
+  emit('update:clone', cloneColumns.value);
 };
 
 const popupVisibleChange = (val: boolean) => {
@@ -99,23 +98,10 @@ watch(
   (val) => {
     cloneColumns.value = cloneDeep(val);
     cloneColumns.value.forEach((item, index) => {
-      item.checked = true;
+      item.checked = !item.hidden;
     });
     showColumns.value = cloneDeep(cloneColumns.value);
   },
   { deep: true, immediate: true }
 );
 </script>
-
-<style scoped lang="less">
-.setting {
-  display: flex;
-  align-items: center;
-  width: 200px;
-
-  .title {
-    margin-left: 12px;
-    cursor: pointer;
-  }
-}
-</style>

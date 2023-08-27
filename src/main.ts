@@ -12,6 +12,7 @@ import store from './store';
 // https://arco.design/docs/designlab/use-theme-package
 import '@/api/interceptor';
 import '@/assets/style/global.less';
+import './style.css';
 
 const app = createApp(App);
 
