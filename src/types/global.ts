@@ -1,5 +1,5 @@
 export interface AnyObject {
-  [key: string]: unknown;
+  [key: string]: any;
 }
 
 export interface Options {
@@ -49,3 +49,25 @@ export interface GeneralChart {
   data: Array<{ name: string; value: number[] }>;
 }
 
+export interface LabelItem {
+  label: string;
+  value: string;
+}
+
+export enum FilterType {
+  String = 'string',
+  Number = 'number',
+  List = 'list',
+  Date = 'date',
+  Bool = 'bool'
+}
+
+export interface Filter {
+  type: FilterType;
+  label: string;
+  name: string;
+  value?: string; // 使用 ? 表示此属性是可选的
+  items?: LabelItem[]; // 同样是可选的
+}
+
+export const BoolOptions = [{ label: '是', value: 'true' }, { label: '否', value: 'false' }]

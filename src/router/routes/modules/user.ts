@@ -13,12 +13,32 @@ const DASHBOARD: AppRouteRecordRaw = {
   },
   children: [
     {
-      path: '',
+      path: 'list',
       name: 'UserList',
       component: () => import('@/views/users/list/index.vue'),
       meta: {
         locale: 'menu.users.list',
         requiresAuth: true,
+      },
+    },
+    {
+      path: 'view/:id',
+      name: 'UserView',
+      component: () => import('@/views/users/view/index.vue'),
+      meta: {
+        locale: 'menu.users.view',
+        requiresAuth: true,
+        hideInMenu: true,
+      },
+    },
+    {
+      path: 'edit/:id',
+      name: 'UserEdit',
+      component: () => import('@/views/users/edit/index.vue'),
+      meta: {
+        locale: 'menu.users.edit',
+        requiresAuth: true,
+        hideInMenu: true,
       },
     },
   ],

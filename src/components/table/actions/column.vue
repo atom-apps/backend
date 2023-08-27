@@ -9,10 +9,7 @@
               <icon-drag-arrow />
             </div>
             <div>
-              <a-checkbox v-model="item.checked" @change="
-                handleChange($event, item as TableColumnData, index)
-                ">
-              </a-checkbox>
+              <a-checkbox v-model="item.checked" @change="handleChange($event, item as TableColumnData, index)" />
             </div>
             <div class="ml-2 cursor-pointer">
               {{ item.title === "#" ? "序列号" : item.title }}
@@ -40,12 +37,12 @@ import { nextTick, ref, watch } from 'vue';
 
 const props = defineProps<{
   columns: TableColumnData[],
+  hidden: string[],
   clone: Column[],
 }>();
 
 const emit = defineEmits(['update:clone']);
 
-const cloneColumns = ref<Column[]>([]);
 const showColumns = ref<Column[]>([]);
 
 
@@ -54,14 +51,7 @@ const handleChange = (
   column: Column,
   index: number
 ) => {
-  if (!checked) {
-    cloneColumns.value = showColumns.value.filter(
-      (item) => item.dataIndex !== column.dataIndex
-    );
-  } else {
-    cloneColumns.value.splice(index, 0, column);
-  }
-  emit('update:clone', cloneColumns.value);
+  emit('update:clone', showColumns.value.filter((item) => item.checked ))
 };
 
 const popupVisibleChange = (val: boolean) => {
@@ -71,8 +61,8 @@ const popupVisibleChange = (val: boolean) => {
       const sortable = new Sortable(el, {
         onEnd(e: any) {
           const { oldIndex, newIndex } = e;
-          exchangeArray(cloneColumns.value, oldIndex, newIndex);
           exchangeArray(showColumns.value, oldIndex, newIndex);
+          emit('update:clone', showColumns.value.filter((item) => item.checked ))
         },
       });
     });
@@ -96,11 +86,10 @@ const exchangeArray = <T extends Array<any>>(
 watch(
   () => props.columns,
   (val) => {
-    cloneColumns.value = cloneDeep(val);
-    cloneColumns.value.forEach((item, index) => {
-      item.checked = !item.hidden;
+    showColumns.value = cloneDeep(val);
+    showColumns.value.forEach((item, index) => {
+      item.checked = !props.hidden.includes(item.dataIndex ?? '')
     });
-    showColumns.value = cloneDeep(cloneColumns.value);
   },
   { deep: true, immediate: true }
 );
