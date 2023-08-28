@@ -1,12 +1,5 @@
 <template>
-  <a-space direction="vertical" size="large" class="w-full" v-if="columnLoading">
-    <a-skeleton :animation="true">
-      <a-space direction="vertical" class="w-full" size="large">
-        <a-skeleton-line :rows="3" />
-      </a-space>
-    </a-skeleton>
-  </a-space>
-
+  <div>
   <a-page-header title="用户管理" subtitle="用户列表" :show-back="false" class="bg-white">
     <template #breadcrumb>
       <a-breadcrumb>
@@ -28,8 +21,18 @@
   </a-page-header>
 
 
-  <a-card class="m-5">
+  <a-card class="m-5 pt-5">
     <Query ref="queryForm" @search="fetchData" />
+  </a-card>
+
+  <a-card class="m-5" v-if="columnLoading">
+  <a-space direction="vertical" size="large" class="w-full" >
+    <a-skeleton :animation="true">
+      <a-space direction="vertical" class="w-full" size="large">
+        <a-skeleton-line :rows="3" />
+      </a-space>
+    </a-skeleton>
+  </a-space>
   </a-card>
 
 
@@ -52,6 +55,7 @@
       </template>
     </a-table>
   </a-card>
+  </div>
 </template>
 
 <script lang="ts" setup>
