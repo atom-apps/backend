@@ -51,7 +51,6 @@
             </a-space>
         </a-col>
     </a-row>
-    <a-divider />
 </template>
 
 
