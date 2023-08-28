@@ -85,8 +85,8 @@ const fetchColumns = async () => {
   try {
     const { data } = await getColumns();
     columns.value = cloneDeep(data.columns);
-    hiddenColumns.value = data.hidden;
-    tableColumns.value = data.columns.filter((item: { dataIndex: string; }) => data.hidden.indexOf(item.dataIndex) === -1);
+    hiddenColumns.value = data.hidden??[];
+    tableColumns.value = data.columns.filter((item) => data.hidden?.indexOf(item.dataIndex??"") === -1);
   } catch (err) {
     // you can report use errorHandler or other
   } finally {
