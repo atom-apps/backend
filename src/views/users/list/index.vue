@@ -116,7 +116,7 @@ const pagination = reactive<PaginationProps>({
 });
 
 
-const fetchData = async (pg: Pagination = { current: 1, pageSize: 20 }) => {
+const fetchData = async (pg: Pagination = basePagination) => {
   setLoading(true);
   try {
     const pages = { page: pg.current ?? 0 + 1, limit: pagination.pageSize }
