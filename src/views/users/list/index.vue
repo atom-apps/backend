@@ -129,9 +129,3 @@ const onPageChange = (page: number) => {
 };
 
 </script>
-
-<script lang="ts">
-export default {
-  name: "SearchTable",
-};
-</script>
