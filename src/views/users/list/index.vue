@@ -102,7 +102,7 @@ onMounted(() => {
 const { loading, setLoading } = useLoading(true);
 const renderData = ref<UserItem[]>([]);
 
-const basePagination: Pagination = { current: 2, pageSize: 20 };
+const basePagination: Pagination = { current: 1, pageSize: 20 };
 const pagination = reactive<PaginationProps>({
   ...basePagination,
   showPageSize: true,
@@ -119,6 +119,7 @@ const pagination = reactive<PaginationProps>({
 const fetchData = async (pg: Pagination = basePagination) => {
   setLoading(true);
   try {
+    console.log(pg)
     const pages = { page: pg.current ?? 0 + 1, limit: pagination.pageSize }
     const params = ({ ...pages, ...queryForm.value?.formModel } as unknown) as UserListQuery
     const { data } = await queryUserList(params);
