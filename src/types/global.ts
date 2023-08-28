@@ -1,3 +1,5 @@
+import { TableColumnData } from "@arco-design/web-vue";
+
 export interface AnyObject {
   [key: string]: any;
 }
@@ -29,7 +31,7 @@ export interface Pagination {
   total?: number;
 }
 
-export interface PaginationResp<T>{
+export interface PaginationResp<T> {
   page: number;
   limit: number;
   total?: number;
@@ -71,3 +73,8 @@ export interface Filter {
 }
 
 export const BoolOptions = [{ label: '是', value: 'true' }, { label: '否', value: 'false' }]
+
+export interface Columns {
+  columns: TableColumnData[];
+  hidden?: string[];
+}

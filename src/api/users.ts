@@ -1,5 +1,6 @@
 import { Filter, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
+import { Columns } from './../types/global';
 
 export interface UserListQuery extends Pagination {
   createdAt?: Date;
@@ -37,4 +38,8 @@ export function deleteUser(id: number) {
 
 export function getUserListQueryFilters() {
   return axios.get<Filter[]>(`/v1/users/filters`);
+}
+
+export function getColumns() {
+  return axios.get<Columns>(`/v1/users/columns`);
 }

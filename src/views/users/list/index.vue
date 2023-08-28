@@ -1,6 +1,17 @@
 <template>
-  <div class="mx-5 my-5 mt-0">
+  <a-space direction="vertical" size="large" class="w-full" v-if="columnLoading">
+    <a-skeleton :animation="true">
+      <a-space direction="vertical" class="w-full" size="large">
+        <a-skeleton-line :rows="3" />
+      </a-space>
+    </a-skeleton>
+  </a-space>
+
+
+  <div class="mx-5 my-5 mt-0" v-else>
+
     <Breadcrumb :items="['menu.list', 'menu.list.searchTable']" />
+
     <a-card class="general-card" title="用户列表">
       <Query ref="queryForm" @search="fetchData" />
       <a-row class="mb-5">
@@ -19,6 +30,7 @@
           </a-space>
         </a-col>
       </a-row>
+
 
       <a-table row-key="id" :loading="loading" :pagination="pagination" :columns="tableColumns" :data="renderData"
         :bordered="false" :size="size" @page-change="onPageChange">
@@ -44,14 +56,15 @@
 </template>
 
 <script lang="ts" setup>
-import { UserItem, UserListQuery, queryUserList } from "@/api/users";
+import { UserItem, UserListQuery, getColumns, queryUserList } from "@/api/users";
 import { ActionColumn, ActionCreate, ActionDensity, ActionExport, ActionImport, ActionRefresh, } from "@/components/table/action";
 import { SizeProps } from '@/components/table/types';
 import useDatetime from '@/hooks/datetime';
 import useLoading from "@/hooks/loading";
 import { Pagination } from "@/types/global";
 import { TableColumnData } from "@arco-design/web-vue";
-import { computed, onMounted, reactive, ref } from "vue";
+import { cloneDeep } from 'lodash';
+import { onMounted, reactive, ref } from "vue";
 import Operations from "./operations.vue";
 import Query from "./query.vue";
 
@@ -61,35 +74,32 @@ const { date } = useDatetime();
 const size = ref<SizeProps>("large");
 const queryForm = ref();
 
-const columns = [
-  { title: "ID", dataIndex: "id" },
-  { title: "UUID", dataIndex: "uuid", slotName: "uuid" },
-  { title: "昵称", dataIndex: "display_name" },
-  { title: "名称", dataIndex: "username" },
-  { title: "状态", align: 'center', dataIndex: "status" },
-  { title: "Email", dataIndex: "email" },
-  { title: "电话", dataIndex: "phone" },
-  { title: "创建时间", dataIndex: "created_at" },
-  { title: "更新时间", dataIndex: "updated_at" },
-  { title: "操作", dataIndex: "operations", align: 'right' },
-].map((item) => {
-  let i = item as TableColumnData
-  if (!i.slotName) {
-    i.slotName = i.dataIndex
+const columns = ref<TableColumnData[]>([]);
+const hiddenColumns = ref<string[]>([]);
+const tableColumns = ref<TableColumnData[]>([]);
+
+// load columns
+const { loading: columnLoading, setLoading: setColumnLoading } = useLoading(true);
+const fetchColumns = async () => {
+  setColumnLoading(true);
+  try {
+    const { data } = await getColumns();
+    columns.value = cloneDeep(data.columns);
+    hiddenColumns.value = data.hidden;
+    tableColumns.value = data.columns.filter((item: { dataIndex: string; }) => data.hidden.indexOf(item.dataIndex) === -1);
+  } catch (err) {
+    // you can report use errorHandler or other
+  } finally {
+    setColumnLoading(false);
   }
-  return i
-});
-
-const hiddenColumns = computed<string[]>(() => {
-  return ['uuid', 'created_at'];
-});
-
-const showColumns = computed<TableColumnData[]>(() => {
-  return columns.filter((item) => !hiddenColumns.value.includes(item.dataIndex??''));
-});
-const tableColumns = ref<TableColumnData[]>(showColumns.value);
+}
+onMounted(() => {
+  fetchColumns();
+  fetchData();
+})
 
 
+// fetch table data
 const { loading, setLoading } = useLoading(true);
 const renderData = ref<UserItem[]>([]);
 
@@ -117,11 +127,6 @@ const fetchData = async () => {
 const onPageChange = (page: number) => {
   fetchData();
 };
-
-onMounted(() => {
-  fetchData();
-});
-
 
 </script>
 
