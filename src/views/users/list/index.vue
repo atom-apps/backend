@@ -33,22 +33,25 @@
   </a-card>
 
 
-  <a-table class="m-5" row-key="id" :loading="loading" :pagination="pagination" :columns="tableColumns" :data="renderData"
-    :bordered="false" :size="size" @page-change="onPageChange">
-    <template #created_at="{ record }"> {{ date(record.created_at) }} </template>
-    <template #updated_at="{ record }"> {{ date(record.updated_at) }} </template>
-    <template #status="{ record }">
-      <a-badge status="danger" v-if="record.status == 'blocked'" />
-      <a-badge status="normal" v-else :text="record.status" />
-    </template>
-    <template #email="{ record }">
-      <a-badge status="normal" v-if="record.email_verified" :text="record.email" />
-      <a-badge status="warning" v-else :text="record.email" />
-    </template>
-    <template #operations="{ record }">
-      <Operations :record="record" :reload="fetchData" edit="UserEdit" view="UserView" :params="{ id: record.id }" />
-    </template>
-  </a-table>
+  <a-card class="m-5">
+    <a-table row-key="id" :hoverable="true" :stripe="true" :row-selection="rowSelection"
+      v-model:selectedKeys="selectedKeys" :loading="loading" :pagination="pagination" :columns="tableColumns"
+      :data="renderData" :bordered="false" :size="size" @page-change="onPageChange">
+      <template #created_at="{ record }"> {{ date(record.created_at) }} </template>
+      <template #updated_at="{ record }"> {{ date(record.updated_at) }} </template>
+      <template #status="{ record }">
+        <a-badge status="danger" v-if="record.status == 'blocked'" />
+        <a-badge status="normal" v-else :text="record.status" />
+      </template>
+      <template #email="{ record }">
+        <a-badge status="normal" v-if="record.email_verified" :text="record.email" />
+        <a-badge status="warning" v-else :text="record.email" />
+      </template>
+      <template #operations="{ record }">
+        <Operations :record="record" :reload="fetchData" edit="UserEdit" view="UserView" :params="{ id: record.id }" />
+      </template>
+    </a-table>
+  </a-card>
 </template>
 
 <script lang="ts" setup>
@@ -58,7 +61,7 @@ import { SizeProps } from '@/components/table/types';
 import useDatetime from '@/hooks/datetime';
 import useLoading from "@/hooks/loading";
 import { Pagination } from "@/types/global";
-import { TableColumnData } from "@arco-design/web-vue";
+import { PaginationProps, TableColumnData, TableRowSelection } from "@arco-design/web-vue";
 import { cloneDeep } from 'lodash';
 import { onMounted, reactive, ref } from "vue";
 import Operations from "./operations.vue";
@@ -91,7 +94,7 @@ const fetchColumns = async () => {
 }
 onMounted(() => {
   fetchColumns();
-  fetchData();
+  fetchData(basePagination);
 })
 
 
@@ -99,19 +102,28 @@ onMounted(() => {
 const { loading, setLoading } = useLoading(true);
 const renderData = ref<UserItem[]>([]);
 
-const basePagination: Pagination = { page: 1, limit: 20 };
-const pagination = reactive({
+const basePagination: Pagination = { current: 2, pageSize: 20 };
+const pagination = reactive<PaginationProps>({
   ...basePagination,
+  showPageSize: true,
+  showJumper: true,
+  showTotal: true,
+  simple: false,
+  hideOnSinglePage: true,
+  showMore: true,
+  defaultCurrent: 1,
+  defaultPageSize: 20,
 });
 
 
-const fetchData = async () => {
+const fetchData = async (pg: Pagination = { current: 1, pageSize: 20 }) => {
   setLoading(true);
   try {
-    const params = ({ ...basePagination, ...queryForm.value?.formModel } as unknown) as UserListQuery
+    const pages = { page: pg.current ?? 0 + 1, limit: pagination.pageSize }
+    const params = ({ ...pages, ...queryForm.value?.formModel } as unknown) as UserListQuery
     const { data } = await queryUserList(params);
     renderData.value = data.items;
-    pagination.page = params.page;
+    pagination.current = data.page;
     pagination.total = data.total;
   } catch (err) {
     // you can report use errorHandler or other
@@ -120,8 +132,17 @@ const fetchData = async () => {
   }
 };
 
-const onPageChange = (page: number) => {
-  fetchData();
+const onPageChange = (current: number) => {
+  fetchData({ current });
 };
+
+// row selection
+const selectedKeys = ref([]);
+
+const rowSelection = reactive<TableRowSelection>({
+  type: 'checkbox',
+  showCheckedAll: true,
+  onlyCurrent: false,
+});
 
 </script>
