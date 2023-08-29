@@ -32,6 +32,15 @@ export function queryUserList(params: UserListQuery) {
   return axios.get<PaginationResp<UserItem>>('/v1/users', { params });
 }
 
+
+export function getUserProfile(id: number) {
+  return axios.get(`/v1/users/${id}`);
+}
+
+export function getUserProfileLabel(id: number) {
+  return axios.get(`/v1/users/${id}/label`);
+}
+
 export function deleteUser(id: number) {
   return axios.delete(`/v1/users/${id}`);
 }
