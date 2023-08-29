@@ -1,12 +1,12 @@
 <script lang="tsx">
-  import { defineComponent, ref, h, compile, computed } from 'vue';
-  import { useI18n } from 'vue-i18n';
-  import { useRoute, useRouter, RouteRecordRaw } from 'vue-router';
-  import type { RouteMeta } from 'vue-router';
   import { useAppStore } from '@/store';
-  import { listenerRouteChange } from '@/utils/route-listener';
-  import { openWindow, regexUrl } from '@/utils';
-  import useMenuTree from './use-menu-tree';
+import { openWindow, regexUrl } from '@/utils';
+import { listenerRouteChange } from '@/utils/route-listener';
+import { compile, computed, defineComponent, h, ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import type { RouteMeta } from 'vue-router';
+import { RouteRecordRaw, useRoute, useRouter } from 'vue-router';
+import useMenuTree from './use-menu-tree';
 
   export default defineComponent({
     emit: ['collapse'],
@@ -103,7 +103,7 @@
                     key={element?.name}
                     v-slots={{
                       icon,
-                      title: () => h(compile(t(element?.meta?.locale || ''))),
+                      title: () => h(compile(element?.meta?.title || '')),
                     }}
                   >
                     {travel(element?.children)}
@@ -114,7 +114,7 @@
                     v-slots={{ icon }}
                     onClick={() => goto(element)}
                   >
-                    {t(element?.meta?.locale || '')}
+                    {t(element?.meta?.title || '')}
                   </a-menu-item>
                 );
               nodes.push(node as never);
@@ -146,15 +146,16 @@
 </script>
 
 <style lang="less" scoped>
-  :deep(.arco-menu-inner) {
-    .arco-menu-inline-header {
-      display: flex;
-      align-items: center;
-    }
-    .arco-icon {
-      &:not(.arco-icon-down) {
-        font-size: 18px;
-      }
+:deep(.arco-menu-inner) {
+  .arco-menu-inline-header {
+    display: flex;
+    align-items: center;
+  }
+
+  .arco-icon {
+    &:not(.arco-icon-down) {
+      font-size: 18px;
     }
   }
+}
 </style>
