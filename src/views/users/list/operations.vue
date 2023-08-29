@@ -21,7 +21,7 @@
 
 
 <script lang="ts" setup>
-import { deleteUser } from "@/api/users";
+import { deleteUserItem } from "@/api/users";
 import useLoading from "@/hooks/loading";
 
 const props = defineProps<{
@@ -37,7 +37,7 @@ const { loading, setLoading } = useLoading();
 const handleOk = async (id: number) => {
     try {
         setLoading(true);
-        await deleteUser(props.record.id)
+        await deleteUserItem(props.record.id)
 
         props.reload()
     } catch (e) {

@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteUser, getUserProfile, getUserProfileLabel } from '@/api/users';
+import { deleteUserItem, getUserItem, getUserItemLabel } from '@/api/users';
 import Container from '@/components/container.vue';
 import PageHeader from '@/components/page-header.vue';
 import useLoading from '@/hooks/loading';
@@ -38,10 +38,10 @@ const userInfo = ref<UserProfile>({});
 const fetchData = async () => {
   try {
     setLoading(true);
-    const { data: profile } = await getUserProfile(Number(route.params.id))
+    const { data: profile } = await getUserItem(Number(route.params.id))
     userInfo.value = profile
 
-    const { data: labels } = await getUserProfileLabel(Number(route.params.id))
+    const { data: labels } = await getUserItemLabel(Number(route.params.id))
     renderData.value = labels
   } catch (e) {
 
@@ -58,7 +58,7 @@ const { loading: deleting, setLoading: setDeleting } = useLoading();
 const handleConfirmDelete = async () => {
   try {
     setDeleting(true);
-    await deleteUser(Number(route.params.id))
+    await deleteUserItem(Number(route.params.id))
 
     Message.success('删除成功');
     router.back()

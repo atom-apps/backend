@@ -16,14 +16,14 @@ export interface UserListQuery extends Pagination {
 
 export interface UserItem {
   id?: number;
-  createdAt?: Date;
-  updatedAt?: Date;
+  created_at?: Date;
+  updated_at?: Date;
   uuid?: string;
   username?: string;
   email?: string;
-  emailVerified?: boolean;
+  email_verified?: boolean;
   phone?: string;
-  displayName?: string;
+  display_name?: string;
   avatar?: string;
   status?: string;
 }
@@ -32,16 +32,19 @@ export function queryUserList(params: UserListQuery) {
   return axios.get<PaginationResp<UserItem>>('/v1/users', { params });
 }
 
+export function updateUserItem(id: number, data: UserItem) {
+  return axios.put(`/v1/users/${id}`, data);
+}
 
-export function getUserProfile(id: number) {
+export function getUserItem(id: number) {
   return axios.get(`/v1/users/${id}`);
 }
 
-export function getUserProfileLabel(id: number) {
+export function getUserItemLabel(id: number) {
   return axios.get(`/v1/users/${id}/label`);
 }
 
-export function deleteUser(id: number) {
+export function deleteUserItem(id: number) {
   return axios.delete(`/v1/users/${id}`);
 }
 
