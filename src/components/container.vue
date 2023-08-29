@@ -11,8 +11,15 @@
     </a-card>
 </template>
 <script lang="ts" setup>
-defineProps<{
-    loading: boolean;
-    rows: number;
-}>();
+defineProps({
+    loading: {
+        type: Boolean,
+        default: false,
+    },
+    rows: {
+        type: Number,
+        default: 0,
+    }
+})
+
 </script>

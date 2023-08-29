@@ -32,6 +32,10 @@ export function queryUserList(params: UserListQuery) {
   return axios.get<PaginationResp<UserItem>>('/v1/users', { params });
 }
 
+export function createUserItem(data: UserItem) {
+  return axios.post(`/v1/users`, data);
+}
+
 export function updateUserItem(id: number, data: UserItem) {
   return axios.put(`/v1/users/${id}`, data);
 }

@@ -41,6 +41,16 @@ const DASHBOARD: AppRouteRecordRaw = {
         hideInMenu: true,
       },
     },
+    {
+      path: 'create',
+      name: 'UserCreate',
+      component: () => import('@/views/users/create/index.vue'),
+      meta: {
+        locale: 'menu.users.create',
+        requiresAuth: true,
+        hideInMenu: true,
+      },
+    },
   ],
 };
 
