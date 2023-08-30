@@ -37,12 +37,17 @@ export const tableUserFilters = (): Filter[] => {
   return [
     { type: FilterType.List, name: "ids", label: "ID" },
     { type: FilterType.Date, name: 'created_at', label: '创建时间' },
+    { type: FilterType.Date, name: 'updated_at', label: '更新时间' },
+    { type: FilterType.Date, name: 'deleted_at', label: '删除时间' },
+    { type: FilterType.String, name: 'uuid', label: 'UUID' },
     { type: FilterType.String, name: 'username', label: '用户名' },
+    { type: FilterType.String, name: 'password', label: '密码' },
     { type: FilterType.String, name: 'email', label: '邮箱' },
     { type: FilterType.Bool, name: 'email_verified', label: '邮箱是否验证' },
     { type: FilterType.String, name: 'phone', label: '手机号' },
     { type: FilterType.String, name: 'display_name', label: '显示名称' },
-    { type: FilterType.String, name: 'status', label: '状态' },
+    { type: FilterType.String, name: 'avatar', label: '头像' },
+    { type: FilterType.String, name: 'status', label: '状态' }, 
   ]
 }
 
@@ -61,8 +66,8 @@ export const tableUserColumns = (): Columns => {
       { title: '手机号', dataIndex: 'phone', slotName: 'phone' },
       { title: '显示名称', dataIndex: 'display_name', slotName: 'display_name' },
       { title: '头像', dataIndex: 'avatar', slotName: 'avatar' },
-      { title: '状态', dataIndex: 'status', slotName: 'status' },
-      { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
+      { title: '状态', dataIndex: 'status', slotName: 'status' }, 
+      { title: '操作', dataIndex: 'operations' ,slotName: 'operations', align:'right' },
     ],
     hidden: [
       'uuid', 'created_at', 'updated_at', 'deleted_at'
@@ -84,7 +89,7 @@ export const tableUserLabels = (): Record<string, string> => {
     'phone': '手机号',
     'display_name': '显示名称',
     'avatar': '头像',
-    'status': '状态',
+    'status': '状态', 
   }
 }
 
