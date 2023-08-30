@@ -5,19 +5,8 @@
     <Container :loading="loading" :rows="3" class="pt-5">
       <a-form :model="form" @submit="handleSubmit" class="md:w-3/4 sm:w-full">
         <!-- form start -->
-          <a-form-item field="name" label="名称">
-            <a-input v-model="form.name" placeholder="请输入名称" />
-          </a-form-item>
-          <a-form-item field="slug" label="唯一标识">
-            <a-input v-model="form.slug" placeholder="请输入唯一标识" />
-          </a-form-item>
-          <a-form-item field="description" label="描述">
-            <a-input v-model="form.description" placeholder="请输入描述" />
-          </a-form-item>
-          <a-form-item field="parent_id" label="父角色">
-            <a-number v-model="form.parent_id" placeholder="请输入父角色" />
-          </a-form-item>
 
+        <FormItems :form="form" />
         <a-form-item>
           <a-button type="primary" html-type="submit" size="large" :loading="submitting">提交</a-button>
         </a-form-item>
@@ -34,6 +23,7 @@ import useLoading from '@/hooks/loading';
 import { Message } from '@arco-design/web-vue';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import FormItems from './form-items.vue';
 
 const route = useRoute();
 const router = useRouter();
