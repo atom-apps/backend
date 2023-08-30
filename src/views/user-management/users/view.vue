@@ -18,11 +18,9 @@
 </template>
 
 <script lang="ts" setup>
-import { deleteUserItem, getUserItem, getUserItemLabel } from '@/api/users';
-import Container from '@/components/container.vue';
-import PageHeader from '@/components/page-header.vue';
+import { UserItem, deleteUserItem, getUserItem, tableUserLabels } from '@/api/users';
+import { Container, PageHeader } from "@/components/layout";
 import useLoading from '@/hooks/loading';
-import { UserProfile } from '@/store/modules/user/types';
 import { DescData, Message } from '@arco-design/web-vue';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
@@ -33,7 +31,8 @@ const router = useRouter();
 
 const { loading, setLoading } = useLoading();
 const renderData = ref<DescData[]>([]);
-const userInfo = ref<UserProfile>({});
+const userInfo = ref<UserItem>({});
+const labels = tableUserLabels();
 
 const fetchData = async () => {
   try {
@@ -41,8 +40,16 @@ const fetchData = async () => {
     const { data: profile } = await getUserItem(Number(route.params.id))
     userInfo.value = profile
 
-    const { data: labels } = await getUserItemLabel(Number(route.params.id))
-    renderData.value = labels
+    let items:DescData[] = [];
+    for (const key in profile) {
+      if (Object.prototype.hasOwnProperty.call(labels, key)) {
+        items.push({
+          label: labels[key],
+          value: profile[key]
+        }) 
+      }
+    }
+    renderData.value = items;
   } catch (e) {
 
   } finally {

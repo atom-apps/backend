@@ -33,7 +33,7 @@ import { Column } from '@/components/table/types';
 import { TableColumnData } from '@arco-design/web-vue';
 import { cloneDeep } from 'lodash';
 import Sortable from 'sortablejs';
-import { nextTick, ref, watch } from 'vue';
+import { nextTick, onMounted, ref, watch } from 'vue';
 
 const props = defineProps<{
   columns: TableColumnData[],
@@ -85,4 +85,8 @@ watch(
   },
   { deep: true, immediate: true }
 );
+
+onMounted(() => {
+  handleChange()
+});
 </script>

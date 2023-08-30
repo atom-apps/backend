@@ -11,7 +11,7 @@
 defineProps<{
     title: string,
     subtitle: string,
-    back: boolean,
-    loading: boolean
+    back?: boolean,
+    loading?: boolean
 }>();
 </script>

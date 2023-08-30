@@ -21,8 +21,8 @@
 
 
 <script lang="ts" setup>
-import { deleteRoleItem } from "@/api/roles";
 import useLoading from "@/hooks/loading";
+
 
 const props = defineProps<{
     edit: string;
@@ -30,6 +30,7 @@ const props = defineProps<{
     params: any;
     record: any;
     reload: () => void;
+    deleteAction: (id: number) => void;
 }>();
 
 const { loading, setLoading } = useLoading();
@@ -37,8 +38,7 @@ const { loading, setLoading } = useLoading();
 const handleOk = async (id: number) => {
     try {
         setLoading(true);
-        await deleteRoleItem(props.record.id)
-
+        await props.deleteAction(props.record.id)
         props.reload()
     } catch (e) {
         console.log(e)

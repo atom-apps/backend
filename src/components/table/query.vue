@@ -1,11 +1,11 @@
 <template>
-    <Container :loading="loading" :rows="2">
+    <Container>
         <a-row>
             <a-col :flex="1">
                 <a-form :model="formModel" :label-col-props="{ span: 6 }" :wrapper-col-props="{ span: 18 }"
                     label-align="left">
                     <a-row :gutter="16">
-                        <a-col :span="6" v-for="filter in filters">
+                        <a-col :span="8" v-for="filter in filters">
                             <a-form-item :field="filter.name" :label="filter.label">
                                 <template v-if="filter.items">
                                     <a-select v-model="formModel[filter.name]" :options="filter.items"
@@ -51,46 +51,43 @@
 
 
 <script lang="ts" setup>
-import { getUserListQueryFilters } from "@/api/users";
-import Container from "@/components/container.vue";
-import useLoading from "@/hooks/loading";
-import { AnyObject, BoolOptions, Filter, FilterType, Pagination } from "@/types/global";
-import { onMounted, ref } from 'vue';
+import { Container } from "@/components/layout";
+import { AnyObject, BoolOptions, Filter, FilterType } from "@/types/global";
+import { ref } from 'vue';
 
+const props = defineProps<{
+    filters: Filter[];
+}>();
 const emit = defineEmits(['search']);
 
-const basePagination: Pagination = { current: 1, pageSize: 20 };
-const { loading, setLoading } = useLoading(true)
-
-const filters = ref<Filter[]>()
-
-const fetchFilters = async () => {
-    try {
-        setLoading(true)
-        const { data } = await getUserListQueryFilters()
-        filters.value = data
-    } catch (e) {
-        console.log(e)
-    } finally {
-        setLoading(false)
-    }
-}
-
-onMounted(() => {
-    fetchFilters()
-})
-
+const filters = ref<Filter[]>(props.filters)
 
 const generateFormModel = () => {
     let obj: AnyObject = {};
     filters.value?.forEach((item) => {
-        obj[item.name] = item.value ?? '';
+        obj[item.name] = item.value ?? undefined;
     })
     return obj
 };
 
 const formModel = ref<AnyObject>(generateFormModel());
-defineExpose({ formModel });
+
+const filterItems = () => {
+    let obj: AnyObject = {};
+
+    for (const key in formModel.value) {
+        if (Object.prototype.hasOwnProperty.call(formModel.value, key)) {
+            const element = formModel.value[key];
+            if (element === undefined || element === null || element === '') {
+                continue
+            }
+            obj[key] = element
+        }
+        console.log(obj)
+        return obj
+    }
+}
+defineExpose({ filterItems });
 
 const reset = () => {
     formModel.value = generateFormModel();
