@@ -114,7 +114,7 @@ import useMenuTree from './use-menu-tree';
                     v-slots={{ icon }}
                     onClick={() => goto(element)}
                   >
-                    {t(element?.meta?.title || '')}
+                    {element?.meta?.title || ''}
                   </a-menu-item>
                 );
               nodes.push(node as never);
