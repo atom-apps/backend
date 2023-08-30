@@ -1,6 +1,5 @@
-import { Filter, Pagination, PaginationResp } from '@/types/global';
+import { Columns, Filter, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
-import { Columns } from './../types/global';
 
 export interface UserListQuery extends Pagination {
   createdAt?: Date;

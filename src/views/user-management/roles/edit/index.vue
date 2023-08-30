@@ -19,7 +19,7 @@
         </a-form-item>
 
         <a-form-item field="parent_id" label="父级">
-          <a-input v-model="form.parent_id" placeholder="请输入父级" />
+          <a-number v-model="form.parent_id" placeholder="请输入父级" />
         </a-form-item>
 
         <a-form-item>
