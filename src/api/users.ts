@@ -3,18 +3,13 @@ import axios from 'axios';
 
 
 export interface UserListQuery extends Pagination {
-  id?: number; // ID
+  ids?: number[]; // ID
   created_at?: Date; // 创建时间
-  updated_at?: Date; // 更新时间
-  deleted_at?: Date; // 删除时间
-  uuid?: string; // UUID
   username?: string; // 用户名
-  password?: string; // 密码
   email?: string; // 邮箱
   email_verified?: boolean; // 邮箱是否验证
   phone?: string; // 手机号
   display_name?: string; // 显示名称
-  avatar?: string; // 头像
   status?: string; // 状态
 }
 
@@ -36,18 +31,15 @@ export interface UserItem {
 export const tableUserFilters = (): Filter[] => {
   return [
     { type: FilterType.List, name: "ids", label: "ID" },
-    { type: FilterType.Date, name: 'created_at', label: '创建时间' },
-    { type: FilterType.Date, name: 'updated_at', label: '更新时间' },
-    { type: FilterType.Date, name: 'deleted_at', label: '删除时间' },
-    { type: FilterType.String, name: 'uuid', label: 'UUID' },
     { type: FilterType.String, name: 'username', label: '用户名' },
-    { type: FilterType.String, name: 'password', label: '密码' },
+    { type: FilterType.String, name: 'display_name', label: '显示名称' },
     { type: FilterType.String, name: 'email', label: '邮箱' },
     { type: FilterType.Bool, name: 'email_verified', label: '邮箱是否验证' },
     { type: FilterType.String, name: 'phone', label: '手机号' },
-    { type: FilterType.String, name: 'display_name', label: '显示名称' },
-    { type: FilterType.String, name: 'avatar', label: '头像' },
-    { type: FilterType.String, name: 'status', label: '状态' }, 
+    { type: FilterType.String, name: 'status', label: '状态' , items: [
+      { label: '正常', value: '' },
+      { label: 'Blocked', value: 'blocked' },
+    ]}, 
   ]
 }
 
@@ -60,9 +52,8 @@ export const tableUserColumns = (): Columns => {
       { title: '删除时间', dataIndex: 'deleted_at', slotName: 'deleted_at' },
       { title: 'UUID', dataIndex: 'uuid', slotName: 'uuid' },
       { title: '用户名', dataIndex: 'username', slotName: 'username' },
-      { title: '密码', dataIndex: 'password', slotName: 'password' },
       { title: '邮箱', dataIndex: 'email', slotName: 'email' },
-      { title: '邮箱是否验证', dataIndex: 'email_verified', slotName: 'email_verified' },
+      { title: '邮箱验证', dataIndex: 'email_verified', slotName: 'email_verified' },
       { title: '手机号', dataIndex: 'phone', slotName: 'phone' },
       { title: '显示名称', dataIndex: 'display_name', slotName: 'display_name' },
       { title: '头像', dataIndex: 'avatar', slotName: 'avatar' },
@@ -85,7 +76,7 @@ export const tableUserLabels = (): Record<string, string> => {
     'username': '用户名',
     'password': '密码',
     'email': '邮箱',
-    'email_verified': '邮箱是否验证',
+    'email_verified': '邮箱验证',
     'phone': '手机号',
     'display_name': '显示名称',
     'avatar': '头像',
