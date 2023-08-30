@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="INPUT_TITLE" subtitle="列表">
+    <PageHeader title="用户管理" subtitle="角色列表">
       <ActionCreate :to="{ name: 'RoleCreate' }" />
       <ActionImport />
       <ActionExport />
@@ -153,4 +153,3 @@ const rowSelection = reactive<TableRowSelection>({
   onlyCurrent: false,
 });
 </script>
-@/components/table/table@/components/table

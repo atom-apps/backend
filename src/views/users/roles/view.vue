@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="INPUT_TITLE" subtitle="详情" :back="true" :loading="loading">
+    <PageHeader title="用户管理" subtitle="角色详情" :back="true" :loading="loading">
       <a-button type="primary" @click="$router.push({ name: 'RoleEdit', params: { id: route.params.id } })">编辑</a-button>
 
       <a-popconfirm content="确认删除？" type="warning" :ok-loading="deleting" @ok="handleConfirmDelete" position="lt">
@@ -11,8 +11,7 @@
     </PageHeader>
 
     <Container :loading="loading" :rows="2">
-      <a-descriptions :data="renderData" :column="3" :align="{ label: 'right' }" size="large"
-        :title="userInfo.username" />
+      <a-descriptions :data="renderData" :column="3" :align="{ label: 'right' }" size="large" :title="title" />
     </Container>
   </div>
 </template>
@@ -28,6 +27,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
+const title=ref<string>("Title")
 
 const { loading, setLoading } = useLoading();
 const renderData = ref<DescData[]>([]);

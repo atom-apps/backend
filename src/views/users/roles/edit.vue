@@ -1,16 +1,13 @@
 <template>
   <div>
-    <PageHeader title="INPUT_TITLE" subtitle="编辑" :back="true" />
+    <PageHeader title="用户管理" subtitle="角色编辑" :back="true"/>
 
     <Container :loading="loading" :rows="3" class="pt-5">
       <a-form :model="form" @submit="handleSubmit" class="md:w-3/4 sm:w-full">
-        <!-- form start -->
-
         <FormItems :form="form" />
         <a-form-item>
           <a-button type="primary" html-type="submit" size="large" :loading="submitting">提交</a-button>
         </a-form-item>
-        <!-- form end -->
       </a-form>
     </Container>
   </div>

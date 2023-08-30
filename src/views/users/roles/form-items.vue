@@ -11,6 +11,7 @@
   <a-form-item field="parent_id" label="父角色">
     <a-input-number v-model="form.parent_id" placeholder="请输入父角色" />
   </a-form-item>
+          
 </template>
 
 <script lang="ts" setup>
