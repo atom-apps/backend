@@ -1,0 +1,8 @@
+{
+	"folders": [
+		{ "path": "src/views" },
+		{ "path": "src/api" },
+		{ "path": "." },
+	],
+	"settings": {}
+}

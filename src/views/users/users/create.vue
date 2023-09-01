@@ -16,7 +16,7 @@
 </template>
 
 <script lang="ts" setup>
-import { UserItem, createUserItem } from '@/api/users';
+import { UserItem, createUserItem } from '@/api/users/users';
 import { Container, PageHeader } from '@/components/layout';
 import useLoading from '@/hooks/loading';
 import { Message } from '@arco-design/web-vue';

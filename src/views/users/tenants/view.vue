@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { TenantItem, deleteTenantItem, getTenantItem, tableTenantLabels } from '@/api/tenants';
+import { TenantItem, deleteTenantItem, getTenantItem, tableTenantLabels } from '@/api/users/tenants';
 import { Container, PageHeader } from "@/components/layout";
 import useLoading from '@/hooks/loading';
 import { DescData, Message } from '@arco-design/web-vue';

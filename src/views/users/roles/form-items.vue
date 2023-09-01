@@ -15,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { RoleItem } from '@/api/roles';
+import { RoleItem } from '@/api/users/roles';
 
 const props = defineProps<{
   form: RoleItem;

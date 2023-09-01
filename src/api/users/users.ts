@@ -34,7 +34,7 @@ export const tableUserFilters = (): Filter[] => {
     { type: FilterType.String, name: 'username', label: '用户名' },
     { type: FilterType.String, name: 'display_name', label: '显示名称' },
     { type: FilterType.String, name: 'email', label: '邮箱' },
-    { type: FilterType.Bool, name: 'email_verified', label: '邮箱是否验证' },
+    { type: FilterType.Bool, name: 'email_verified', label: '邮箱验证' },
     { type: FilterType.String, name: 'phone', label: '手机号' },
     { type: FilterType.String, name: 'status', label: '状态' , items: [
       { label: '正常', value: '' },

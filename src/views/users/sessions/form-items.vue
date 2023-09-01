@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { SessionItem } from '@/api/sessions';
+import { SessionItem } from '@/api/users/sessions';
 
 const props = defineProps<{
   form: SessionItem;

@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { RoleItem, deleteRoleItem, getRoleItem, tableRoleLabels } from '@/api/roles';
+import { RoleItem, deleteRoleItem, getRoleItem, tableRoleLabels } from '@/api/users/roles';
 import { Container, PageHeader } from "@/components/layout";
 import useLoading from '@/hooks/loading';
 import { DescData, Message } from '@arco-design/web-vue';

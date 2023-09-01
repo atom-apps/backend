@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts" setup>
-import { SessionItem, deleteSessionItem, getSessionItem, tableSessionLabels } from '@/api/sessions';
+import { SessionItem, deleteSessionItem, getSessionItem, tableSessionLabels } from '@/api/users/sessions';
 import { Container, PageHeader } from "@/components/layout";
 import useLoading from '@/hooks/loading';
 import { DescData, Message } from '@arco-design/web-vue';

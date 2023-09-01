@@ -11,7 +11,7 @@
 </template>
 
 <script lang="ts" setup>
-import { TenantItem } from '@/api/tenants';
+import { TenantItem } from '@/api/users/tenants';
 
 const props = defineProps<{
   form: TenantItem;

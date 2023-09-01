@@ -11,14 +11,13 @@
     </PageHeader>
 
     <Container :loading="loading" :rows="2">
-      <a-descriptions :data="renderData" :column="3" :align="{ label: 'right' }" size="large"
-        :title="userInfo.username" />
+      <a-descriptions :data="renderData" :column="3" :align="{ label: 'right' }" size="large" :title="title" />
     </Container>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { UserItem, deleteUserItem, getUserItem, tableUserLabels } from '@/api/users';
+import { UserItem, deleteUserItem, getUserItem, tableUserLabels } from '@/api/users/users';
 import { Container, PageHeader } from "@/components/layout";
 import useLoading from '@/hooks/loading';
 import { DescData, Message } from '@arco-design/web-vue';
@@ -28,6 +27,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
+const title=ref<string>("Title")
 
 const { loading, setLoading } = useLoading();
 const renderData = ref<DescData[]>([]);
