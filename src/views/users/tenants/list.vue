@@ -59,7 +59,7 @@ deleteTenantItem,
 queryTenantList,
 tableTenantColumns,
 tableTenantFilters,
-} from "@/api/usres/tenants";
+} from "@/api/users/tenants";
 import { Container, PageHeader } from "@/components/layout";
 import {
 ActionColumn,
