@@ -6,8 +6,6 @@ export interface TenantListQuery extends Pagination {
   ids?: number[]; // ID
   created_at?: Date; // 创建时间
   name?: string; // 名称
-  description?: string; // 描述
-  meta?: string; // 元数据
 }
 
 export interface TenantItem {
@@ -36,7 +34,7 @@ export const tableTenantColumns = (): Columns => {
       { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
-      'uuid', 'created_at', 'updated_at', 'deleted_at'
+      'uuid', 'created_at', 'updated_at', 'deleted_at', 'meta'
     ],
   }
 }

@@ -36,6 +36,16 @@
         @page-change="onPageChange"
         @page-size-change="onPageSizeChange"
       >
+      <template #created_at="{ record }"> {{ date(record.created_at) }} </template>
+        <template #updated_at="{ record }"> {{ date(record.updated_at) }} </template>
+        <template #status="{ record }">
+          <a-badge status="danger" v-if="record.status == 'blocked'" />
+          <a-badge status="normal" v-else :text="record.status" />
+        </template>
+        <template #email="{ record }">
+          <a-badge status="normal" v-if="record.email_verified" :text="record.email" />
+          <a-badge status="warning" v-else :text="record.email" />
+        </template>
         <template #operations="{ record }">
           <RowOperations
             :record="record"
