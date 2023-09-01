@@ -1,5 +1,7 @@
 <template>
     <a-space>
+        <slot></slot>
+
         <a-tooltip content="查看">
             <a-button type="outline" size="mini" @click="$router.push({ name: view, params: params })"
                 status="normal"><template #icon><icon-eye /></template> </a-button>

@@ -6,55 +6,45 @@
       <ActionExport />
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
-      <ActionColumn
-        :columns="allColumns"
-        :hidden="hiddenColumns"
-        v-model:clone="showColumns"
-      />
+      <ActionColumn :columns="allColumns" :hidden="hiddenColumns" v-model:clone="showColumns" />
     </PageHeader>
 
-    <QueryForm
-      class="m-5 pt-5"
-      ref="queryForm"
-      @search="fetchData"
-      :filters="tableUserFilters()"
-    />
+    <QueryForm class="m-5 pt-5" ref="queryForm" @search="fetchData" :filters="tableUserFilters()" />
 
     <Container class="m-5">
-      <a-table
-        row-key="id"
-        :hoverable="true"
-        :stripe="true"
-        :row-selection="rowSelection"
-        v-model:selectedKeys="selectedKeys"
-        :loading="loading"
-        :pagination="pagination"
-        :columns="showColumns"
-        :data="renderData"
-        :bordered="false"
-        :size="size"
-        @page-change="onPageChange"
-        @page-size-change="onPageSizeChange"
-      >
-      <template #created_at="{ record }"> {{ date(record.created_at) }} </template>
+      <a-table row-key="id" :hoverable="true" :stripe="true" :row-selection="rowSelection"
+        v-model:selectedKeys="selectedKeys" :loading="loading" :pagination="pagination" :columns="showColumns"
+        :data="renderData" :bordered="false" :size="size" @page-change="onPageChange"
+        @page-size-change="onPageSizeChange">
+        <template #created_at="{ record }"> {{ date(record.created_at) }} </template>
         <template #updated_at="{ record }"> {{ date(record.updated_at) }} </template>
+
         <template #status="{ record }">
           <a-badge status="danger" v-if="record.status == 'blocked'" />
           <a-badge status="normal" v-else :text="record.status" />
         </template>
+
         <template #email="{ record }">
           <a-badge status="normal" v-if="record.email_verified" :text="record.email" />
           <a-badge status="warning" v-else :text="record.email" />
         </template>
+
+        <template #tenant_role="{ record }">
+          <a-space wrap>
+            <a-tag color="orange" v-for="item in record.tenant_roles">
+              {{ item.tenant.name }}/{{ item.role.name }}
+            </a-tag>
+          </a-space>
+        </template>
+
         <template #operations="{ record }">
-          <RowOperations
-            :record="record"
-            :reload="fetchData"
-            edit="UserEdit"
-            view="UserView"
-            :params="{ id: record.id }"
-            :deleteAction="deleteUserItem"
-          />
+          <RowOperations :record="record" :reload="fetchData" edit="UserEdit" view="UserView" :params="{ id: record.id }"
+            :deleteAction="deleteUserItem">
+
+            <a-button type="outline" size="mini" status="normal"
+              @click="$router.push({ name: 'UserTenantRole', params: { id: record.id } })">角色分配</a-button>
+
+          </RowOperations>
         </template>
       </a-table>
     </Container>

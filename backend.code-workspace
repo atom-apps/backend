@@ -2,6 +2,7 @@
 	"folders": [
 		{ "path": "src/views" },
 		{ "path": "src/api" },
+		{ "path": "src/router/routes/modules","name":"Route" },
 		{ "path": "." },
 	],
 	"settings": {}

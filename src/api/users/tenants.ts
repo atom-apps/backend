@@ -14,6 +14,7 @@ export interface TenantItem {
   name?: string; // 名称
   description?: string; // 描述
   meta?: string; // 元数据
+  user_amount?: number; // 用户数量
 }
 
 export const tableTenantFilters = (): Filter[] => {
@@ -31,10 +32,11 @@ export const tableTenantColumns = (): Columns => {
       { title: '名称', dataIndex: 'name', slotName: 'name' },
       { title: '描述', dataIndex: 'description', slotName: 'description' },
       { title: '元数据', dataIndex: 'meta', slotName: 'meta' },
+      { title: '用户数量', dataIndex: 'user_amount', slotName: 'user_amount', align: 'center' },
       { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
-      'uuid', 'created_at', 'updated_at', 'deleted_at', 'meta'
+      'uuid', 'created_at', 'updated_at', 'deleted_at', 'meta','description'
     ],
   }
 }

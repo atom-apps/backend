@@ -36,6 +36,9 @@
         @page-change="onPageChange"
         @page-size-change="onPageSizeChange"
       >
+        <template #expire_at="{ record }">
+          {{  datetime(record.expire_at) }}
+        </template>
         <template #operations="{ record }">
           <RowOperations
             :record="record"
@@ -82,7 +85,7 @@ TableRowSelection,
 } from "@arco-design/web-vue";
 import { onMounted, reactive, ref } from "vue";
 
-const { date } = useDatetime();
+const { datetime } = useDatetime();
 
 const size = ref<SizeProps>("large");
 const queryForm = ref();

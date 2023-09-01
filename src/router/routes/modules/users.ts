@@ -9,6 +9,7 @@ const DASHBOARD: AppRouteRecordRaw = {
     { path: 'users/view/:id', name: 'UserView', component: () => import('@/views/users/users/view.vue'), meta: { title: '用户详情', requiresAuth: true, hideInMenu: true } },
     { path: 'users/edit/:id', name: 'UserEdit', component: () => import('@/views/users/users/edit.vue'), meta: { title: '用户编辑', requiresAuth: true, hideInMenu: true } },
     { path: 'users/create', name: 'UserCreate', component: () => import('@/views/users/users/create.vue'), meta: { title: '用户创建', requiresAuth: true, hideInMenu: true } },
+    { path: 'users/:id/tenant-role', name: 'UserTenantRole', component: () => import('@/views/users/users/tenant-role.vue'), meta: { title: '角色分配', requiresAuth: true, hideInMenu: true } },
 
     // role
     { path: 'roles', name: 'RoleList', component: () => import('@/views/users/roles/list.vue'), meta: { title: '角色列表', requiresAuth: true }, },

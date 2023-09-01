@@ -18,16 +18,15 @@ export interface RoleItem {
   slug?: string; // 唯一标识
   description?: string; // 描述
   parent_id?: number; // 父角色
+  user_amount?: number; // 用户数量
 }
 
 export const tableRoleFilters = (): Filter[] => {
   return [
     { type: FilterType.List, name: "ids", label: "ID" },
-    { type: FilterType.Date, name: 'created_at', label: '创建时间' },
     { type: FilterType.String, name: 'name', label: '名称' },
     { type: FilterType.String, name: 'slug', label: '唯一标识' },
-    { type: FilterType.String, name: 'description', label: '描述' },
-    { type: FilterType.Number, name: 'parent_id', label: '父角色' }, 
+    { type: FilterType.Number, name: 'parent_id', label: '父角色' },
   ]
 }
 
@@ -38,12 +37,13 @@ export const tableRoleColumns = (): Columns => {
       { title: '创建时间', dataIndex: 'created_at', slotName: 'created_at' },
       { title: '名称', dataIndex: 'name', slotName: 'name' },
       { title: '唯一标识', dataIndex: 'slug', slotName: 'slug' },
+      { title: '用户数量', dataIndex: 'user_amount', slotName: 'user_amount', align: 'center' },
       { title: '描述', dataIndex: 'description', slotName: 'description' },
-      { title: '父角色', dataIndex: 'parent_id', slotName: 'parent_id' }, 
-      { title: '操作', dataIndex: 'operations' ,slotName: 'operations', align: 'right' },
+      { title: '父角色', dataIndex: 'parent_id', slotName: 'parent_id' },
+      { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
-      'uuid', 'created_at', 'updated_at', 'deleted_at'
+      'uuid', 'created_at', 'updated_at', 'deleted_at','description'
     ],
   }
 }
@@ -55,7 +55,7 @@ export const tableRoleLabels = (): Record<string, string> => {
     'name': '名称',
     'slug': '唯一标识',
     'description': '描述',
-    'parent_id': '父角色', 
+    'parent_id': '父角色',
   }
 }
 
