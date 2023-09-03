@@ -38,12 +38,13 @@
       >
         <template #tenant="{ record }">{{ record.tenant.name }}</template>
         <template #role="{ record }">{{ record.role.name }}</template>
+        <template #action="{ record }">{{ actionDesc(record.action) }}</template>
         <template #operations="{ record }">
           <RowOperations
             :record="record"
             :reload="fetchData"
             edit="PermissionEdit"
-            view="PermissionView"
+            :view="false"
             :params="{ id: record.id }"
             :deleteAction="deletePermissionItem"
           />
@@ -57,6 +58,7 @@
 import {
 PermissionItem,
 PermissionListQuery,
+actionDesc,
 deletePermissionItem,
 queryPermissionList,
 tablePermissionColumns,

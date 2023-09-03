@@ -1,3 +1,4 @@
+import { useUserStore } from '@/store';
 import { Columns, Filter, FilterType, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
 import { RoleItem } from './roles';
@@ -25,12 +26,35 @@ export interface PermissionItem {
 }
 
 export const tablePermissionFilters = (): Filter[] => {
+  const userStore = useUserStore()
   return [
-    { type: FilterType.Number, name: 'tenant_id', label: '租户' },
-    { type: FilterType.Number, name: 'role_id', label: '角色' },
+    { type: FilterType.Number, name: 'tenant_id', label: '租户', items: userStore.tenants },
+    { type: FilterType.Number, name: 'role_id', label: '角色', items: userStore.roles },
     { type: FilterType.String, name: 'path', label: '路由' },
-    { type: FilterType.String, name: 'action', label: '请求方式' }, 
+    {
+      type: FilterType.String, name: 'action', label: '请求方式', items: [
+        { label: actionDesc('GET'), value: "GET" },
+        { label: actionDesc('POST'), value: "POST" },
+        { label: actionDesc('PUT'), value: "PUT" },
+        { label: actionDesc('DELETE'), value: "DELETE" },
+      ]
+    },
   ]
+}
+
+export const actionDesc = (action: string) => {
+  switch (action) {
+    case 'GET':
+      return 'View'
+    case 'POST':
+      return 'Create'
+    case 'PUT':
+      return 'Update'
+    case 'DELETE':
+      return 'Delete'
+    default:
+      return 'Unknown'
+  }
 }
 
 export const tablePermissionColumns = (): Columns => {
@@ -43,8 +67,8 @@ export const tablePermissionColumns = (): Columns => {
       // { title: '角色ID', dataIndex: 'role_id', slotName: 'role_id' },
       { title: '角色', dataIndex: 'role', slotName: 'role' },
       { title: '路由', dataIndex: 'path', slotName: 'path' },
-      { title: '请求方式', dataIndex: 'action', slotName: 'action' }, 
-      { title: '操作', dataIndex: 'operations' ,slotName: 'operations', align: 'right' },
+      { title: '请求方式', dataIndex: 'action', slotName: 'action' },
+      { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
       'uuid', 'created_at', 'updated_at', 'deleted_at'
@@ -59,7 +83,7 @@ export const tablePermissionLabels = (): Record<string, string> => {
     'tenant_id': '租户ID',
     'role_id': '角色ID',
     'path': '路由',
-    'action': '请求方式', 
+    'action': '请求方式',
   }
 }
 
