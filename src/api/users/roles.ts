@@ -1,3 +1,4 @@
+import { useUserStore } from '@/store';
 import { Columns, Filter, FilterType, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
 
@@ -22,11 +23,11 @@ export interface RoleItem {
 }
 
 export const tableRoleFilters = (): Filter[] => {
+  const userState = useUserStore()
   return [
-    { type: FilterType.List, name: "ids", label: "ID" },
     { type: FilterType.String, name: 'name', label: '名称' },
     { type: FilterType.String, name: 'slug', label: '唯一标识' },
-    { type: FilterType.Number, name: 'parent_id', label: '父角色' },
+    { type: FilterType.Number, name: 'parent_id', label: '父角色',items:userState.roles },
   ]
 }
 

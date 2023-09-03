@@ -25,20 +25,22 @@ export interface PermissionItem {
   action?: string; // 请求方式
 }
 
+export const actionList = () => {
+  return [
+    { label: actionDesc('GET'), value: "GET" },
+    { label: actionDesc('POST'), value: "POST" },
+    { label: actionDesc('PUT'), value: "PUT" },
+    { label: actionDesc('DELETE'), value: "DELETE" },
+  ]
+}
+
 export const tablePermissionFilters = (): Filter[] => {
   const userStore = useUserStore()
   return [
     { type: FilterType.Number, name: 'tenant_id', label: '租户', items: userStore.tenants },
     { type: FilterType.Number, name: 'role_id', label: '角色', items: userStore.roles },
     { type: FilterType.String, name: 'path', label: '路由' },
-    {
-      type: FilterType.String, name: 'action', label: '请求方式', items: [
-        { label: actionDesc('GET'), value: "GET" },
-        { label: actionDesc('POST'), value: "POST" },
-        { label: actionDesc('PUT'), value: "PUT" },
-        { label: actionDesc('DELETE'), value: "DELETE" },
-      ]
-    },
+    { type: FilterType.String, name: 'action', label: '请求方式', items: actionList() },
   ]
 }
 

@@ -3,7 +3,7 @@
     <PageHeader title="用户管理" subtitle="角色编辑" :back="true" :loading="false" />
 
     <Container class="pt-5">
-      <a-form :model="form" @submit="handleSubmit" class="md:w-3/4 sm:w-full">
+      <a-form :model="form" @submit="handleSubmit" class="mx-auto md:w-1/2 sm:w-full">
         <!-- form start -->
         <FormItems :form="form" />
         <a-form-item>
