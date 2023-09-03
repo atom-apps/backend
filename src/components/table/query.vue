@@ -53,12 +53,19 @@
 <script lang="ts" setup>
 import { Container } from "@/components/layout";
 import { AnyObject, BoolOptions, Filter, FilterType } from "@/types/global";
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
     filters: Filter[];
 }>();
 const emit = defineEmits(['search']);
+
+watch(
+    () => props.filters,
+    (val) => {
+        filters.value = val
+    }
+);
 
 const filters = ref<Filter[]>(props.filters)
 

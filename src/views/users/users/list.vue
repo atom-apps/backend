@@ -9,7 +9,7 @@
       <ActionColumn :columns="allColumns" :hidden="hiddenColumns" v-model:clone="showColumns" />
     </PageHeader>
 
-    <QueryForm class="m-5 pt-5" ref="queryForm" @search="fetchData" :filters="tableUserFilters()" />
+    <QueryForm class="m-5 pt-5" ref="queryForm" @search="fetchData" :filters="queryFilters" />
 
     <Container class="m-5">
       <a-table row-key="id" :hoverable="true" :stripe="true" :row-selection="rowSelection"
@@ -52,6 +52,7 @@
 </template>
 
 <script lang="ts" setup>
+import { queryTenantList } from "@/api/users/tenants";
 import {
 UserItem,
 UserListQuery,
@@ -74,7 +75,7 @@ RowOperations,
 import { SizeProps } from "@/components/table/types";
 import useDatetime from "@/hooks/datetime";
 import useLoading from "@/hooks/loading";
-import { Pagination } from "@/types/global";
+import { Filter, FilterType, LabelItem, Pagination } from "@/types/global";
 import {
 PaginationProps,
 TableColumnData,
@@ -95,7 +96,24 @@ const showColumns = ref<TableColumnData[]>([]);
 // load columns
 onMounted(() => {
   fetchData(basePagination);
+  fetchQueryFilters()
 });
+
+
+const queryFilters = ref<Filter[]>([])
+// query filters
+const fetchQueryFilters = async () => {
+  let filters = tableUserFilters()
+  const { data: tenants } = await queryTenantList({})
+
+  let items: LabelItem[] = [];
+  tenants.items.forEach((item) => {
+    items.push({ label: String(item.name), value: `${item.id}` });
+  });
+  filters.push({ type: FilterType.String, name: 'tenant', label: '租户', items: items });;
+
+  queryFilters.value = filters
+}
 
 // fetch table data
 const { loading, setLoading } = useLoading(true);
