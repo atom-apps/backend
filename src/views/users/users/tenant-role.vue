@@ -9,12 +9,14 @@
           <a-row class="mb-10" :gutter="10">
             <a-col :span="8">
               <a-select v-model="selectTenant" placeholder="请选择租户" size="large">
-                <a-option v-for="item of tenants" :value="item.id" :label="item.name" />
+                <a-option v-for="item of tenants" :value="item.id" :label="item.name"
+                  :disabled="hasTenant(Number(item.id))" />
               </a-select>
             </a-col>
             <a-col :span="8">
               <a-select v-model="selectRole" placeholder="请选择角色" size="large">
-                <a-option v-for="item of roles" :value="item.id" :label="item.name" />
+                <a-option v-for="item of roles" :value="item.id" :label="item.name"
+                  :disabled="tenantHasRole(selectTenant, Number(item.id))" />
               </a-select>
             </a-col>
             <a-col :span="8">
@@ -28,8 +30,8 @@
             <template #tenant="{ record }">{{ record.tenant.name }}</template>
             <template #role="{ record }">{{ record.role.name }}</template>
             <template #operations="{ record }">
-              <a-popconfirm content="确认删除？" type="warning" :ok-loading="detaching" @ok="detachUser(record.tenant.id, record.role.id)"
-                position="lt" :data-id="record.id">
+              <a-popconfirm content="确认删除？" type="warning" :ok-loading="detaching"
+                @ok="detachUser(record.tenant.id, record.role.id)" position="lt" :data-id="record.id">
                 <a-button type="outline" size="mini" status="danger">删除</a-button>
               </a-popconfirm>
             </template>
@@ -83,6 +85,28 @@ const fetchTenantRoles = async () => {
   }
 }
 
+const hasTenant = (id: number) => {
+  let has = false
+  userInfo.value.tenant_roles?.forEach((item: UserItemTenantRole) => {
+    if (item.tenant?.id === id) {
+      has = true
+    }
+  })
+  return has
+}
+
+const tenantHasRole = (tenant: number | undefined, role: number) => {
+  if (tenant === undefined || role === undefined) return true
+
+  let has = false
+  userInfo.value.tenant_roles?.forEach((item: UserItemTenantRole) => {
+    if (item.tenant?.id === tenant && item.role?.id === role) {
+      has = true
+    }
+  })
+  return has
+}
+
 const fetchData = async () => {
   try {
     setLoading(true);
@@ -127,11 +151,13 @@ const detachUser = async (tenant: number, role: number) => {
   try {
     setDetaching(true);
     await detachUsers(tenant, role, [Number(userInfo.value.id)])
+    fetchData()
   } catch (e) {
     console.log(e)
   } finally {
     setDetaching(false);
   }
 }
+
 
 </script>
