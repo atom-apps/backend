@@ -10,13 +10,13 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed } from 'vue';
   import { useUserStore } from '@/store';
+import { computed } from 'vue';
 
   const userStore = useUserStore();
   const userInfo = computed(() => {
     return {
-      name: userStore.name,
+      name: userStore.profile?.display_name??'',
     };
   });
 </script>

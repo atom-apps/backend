@@ -1,5 +1,5 @@
-import { RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 import { useUserStore } from '@/store';
+import { RouteLocationNormalized, RouteRecordRaw } from 'vue-router';
 
 export default function usePermission() {
   const userStore = useUserStore();
@@ -9,7 +9,7 @@ export default function usePermission() {
         !route.meta?.requiresAuth ||
         !route.meta?.roles ||
         route.meta?.roles?.includes('*') ||
-        route.meta?.roles?.includes(userStore.role)
+        route.meta?.roles?.includes(userStore.profile.role??'')
       );
     },
     findFirstPermissionRoute(_routers: any, role = 'admin') {

@@ -8,15 +8,15 @@
         <a-col :span="12" :offset="6">
           <a-row class="mb-10" :gutter="10">
             <a-col :span="8">
-              <a-select v-model="selectTenant" placeholder="请选择租户" size="large">
-                <a-option v-for="item of tenants" :value="item.id" :label="item.name"
-                  :disabled="hasTenant(Number(item.id))" />
+              <a-select v-model="selectTenant" placeholder="请选择租户" size="large" ref="tenantSelector">
+                <a-option v-for="item of userStore.tenants" :value="item.value" :label="item.label"
+                  :disabled="hasTenant(Number(item.value))" />
               </a-select>
             </a-col>
             <a-col :span="8">
               <a-select v-model="selectRole" placeholder="请选择角色" size="large">
-                <a-option v-for="item of roles" :value="item.id" :label="item.name"
-                  :disabled="tenantHasRole(selectTenant, Number(item.id))" />
+                <a-option v-for="item of userStore.roles" :value="item.value" :label="item.label"
+                  :disabled="tenantHasRole(selectTenant, Number(item.value))" />
               </a-select>
             </a-col>
             <a-col :span="8">
@@ -45,19 +45,20 @@
 
 <script lang="ts" setup>
 import { attachUsers, detachUsers } from '@/api/users/permissions';
-import { RoleItem, queryRoleList } from '@/api/users/roles';
-import { TenantItem, queryTenantList } from '@/api/users/tenants';
 import { UserItem, UserItemTenantRole, getUserItem } from '@/api/users/users';
 import { Container, PageHeader } from "@/components/layout";
 import useLoading from '@/hooks/loading';
-import { TableColumnData } from '@arco-design/web-vue';
+import { useUserStore } from '@/store';
+import { Message, TableColumnData } from '@arco-design/web-vue';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 
+const userStore = useUserStore();
 const route = useRoute();
 
 const selectTenant = ref<number>()
 const selectRole = ref<number>()
+
 
 const { loading, setLoading } = useLoading();
 const userInfo = ref<UserItem>({});
@@ -67,23 +68,6 @@ const columns = ref<TableColumnData[]>([
   { title: '角色', dataIndex: 'role', slotName: 'role' },
   { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
 ])
-
-const roles = ref<RoleItem[]>([]);
-const tenants = ref<TenantItem[]>([]);
-
-const fetchTenantRoles = async () => {
-  try {
-    // load roles
-    const { data: roleData } = await queryRoleList({})
-    roles.value = roleData.items
-
-    // load tenants
-    const { data: tenantData } = await queryTenantList({})
-    tenants.value = tenantData.items
-  } catch (e) {
-  } finally {
-  }
-}
 
 const hasTenant = (id: number) => {
   let has = false
@@ -125,7 +109,6 @@ const fetchData = async () => {
   }
 }
 onMounted(() => {
-  fetchTenantRoles()
   fetchData()
 })
 
@@ -136,7 +119,14 @@ const attachUser = async () => {
   try {
     setAttaching(true);
     await attachUsers(Number(selectTenant.value), Number(selectRole.value), [Number(userInfo.value.id)])
-    fetchData()
+    Message.success("更新成功")
+
+
+    selectTenant.value = undefined
+    selectRole.value = undefined
+
+    await fetchData()
+
   } catch (e) {
     console.log(e)
   } finally {
@@ -152,6 +142,8 @@ const detachUser = async (tenant: number, role: number) => {
     setDetaching(true);
     await detachUsers(tenant, role, [Number(userInfo.value.id)])
     fetchData()
+
+    Message.success("更新成功")
   } catch (e) {
     console.log(e)
   } finally {

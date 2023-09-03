@@ -4,35 +4,41 @@ import {
   login as userLogin,
   logout as userLogout
 } from '@/api/user';
+import { RoleItem, queryRoleList } from '@/api/users/roles';
+import { TenantItem, queryTenantList } from '@/api/users/tenants';
+import { LabelItem } from '@/types/global';
 import { clearToken, setToken } from '@/utils/auth';
 import { removeRouteListener } from '@/utils/route-listener';
 import { defineStore } from 'pinia';
 import useAppStore from '../app';
-import { UserProfile } from './types';
+import { UserState } from './types';
 
 const useUserStore = defineStore('user', {
-  state: (): UserProfile => ({
-    id: undefined,
-    createdAt: undefined,
-    updatedAt: undefined,
-    uuid: undefined,
-    username: undefined,
-    email: undefined,
-    emailVerified: undefined,
-    phone: undefined,
-    displayName: undefined,
-    avatar: undefined
+  state: (): UserState => ({
+    profile: {
+      id: undefined,
+      uuid: undefined,
+      username: undefined,
+      email: undefined,
+      phone: undefined,
+      display_name: undefined,
+      avatar: undefined,
+      role: undefined,
+    },
+    roles: [],
+    tenants: [],
   }),
 
   getters: {
-    userInfo(state: UserProfile): UserProfile {
+    userState(state: UserState): UserState {
       return { ...state };
     },
+
   },
 
   actions: {
     // Set user's information
-    setInfo(partial: Partial<UserProfile>) {
+    setInfo(partial: Partial<UserState>) {
       this.$patch(partial);
     },
 
@@ -42,10 +48,26 @@ const useUserStore = defineStore('user', {
     },
 
     // Get user's information
-    async info() {
+    async init() {
       const res = await getUserInfo();
+      this.setInfo({ profile: res.data });
 
-      this.setInfo(res.data);
+      // get tenants
+      const tenantRes = await queryTenantList({});
+      let items: LabelItem[] = []
+      tenantRes.data.items.forEach((item: TenantItem) => {
+        items.push({ label: item.name ?? '', value: `${item.id}` })
+      })
+      this.setInfo({ tenants: items });
+
+      // roles
+      const roleRes = await queryRoleList({});
+
+      items = []
+      roleRes.data.items.forEach((item: RoleItem) => {
+        items.push({ label: item.name ?? '', value: `${item.id}` })
+      })
+      this.setInfo({ roles: items });
     },
 
     // Login

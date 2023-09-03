@@ -1,3 +1,4 @@
+import { useUserStore } from '@/store';
 import { Columns, Filter, FilterType, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
 import { RoleItem } from './roles';
@@ -37,6 +38,8 @@ export interface UserItemTenantRole {
 }
 
 export const tableUserFilters = (): Filter[] => {
+  const userStore = useUserStore();
+
   return [
     { type: FilterType.List, name: "ids", label: "ID" },
     { type: FilterType.String, name: 'username', label: '用户名' },
@@ -44,6 +47,7 @@ export const tableUserFilters = (): Filter[] => {
     { type: FilterType.String, name: 'email', label: '邮箱' },
     { type: FilterType.Bool, name: 'email_verified', label: '邮箱验证' },
     { type: FilterType.String, name: 'phone', label: '手机号' },
+    { type: FilterType.String, name: 'tenant', label: '租户',items: userStore.tenants},
     {
       type: FilterType.String, name: 'status', label: '状态', items: [
         { label: '正常', value: '' },

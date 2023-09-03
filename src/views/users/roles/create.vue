@@ -19,12 +19,14 @@
 import { RoleItem, createRoleItem } from '@/api/users/roles';
 import { Container, PageHeader } from '@/components/layout';
 import useLoading from '@/hooks/loading';
+import { useUserStore } from '@/store';
 import { Message } from '@arco-design/web-vue';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import FormItems from './form-items.vue';
 
 const router = useRouter();
+const userStore = useUserStore()
 
 const form = ref<RoleItem>({});
 
@@ -36,6 +38,7 @@ const handleSubmit = async ({ values, errors }: any) => {
     await createRoleItem(values);
 
     Message.success("创建成功");
+    await userStore.init();
     router.back();
   } catch (e: any) {
     // Message.error(e.message)

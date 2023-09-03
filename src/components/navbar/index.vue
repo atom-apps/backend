@@ -119,14 +119,14 @@ const { changeLocale, currentLocale } = useLocale();
 const { isFullscreen, toggle: toggleFullScreen } = useFullscreen();
 const locales = [...LOCALE_OPTIONS];
 const avatar = computed(() => {
-  return userStore.avatar;
+  return userStore.profile?.avatar;
 });
 const theme = computed(() => {
   return appStore.theme;
 });
 
 const hasAvatar = computed(() => {
-  return userStore.avatar && userStore.avatar !== '';
+  return userStore.profile && userStore.profile.avatar !== '';
 });
 
 const topMenu = computed(() => appStore.topMenu && appStore.menu);
