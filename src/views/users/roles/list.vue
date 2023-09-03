@@ -36,8 +36,8 @@
         @page-change="onPageChange"
         @page-size-change="onPageSizeChange"
       >
-           <!-- 父角色 -->
-        <template #parent_id="{record}">
+        <!-- 父角色 -->
+        <template #parent_id="{ record }">
           <a-tag v-if="record.parent" color="orange">{{ record.parent?.name }}</a-tag>
         </template>
 

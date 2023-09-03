@@ -1,12 +1,14 @@
 <template>
   <div>
-    <PageHeader title="用户管理" subtitle="权限编辑" :back="true"/>
+    <PageHeader title="用户管理" subtitle="权限编辑" :back="true" />
 
     <Container :loading="loading" :rows="3" class="pt-5">
       <a-form :model="form" @submit="handleSubmit" class="md:w-3/4 sm:w-full">
         <FormItems :form="form" />
         <a-form-item>
-          <a-button type="primary" html-type="submit" size="large" :loading="submitting">提交</a-button>
+          <a-button type="primary" html-type="submit" size="large" :loading="submitting"
+            >提交</a-button
+          >
         </a-form-item>
       </a-form>
     </Container>
@@ -14,49 +16,53 @@
 </template>
 
 <script lang="ts" setup>
-import { PermissionItem, getPermissionItem, updatePermissionItem } from '@/api/users/permissions';
+import {
+PermissionItem,
+getPermissionItem,
+updatePermissionItem,
+} from "@/api/users/permissions";
 import { Container, PageHeader } from "@/components/layout";
-import useLoading from '@/hooks/loading';
-import { Message } from '@arco-design/web-vue';
-import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
-import FormItems from './form-items.vue';
+import useLoading from "@/hooks/loading";
+import { Message } from "@arco-design/web-vue";
+import { onMounted, ref } from "vue";
+import { useRoute, useRouter } from "vue-router";
+import FormItems from "./form-items.vue";
 
 const route = useRoute();
 const router = useRouter();
-const { loading, setLoading } = useLoading()
+const { loading, setLoading } = useLoading();
 
 onMounted(() => {
-  fetchData()
-})
+  fetchData();
+});
 const form = ref<PermissionItem>({});
 
 const fetchData = async () => {
   try {
     setLoading(true);
-    const { data } = await getPermissionItem(Number(route.params.id))
-    form.value = data
+    const { data } = await getPermissionItem(Number(route.params.id));
+    form.value = data;
   } catch (e: any) {
-    Message.error(e.message)
+    Message.error(e.message);
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
-}
+};
 
-const { loading: submitting, setLoading: setSubmitting } = useLoading()
+const { loading: submitting, setLoading: setSubmitting } = useLoading();
 // form
 const handleSubmit = async ({ values, errors }: any) => {
   console.log(values, errors);
   try {
     setSubmitting(true);
-    await updatePermissionItem(Number(route.params.id), values)
+    await updatePermissionItem(Number(route.params.id), values);
 
-    Message.success("更新成功")
-    router.back()
+    Message.success("更新成功");
+    router.back();
   } catch (e: any) {
     // Message.error(e.message)
   } finally {
-    setSubmitting(false)
+    setSubmitting(false);
   }
 };
 </script>
