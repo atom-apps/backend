@@ -25,6 +25,15 @@ export interface PermissionItem {
   action?: string; // 请求方式
 }
 
+export interface PermissionTree {
+  id: number;
+  name: string;
+  method: string;
+  path: string;
+  parent_id: number;
+  children?: PermissionTree[];
+}
+
 export const actionList = () => {
   return [
     { label: actionDesc('GET'), value: "GET" },
@@ -64,7 +73,6 @@ export const tablePermissionColumns = (): Columns => {
     columns: [
       // { title: '租户ID', dataIndex: 'tenant_id', slotName: 'tenant_id' },
       { title: '名称', dataIndex: 'name', slotName: 'name' },
-      { title: '请求方式', dataIndex: 'action', slotName: 'action' },
       { title: '路由', dataIndex: 'path', slotName: 'path' },
       { title: '权限', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
@@ -89,8 +97,8 @@ export function queryPermissionList(params: PermissionListQuery) {
   return axios.get<PaginationResp<PermissionItem>>('/v1/users/permissions', { params });
 }
 
-export function getPermissionTree(params: PermissionListQuery) {
-  return axios.get<PaginationResp<PermissionItem>>('/v1/users/permissions', { params });
+export function getPermissionTree() {
+  return axios.get<PermissionTree[]>('/v1/users/permissions/tree');
 }
 
 export function createPermissionItem(data: PermissionItem) {
