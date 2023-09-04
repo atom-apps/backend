@@ -99,21 +99,21 @@ export const tableUserLabels = (): Record<string, string> => {
 }
 
 export function queryUserList(params: UserListQuery) {
-  return axios.get<PaginationResp<UserItem>>('/v1/users', { params });
+  return axios.get<PaginationResp<UserItem>>('/v1/users/users', { params });
 }
 
 export function createUserItem(data: UserItem) {
-  return axios.post(`/v1/users`, data);
+  return axios.post(`/v1/users/users`, data);
 }
 
 export function updateUserItem(id: number, data: UserItem) {
-  return axios.put(`/v1/users/${id}`, data);
+  return axios.put(`/v1/users/users/${id}`, data);
 }
 
 export function getUserItem(id: number) {
-  return axios.get(`/v1/users/${id}`);
+  return axios.get(`/v1/users/users/${id}`);
 }
 
 export function deleteUserItem(id: number) {
-  return axios.delete(`/v1/users/${id}`);
+  return axios.delete(`/v1/users/users/${id}`);
 }
