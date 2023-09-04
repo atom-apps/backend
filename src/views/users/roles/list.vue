@@ -20,8 +20,8 @@
       :filters="tableRoleFilters()"
     />
 
-    <Container class="m-5">
       <a-table
+      class="m-5"
         row-key="id"
         :hoverable="true"
         :stripe="true"
@@ -31,7 +31,6 @@
         :pagination="pagination"
         :columns="showColumns"
         :data="renderData"
-        :bordered="false"
         :size="size"
         @page-change="onPageChange"
         @page-size-change="onPageSizeChange"
@@ -52,7 +51,6 @@
           />
         </template>
       </a-table>
-    </Container>
   </div>
 </template>
 
@@ -65,7 +63,7 @@ queryRoleList,
 tableRoleColumns,
 tableRoleFilters,
 } from "@/api/users/roles";
-import { Container, PageHeader } from "@/components/layout";
+import { PageHeader } from "@/components/layout";
 import {
 ActionColumn,
 ActionCreate,

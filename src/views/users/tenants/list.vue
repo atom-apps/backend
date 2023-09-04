@@ -20,8 +20,8 @@
       :filters="tableTenantFilters()"
     />
 
-    <Container class="m-5">
       <a-table
+        class="m-5"
         row-key="id"
         :hoverable="true"
         :stripe="true"
@@ -31,7 +31,6 @@
         :pagination="pagination"
         :columns="showColumns"
         :data="renderData"
-        :bordered="false"
         :size="size"
         @page-change="onPageChange"
         @page-size-change="onPageSizeChange"
@@ -47,7 +46,6 @@
           />
         </template>
       </a-table>
-    </Container>
   </div>
 </template>
 
@@ -60,7 +58,7 @@ queryTenantList,
 tableTenantColumns,
 tableTenantFilters,
 } from "@/api/users/tenants";
-import { Container, PageHeader } from "@/components/layout";
+import { PageHeader } from "@/components/layout";
 import {
 ActionColumn,
 ActionCreate,

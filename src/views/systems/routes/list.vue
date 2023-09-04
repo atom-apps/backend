@@ -20,8 +20,8 @@
       :filters="tableRouteFilters()"
     />
 
-    <Container class="m-5">
       <a-table
+        class="m-5"
         row-key="id"
         :hoverable="true"
         :stripe="true"
@@ -31,7 +31,6 @@
         :pagination="pagination"
         :columns="showColumns"
         :data="renderData"
-        :bordered="false"
         :size="size"
         @page-change="onPageChange"
         @page-size-change="onPageSizeChange"
@@ -47,7 +46,6 @@
           />
         </template>
       </a-table>
-    </Container>
   </div>
 </template>
 
@@ -60,7 +58,7 @@ queryRouteList,
 tableRouteColumns,
 tableRouteFilters,
 } from "@/api/systems/routes";
-import { Container, PageHeader } from "@/components/layout";
+import { PageHeader } from "@/components/layout";
 import {
 ActionColumn,
 ActionCreate,
@@ -72,7 +70,6 @@ QueryForm,
 RowOperations,
 } from "@/components/table";
 import { SizeProps } from "@/components/table/types";
-import useDatetime from "@/hooks/datetime";
 import useLoading from "@/hooks/loading";
 import { Pagination } from "@/types/global";
 import {
@@ -81,9 +78,6 @@ TableColumnData,
 TableRowSelection,
 } from "@arco-design/web-vue";
 import { onMounted, reactive, ref } from "vue";
-
-const { date } = useDatetime();
-
 const size = ref<SizeProps>("large");
 const queryForm = ref();
 

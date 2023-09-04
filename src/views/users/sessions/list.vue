@@ -20,37 +20,35 @@
       :filters="tableSessionFilters()"
     />
 
-    <Container class="m-5">
-      <a-table
-        row-key="id"
-        :hoverable="true"
-        :stripe="true"
-        :row-selection="rowSelection"
-        v-model:selectedKeys="selectedKeys"
-        :loading="loading"
-        :pagination="pagination"
-        :columns="showColumns"
-        :data="renderData"
-        :bordered="false"
-        :size="size"
-        @page-change="onPageChange"
-        @page-size-change="onPageSizeChange"
-      >
-        <template #expire_at="{ record }">
-          {{  datetime(record.expire_at) }}
-        </template>
-        <template #operations="{ record }">
-          <RowOperations
-            :record="record"
-            :reload="fetchData"
-            edit="SessionEdit"
-            view="SessionView"
-            :params="{ id: record.id }"
-            :deleteAction="deleteSessionItem"
-          />
-        </template>
-      </a-table>
-    </Container>
+    <a-table
+      class="m-5"
+      row-key="id"
+      :hoverable="true"
+      :stripe="true"
+      :row-selection="rowSelection"
+      v-model:selectedKeys="selectedKeys"
+      :loading="loading"
+      :pagination="pagination"
+      :columns="showColumns"
+      :data="renderData"
+      :size="size"
+      @page-change="onPageChange"
+      @page-size-change="onPageSizeChange"
+    >
+      <template #expire_at="{ record }">
+        {{ datetime(record.expire_at) }}
+      </template>
+      <template #operations="{ record }">
+        <RowOperations
+          :record="record"
+          :reload="fetchData"
+          edit="SessionEdit"
+          view="SessionView"
+          :params="{ id: record.id }"
+          :deleteAction="deleteSessionItem"
+        />
+      </template>
+    </a-table>
   </div>
 </template>
 
@@ -63,7 +61,7 @@ querySessionList,
 tableSessionColumns,
 tableSessionFilters,
 } from "@/api/users/sessions";
-import { Container, PageHeader } from "@/components/layout";
+import { PageHeader } from "@/components/layout";
 import {
 ActionColumn,
 ActionCreate,
