@@ -30,7 +30,7 @@
     ]
   },
   "dependencies": {
-    "@arco-design/web-vue": "^2.50.2",
+    "@arco-design/web-vue": "^2.51.0",
     "@vueuse/core": "^9.13.0",
     "arco-design-pro-vue": "^2.7.2",
     "axios": "^0.24.0",
@@ -54,7 +54,7 @@
     "@types/lodash": "^4.14.197",
     "@types/mockjs": "^1.0.7",
     "@types/nprogress": "^0.2.0",
-    "@types/sortablejs": "^1.15.1",
+    "@types/sortablejs": "^1.15.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vitejs/plugin-vue": "^3.2.0",
@@ -74,7 +74,7 @@
     "less": "^4.2.0",
     "lint-staged": "^13.3.0",
     "mockjs": "^1.1.0",
-    "postcss": "^8.4.28",
+    "postcss": "^8.4.29",
     "postcss-html": "^1.5.0",
     "prettier": "^2.8.8",
     "rollup": "^2.79.1",

@@ -29,7 +29,7 @@ export function logout() {
 }
 
 export function getUserInfo() {
-  return axios.get<UserProfile>('/v1/users/profile');
+  return axios.get<UserProfile>('/v1/users/users/profile');
 }
 
 export function getMenuList() {

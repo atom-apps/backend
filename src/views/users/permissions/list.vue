@@ -7,6 +7,7 @@
       row-key="id"
       v-model:selectedKeys="selectedKeys"
       :default-expand-all-rows="true"
+      :default-expanded-keys="expandedKeys"
       :row-selection="rowSelection"
       :loading="loading"
       :columns="columns"
@@ -25,7 +26,7 @@ tablePermissionColumns,
 } from "@/api/users/permissions";
 import { PageHeader } from "@/components/layout";
 import useLoading from "@/hooks/loading";
-import { TableExpandable, TableRowSelection } from "@arco-design/web-vue";
+import { TableRowSelection } from "@arco-design/web-vue";
 import { onMounted, reactive, ref } from "vue";
 
 const { columns } = tablePermissionColumns();
@@ -35,20 +36,20 @@ onMounted(() => {
   fetchData();
 });
 
-// expand
-const expandable = reactive<TableExpandable>({
-  defaultExpandAllRows: true,
-});
-
 // fetch table data
 const { loading, setLoading } = useLoading(true);
 const renderData = ref<PermissionTree[]>([]);
+const expandedKeys = ref<number[]>([]);
 
 const fetchData = async () => {
   setLoading(true);
   try {
     const { data } = await getPermissionTree();
     renderData.value = data;
+
+    data.forEach((item) => {
+      expandedKeys.value.push(item.id);
+    });
   } catch (err) {
   } finally {
     setLoading(false);
@@ -61,8 +62,8 @@ const selectedKeys = ref([]);
 
 const rowSelection = reactive<TableRowSelection>({
   type: "checkbox",
-  showCheckedAll: true,
-  checkStrictly: false,
+  showCheckedAll: false,
+  checkStrictly: true,
   onlyCurrent: false,
 });
 </script>
