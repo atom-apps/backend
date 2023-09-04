@@ -62,15 +62,11 @@ export const actionDesc = (action: string) => {
 export const tablePermissionColumns = (): Columns => {
   return {
     columns: [
-      { title: 'ID', dataIndex: 'id', slotName: 'id' },
-      { title: '创建时间', dataIndex: 'created_at', slotName: 'created_at' },
       // { title: '租户ID', dataIndex: 'tenant_id', slotName: 'tenant_id' },
-      { title: '租户', dataIndex: 'tenant', slotName: 'tenant' },
-      // { title: '角色ID', dataIndex: 'role_id', slotName: 'role_id' },
-      { title: '角色', dataIndex: 'role', slotName: 'role' },
-      { title: '路由', dataIndex: 'path', slotName: 'path' },
+      { title: '名称', dataIndex: 'name', slotName: 'name' },
       { title: '请求方式', dataIndex: 'action', slotName: 'action' },
-      { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
+      { title: '路由', dataIndex: 'path', slotName: 'path' },
+      { title: '权限', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
       'uuid', 'created_at', 'updated_at', 'deleted_at'
@@ -90,6 +86,10 @@ export const tablePermissionLabels = (): Record<string, string> => {
 }
 
 export function queryPermissionList(params: PermissionListQuery) {
+  return axios.get<PaginationResp<PermissionItem>>('/v1/users/permissions', { params });
+}
+
+export function getPermissionTree(params: PermissionListQuery) {
   return axios.get<PaginationResp<PermissionItem>>('/v1/users/permissions', { params });
 }
 

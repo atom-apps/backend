@@ -1,7 +1,7 @@
 import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
-const DASHBOARD: AppRouteRecordRaw = {
+const USER: AppRouteRecordRaw = {
   path: '/users', name: 'users', component: DEFAULT_LAYOUT, meta: { title: '用户管理', requiresAuth: true, icon: 'icon-user', order: 0 },
   children: [
     // user
@@ -38,4 +38,4 @@ const DASHBOARD: AppRouteRecordRaw = {
   ],
 };
 
-export default DASHBOARD;
+export default USER;
