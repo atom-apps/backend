@@ -1,6 +1,8 @@
 <template>
   <div>
-    <PageHeader title="用户管理" subtitle="权限列表" />
+    <PageHeader title="用户管理" subtitle="权限列表" >
+      <a-button type="primary">SetAuth</a-button>
+    </PageHeader>
 
     <a-table
       class="m-5"
