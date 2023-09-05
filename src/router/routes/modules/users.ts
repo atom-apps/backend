@@ -28,13 +28,6 @@ const USER: AppRouteRecordRaw = {
     { path: 'sessions/view/:id', name: 'SessionView', component: () => import('@/views/users/sessions/view.vue'), meta: { title: '在线详情', requiresAuth: true, hideInMenu: true } },
     { path: 'sessions/edit/:id', name: 'SessionEdit', component: () => import('@/views/users/sessions/edit.vue'), meta: { title: '在线编辑', requiresAuth: true, hideInMenu: true } },
     { path: 'sessions/create', name: 'SessionCreate', component: () => import('@/views/users/sessions/create.vue'), meta: { title: '在线创建', requiresAuth: true, hideInMenu: true } },
-
-    // permissions
-    { path: 'permissions', name: 'PermissionList', component: () => import('@/views/users/permissions/list.vue'), meta: { title: '权限列表', requiresAuth: true }, },
-    { path: 'permissions/view/:id', name: 'PermissionView', component: () => import('@/views/users/permissions/view.vue'), meta: { title: '权限详情', requiresAuth: true, hideInMenu: true } },
-    { path: 'permissions/edit/:id', name: 'PermissionEdit', component: () => import('@/views/users/permissions/edit.vue'), meta: { title: '权限编辑', requiresAuth: true, hideInMenu: true } },
-    { path: 'permissions/create', name: 'PermissionCreate', component: () => import('@/views/users/permissions/create.vue'), meta: { title: '权限创建', requiresAuth: true, hideInMenu: true } },
-
   ],
 };
 
