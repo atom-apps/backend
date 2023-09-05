@@ -74,7 +74,7 @@ export const tablePermissionColumns = (): Columns => {
       // { title: '租户ID', dataIndex: 'tenant_id', slotName: 'tenant_id' },
       { title: '名称', dataIndex: 'name', slotName: 'name' },
       { title: '路由', dataIndex: 'path', slotName: 'path' },
-      { title: '权限', dataIndex: 'operations', slotName: 'operations', align: 'right' },
+      // { title: '权限', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
       'uuid', 'created_at', 'updated_at', 'deleted_at'
@@ -99,6 +99,10 @@ export function queryPermissionList(params: PermissionListQuery) {
 
 export function getPermissionTree() {
   return axios.get<PermissionTree[]>('/v1/users/permissions/tree');
+}
+
+export function savePermissionOfTenantRole(tenant:number,role:number, roleIds: number[]) {
+  return axios.post(`/v1/users/permissions/save/${tenant}/${role}`, { ids: roleIds });
 }
 
 export function createPermissionItem(data: PermissionItem) {

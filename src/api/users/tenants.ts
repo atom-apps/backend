@@ -1,5 +1,6 @@
 import { Columns, Filter, FilterType, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
+import { RoleItem } from './roles';
 
 
 export interface TenantListQuery extends Pagination {
@@ -15,6 +16,7 @@ export interface TenantItem {
   description?: string; // 描述
   meta?: string; // 元数据
   user_amount?: number; // 用户数量
+  roles?: RoleItem[]; //  角色
 }
 
 export const tableTenantFilters = (): Filter[] => {
@@ -33,6 +35,7 @@ export const tableTenantColumns = (): Columns => {
       { title: '描述', dataIndex: 'description', slotName: 'description' },
       { title: '元数据', dataIndex: 'meta', slotName: 'meta' },
       { title: '用户数量', dataIndex: 'user_amount', slotName: 'user_amount', align: 'center' },
+      { title: '角色', dataIndex: 'roles', slotName: 'roles', align: 'center' },
       { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [

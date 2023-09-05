@@ -1,6 +1,7 @@
 import { useUserStore } from '@/store';
 import { Columns, Filter, FilterType, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
+import { TenantItem } from './tenants';
 
 
 export interface RoleListQuery extends Pagination {
@@ -20,6 +21,8 @@ export interface RoleItem {
   description?: string; // 描述
   parent_id?: number; // 父角色
   user_amount?: number; // 用户数量
+  tenants?: TenantItem[]; // 租户
+  permissions?: Record<number, number[]>;
 }
 
 export const tableRoleFilters = (): Filter[] => {
@@ -27,7 +30,7 @@ export const tableRoleFilters = (): Filter[] => {
   return [
     { type: FilterType.String, name: 'name', label: '名称' },
     { type: FilterType.String, name: 'slug', label: '唯一标识' },
-    { type: FilterType.Number, name: 'parent_id', label: '父角色',items:userState.roles },
+    { type: FilterType.Number, name: 'parent_id', label: '父角色', items: userState.roles },
   ]
 }
 
@@ -40,11 +43,13 @@ export const tableRoleColumns = (): Columns => {
       { title: '唯一标识', dataIndex: 'slug', slotName: 'slug' },
       { title: '用户数量', dataIndex: 'user_amount', slotName: 'user_amount', align: 'center' },
       { title: '描述', dataIndex: 'description', slotName: 'description' },
-      { title: '父角色', dataIndex: 'parent_id', slotName: 'parent_id' },
+      { title: '父角色', dataIndex: 'parent_id', slotName: 'parent_id', align: 'center' },
+      { title: '租户', dataIndex: 'tenants', slotName: 'tenants', align: 'center' },
+      { title: '权限设置', dataIndex: 'permission', slotName: 'permission' },
       { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
-      'uuid', 'created_at', 'updated_at', 'deleted_at','description'
+      'uuid', 'created_at', 'updated_at', 'deleted_at', 'description'
     ],
   }
 }

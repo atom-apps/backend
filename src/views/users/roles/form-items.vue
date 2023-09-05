@@ -9,7 +9,9 @@
     <a-input v-model="form.description" placeholder="请输入描述" />
   </a-form-item>
   <a-form-item field="parent_id" label="父角色">
-    <a-select :options="userStore.roles" allow-clear v-model="form.parent_id" placeholder="请输入父角色" />
+    <a-select  allow-clear v-model.number="form.parent_id" placeholder="请输入父角色" >
+      <a-option v-for="item in userStore.roles" :value="Number(item.value)" :label="item.label" />
+    </a-select>
   </a-form-item>
           
 </template>

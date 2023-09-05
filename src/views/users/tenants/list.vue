@@ -35,6 +35,10 @@
         @page-change="onPageChange"
         @page-size-change="onPageSizeChange"
       >
+        <template #roles="{ record }">
+          <a-tag v-for="role in record.roles" color="orange">{{ role.name }}</a-tag>
+        </template>
+
         <template #operations="{ record }">
           <RowOperations
             :record="record"
