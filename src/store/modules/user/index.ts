@@ -23,7 +23,7 @@ const useUserStore = defineStore('user', {
       phone: undefined,
       display_name: undefined,
       avatar: undefined,
-      role: undefined,
+      claims: undefined,
     },
     roles: [],
     tenants: [],
@@ -49,32 +49,35 @@ const useUserStore = defineStore('user', {
 
     // Get user's information
     async init() {
-      const res = await getUserInfo();
-      this.setInfo({ profile: res.data });
+      const { data } = await getUserInfo();
+      this.setInfo({ profile: data });
 
-      // get tenants
-      const tenantRes = await queryTenantList({});
-      let items: LabelItem[] = []
-      tenantRes.data.items.forEach((item: TenantItem) => {
-        items.push({ label: item.name ?? '', value: `${item.id}` })
-      })
-      this.setInfo({ tenants: items });
+      const adminRoles = ['super_admin','system_admin','tenant_admin']
+      if (adminRoles.includes(data.claims?.role ?? '')) {
+        // get tenants
+        const { data: tenants } = await queryTenantList({});
+        let items: LabelItem[] = []
+        tenants.items.forEach((item: TenantItem) => {
+          items.push({ label: item.name ?? '', value: `${item.id}` })
+        })
+        this.setInfo({ tenants: items });
 
-      // roles
-      const roleRes = await queryRoleList({});
+        // roles
+        const { data: roles } = await queryRoleList({});
 
-      items = []
-      roleRes.data.items.forEach((item: RoleItem) => {
-        items.push({ label: item.name ?? '', value: `${item.id}` })
-      })
-      this.setInfo({ roles: items });
+        items = []
+        roles.items.forEach((item: RoleItem) => {
+          items.push({ label: item.name ?? '', value: `${item.id}` })
+        })
+        this.setInfo({ roles: items });
+      }
     },
 
     // Login
     async login(loginForm: LoginData) {
       try {
-        const res = await userLogin(loginForm);
-        setToken(res.data.token);
+        const { data } = await userLogin(loginForm);
+        setToken(data.token);
       } catch (err) {
         clearToken();
         throw err;

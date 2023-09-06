@@ -1,18 +1,14 @@
-import { computed } from 'vue';
-import { RouteRecordRaw, RouteRecordNormalized } from 'vue-router';
 import usePermission from '@/hooks/permission';
 import { useAppStore } from '@/store';
-import appClientMenus from '@/router/app-menus';
 import { cloneDeep } from 'lodash';
+import { computed } from 'vue';
+import { RouteRecordNormalized, RouteRecordRaw } from 'vue-router';
 
 export default function useMenuTree() {
   const permission = usePermission();
   const appStore = useAppStore();
   const appRoute = computed(() => {
-    if (appStore.menuFromServer) {
-      return appStore.appAsyncMenus;
-    }
-    return appClientMenus;
+    return appStore.appAsyncMenus;
   });
   const menuTree = computed(() => {
     const copyRouter = cloneDeep(appRoute.value) as RouteRecordNormalized[];

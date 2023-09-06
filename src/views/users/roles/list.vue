@@ -46,7 +46,9 @@
       <div class="p-5 max-h-96 overflow-auto">
         <a-table row-key="id" v-model:selectedKeys="permissionSelectedKeys" v-model:expandedKeys="permissionExpandedKeys"
           :row-selection="permissionRowSelection" :loading="permissionLoading" :bordered="false"
-          :columns="permissionColumns" :data="permissionTree" :pagination="false" size="large" />
+          :columns="permissionColumns" :data="permissionTree" :pagination="false" size="large" >
+          <template #name="{record}">{{ record.metadata.title }}</template>
+          </a-table>
       </div>
     </a-modal>
   </div>

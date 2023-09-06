@@ -82,7 +82,7 @@ setupMock({
           children: [
             {
               path: 'workplace',
-              name: 'Workplace',
+              name: 'workplace',
               meta: {
                 locale: 'menu.server.workplace',
                 requiresAuth: true,

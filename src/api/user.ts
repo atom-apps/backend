@@ -33,5 +33,5 @@ export function getUserInfo() {
 }
 
 export function getMenuList() {
-  return axios.post<RouteRecordNormalized[]>('/v1/auth/pages');
+  return axios.get<RouteRecordNormalized[]>('/v1/auth/pages');
 }

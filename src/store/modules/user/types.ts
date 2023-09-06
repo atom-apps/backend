@@ -9,11 +9,17 @@ export interface UserProfile {
   phone?: string;
   display_name?: string;
   avatar?: string
-  role?: string;
+  claims?: Claims;
 }
 
 export interface UserState {
   profile: UserProfile;
   tenants?: LabelItem[];
   roles?: LabelItem[];
+}
+export interface Claims {
+  user_id: number;
+  tenant_id: number;
+  role_id: number;
+  role: string;
 }
