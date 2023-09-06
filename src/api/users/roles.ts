@@ -39,11 +39,11 @@ export const tableRoleColumns = (): Columns => {
     columns: [
       { title: 'ID', dataIndex: 'id', slotName: 'id' },
       { title: '创建时间', dataIndex: 'created_at', slotName: 'created_at' },
+      { title: '父角色', dataIndex: 'parent_id', slotName: 'parent_id', align: 'center' },
       { title: '名称', dataIndex: 'name', slotName: 'name' },
       { title: '唯一标识', dataIndex: 'slug', slotName: 'slug' },
       { title: '用户数量', dataIndex: 'user_amount', slotName: 'user_amount', align: 'center' },
       { title: '描述', dataIndex: 'description', slotName: 'description' },
-      { title: '父角色', dataIndex: 'parent_id', slotName: 'parent_id', align: 'center' },
       { title: '租户', dataIndex: 'tenants', slotName: 'tenants', align: 'center' },
       { title: '权限设置', dataIndex: 'permission', slotName: 'permission' },
       { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
