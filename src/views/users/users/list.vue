@@ -39,10 +39,7 @@
         <template #operations="{ record }">
           <RowOperations :record="record" :reload="fetchData" edit="UserEdit" view="UserView" :params="{ id: record.id }"
             :deleteAction="deleteUserItem">
-
-            <a-button type="outline" size="mini" status="normal"
-              @click="$router.push({ name: 'UserTenantRole', params: { id: record.id } })">角色分配</a-button>
-
+            <a-button type="outline" size="mini" status="normal" @click="$router.push({ name: 'UserTenantRole', params: { id: record.id } })">角色分配</a-button>
           </RowOperations>
         </template>
       </a-table>
