@@ -13,13 +13,6 @@
       />
     </PageHeader>
 
-    <QueryForm
-      class="m-5 pt-5"
-      ref="queryForm"
-      @search="fetchData"
-      :filters="tableDictionaryFilters()"
-    />
-
     <a-table
       class="m-5"
       row-key="id"
@@ -61,8 +54,7 @@ DictionaryItem,
 DictionaryListQuery,
 deleteDictionaryItem,
 queryDictionaryList,
-tableDictionaryColumns,
-tableDictionaryFilters,
+tableDictionaryColumns
 } from "@/api/systems/dictionaries";
 import { PageHeader } from "@/components/layout";
 import {
@@ -72,8 +64,7 @@ ActionDensity,
 ActionExport,
 ActionImport,
 ActionRefresh,
-QueryForm,
-RowOperations,
+RowOperations
 } from "@/components/table";
 import { SizeProps } from "@/components/table/types";
 import useDatetime from "@/hooks/datetime";
@@ -124,7 +115,6 @@ const fetchData = async (pg: Pagination = basePagination) => {
       ...pages,
       ...queryForm.value?.filterItems(),
     } as unknown) as DictionaryListQuery;
-    console.log(params);
 
     const { data } = await queryDictionaryList(params);
     renderData.value = data.items;

@@ -1,16 +1,11 @@
-import { Columns, Filter, FilterType, Pagination, PaginationResp } from '@/types/global';
+import { Columns, Filter, FilterType, LabelItem, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
 
 
 export interface DictionaryListQuery extends Pagination {
-  id?: number; // ID
-  created_at?: Date; // 创建时间
-  updated_at?: Date; // 更新时间
-  deleted_at?: Date; // 删除时间
   name?: string; // 名称
   slug?: string; // 别名
   description?: string; // 描述
-  items?: string; // 选项
 }
 
 export interface DictionaryItem {
@@ -20,16 +15,13 @@ export interface DictionaryItem {
   name?: string; // 名称
   slug?: string; // 别名
   description?: string; // 描述
-  items?: string; // 选项
+  items?: LabelItem[]; // 选项
 }
 
 export const tableDictionaryFilters = (): Filter[] => {
   return [
-    { type: FilterType.List, name: "ids", label: "ID" },
     { type: FilterType.String, name: 'name', label: '名称' },
     { type: FilterType.String, name: 'slug', label: '别名' },
-    { type: FilterType.String, name: 'description', label: '描述' },
-    { type: FilterType.String, name: 'items', label: '选项' }, 
   ]
 }
 
