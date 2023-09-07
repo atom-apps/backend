@@ -11,38 +11,43 @@
 
     <QueryForm class="m-5 pt-5" ref="queryForm" @search="fetchData" :filters="tableUserFilters()" />
 
-      <a-table class="m-5" row-key="id" :hoverable="true" :stripe="true" :row-selection="rowSelection"
-        v-model:selectedKeys="selectedKeys" :loading="loading" :pagination="pagination" :columns="showColumns"
-        :data="renderData" :size="size" @page-change="onPageChange"
-        @page-size-change="onPageSizeChange">
-        <template #created_at="{ record }"> {{ date(record.created_at) }} </template>
-        <template #updated_at="{ record }"> {{ date(record.updated_at) }} </template>
+    <a-table class="m-5" row-key="id" :hoverable="true" :stripe="true" :row-selection="rowSelection"
+      v-model:selectedKeys="selectedKeys" :loading="loading" :pagination="pagination" :columns="showColumns"
+      :data="renderData" :size="size" @page-change="onPageChange" @page-size-change="onPageSizeChange">
+      <template #created_at="{ record }"> {{ date(record.created_at) }} </template>
+      <template #updated_at="{ record }"> {{ date(record.updated_at) }} </template>
 
-        <template #status="{ record }">
-          <a-badge status="danger" v-if="record.status == 'blocked'" />
-          <a-badge status="normal" v-else :text="record.status" />
-        </template>
+      <template #status="{ record }">
+        <a-badge status="danger" v-if="record.status == 'blocked'" />
+        <a-badge status="normal" v-else :text="record.status" />
+      </template>
 
-        <template #email="{ record }">
-          <a-badge status="normal" v-if="record.email_verified" :text="record.email" />
-          <a-badge status="warning" v-else :text="record.email" />
-        </template>
+      <template #email="{ record }">
+        <a-badge status="normal" v-if="record.email_verified" :text="record.email" />
+        <a-badge status="warning" v-else :text="record.email" />
+      </template>
 
-        <template #tenant_role="{ record }">
-          <a-space wrap>
-            <a-tag color="orange" v-for="item in record.tenant_roles">
-              {{ item.tenant.name }}/{{ item.role.name }}
-            </a-tag>
-          </a-space>
-        </template>
+      <template #tenant_role="{ record }">
+        <a-space wrap>
+          <a-tag color="orange" v-for="item in record.tenant_roles">
+            {{ item.tenant.name }}/{{ item.role.name }}
+          </a-tag>
+        </a-space>
+      </template>
 
-        <template #operations="{ record }">
-          <RowOperations v-if="record.id>1" :record="record" :reload="fetchData" edit="UserEdit" view="UserView" :params="{ id: record.id }"
-            :deleteAction="deleteUserItem">
-            <a-button type="outline" size="mini" status="normal" @click="$router.push({ name: 'UserTenantRole', params: { id: record.id } })">角色分配</a-button>
-          </RowOperations>
-        </template>
-      </a-table>
+      <template #operations="{ record }">
+        <RowOperations v-if="record.id > 1" :record="record" :reload="fetchData" edit="UserEdit" view="UserView"
+          :params="{ id: record.id }" :deleteAction="deleteUserItem">
+          <a-button type="outline" size="mini" status="normal"
+            @click="$router.push({ name: 'UserTenantRole', params: { id: record.id } })">角色分配</a-button>
+
+          <a-popconfirm content="确认重置用户密码？" type="warning" :ok-loading="passwordReseting"
+            @ok="handlerResetPassword(record.id)" position="lt" :data-id="record.id">
+            <a-button type="outline" size="mini">重置密码</a-button>
+          </a-popconfirm>
+        </RowOperations>
+      </template>
+    </a-table>
   </div>
 </template>
 
@@ -52,6 +57,7 @@ UserItem,
 UserListQuery,
 deleteUserItem,
 queryUserList,
+resetUserPassword,
 tableUserColumns,
 tableUserFilters,
 } from "@/api/users/users";
@@ -71,6 +77,8 @@ import useDatetime from "@/hooks/datetime";
 import useLoading from "@/hooks/loading";
 import { Pagination } from "@/types/global";
 import {
+Message,
+Notification,
 PaginationProps,
 TableColumnData,
 TableRowSelection,
@@ -92,6 +100,24 @@ onMounted(() => {
   fetchData(basePagination);
 });
 
+// reset password
+const { loading: passwordReseting, setLoading: setPasswordReseting } = useLoading(false);
+const handlerResetPassword = async (id: number) => {
+  try {
+    setPasswordReseting(true);
+    const { data } = await resetUserPassword(id);
+    Notification.success({
+      title: '密码重置成功',
+      content: `新密码：${data}, 请复制后手动关闭`,
+      closable: true,
+      duration: 0,
+    })
+  } catch (e: any) {
+    Message.error(e.message);
+  } finally {
+    setPasswordReseting(false);
+  }
+};
 
 // fetch table data
 const { loading, setLoading } = useLoading(true);

@@ -117,3 +117,6 @@ export function getUserItem(id: number) {
 export function deleteUserItem(id: number) {
   return axios.delete(`/v1/users/users/${id}`);
 }
+export function resetUserPassword(id: number) {
+  return axios.put(`/v1/users/users/${id}/reset-password`);
+}
