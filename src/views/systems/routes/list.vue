@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="系统管理" subtitle="路由列表">
+    <PageHeader subtitle="系统管理">
       <ActionCreate :to="{ name: 'RouteCreate' }" />
       <ActionImport />
       <ActionExport />

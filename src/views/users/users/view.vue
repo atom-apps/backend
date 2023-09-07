@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="用户管理" subtitle="用户详情" :back="true" :loading="loading">
+    <PageHeader subtitle="用户管理" :back="true" :loading="loading">
       <a-button type="primary" @click="$router.push({ name: 'UserEdit', params: { id: route.params.id } })">编辑</a-button>
 
       <a-popconfirm content="确认删除？" type="warning" :ok-loading="deleting" @ok="handleConfirmDelete" position="lt">

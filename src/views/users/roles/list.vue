@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="用户管理" subtitle="角色列表">
+    <PageHeader subtitle="用户管理">
       <ActionCreate :to="{ name: 'RoleCreate' }" />
       <ActionImport />
       <ActionExport />

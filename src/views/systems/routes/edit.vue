@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="系统管理" subtitle="路由编辑" :back="true"/>
+    <PageHeader subtitle="系统管理"  :back="true"/>
 
     <Container :loading="loading" :rows="3" class="pt-5">
       <a-form :model="form" @submit="handleSubmit" class="md:w-3/4 sm:w-full">

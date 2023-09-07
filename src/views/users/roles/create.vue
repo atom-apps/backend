@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="用户管理" subtitle="角色编辑" :back="true" :loading="false" />
+    <PageHeader subtitle="用户管理" :back="true" :loading="false" />
 
     <Container class="pt-5">
       <a-form :model="form" @submit="handleSubmit" class="mx-auto md:w-1/2 sm:w-full">

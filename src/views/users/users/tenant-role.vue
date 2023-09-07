@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader title="用户管理" subtitle="角色分配" :back="true" />
+    <PageHeader subtitle="用户管理" :back="true" />
 
     <Container :loading="loading" :rows="2" :title="userInfo.username">
 
