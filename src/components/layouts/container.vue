@@ -1,5 +1,5 @@
 <template>
-    <a-card class="m-5" :title="title">
+    <a-card class="m-5 rounded" :title="title">
         <a-space direction="vertical" size="large" class="w-full" v-if="loading">
             <a-skeleton :animation="true">
                 <a-space direction="vertical" class="w-full" size="large">
