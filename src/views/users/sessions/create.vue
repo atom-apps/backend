@@ -31,6 +31,7 @@ const form = ref<SessionItem>({});
 const { loading: submitting, setLoading: setSubmitting } = useLoading()
 // form
 const handleSubmit = async ({ values, errors }: any) => {
+  if (!!errors) return;
   try {
     setSubmitting(true);
     await createSessionItem(values);

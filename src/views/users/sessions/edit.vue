@@ -46,7 +46,7 @@ const fetchData = async () => {
 const { loading: submitting, setLoading: setSubmitting } = useLoading()
 // form
 const handleSubmit = async ({ values, errors }: any) => {
-  console.log(values, errors);
+  if (!!errors) return;
   try {
     setSubmitting(true);
     await updateSessionItem(Number(route.params.id), values)
