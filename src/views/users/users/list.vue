@@ -37,7 +37,7 @@
         </template>
 
         <template #operations="{ record }">
-          <RowOperations :record="record" :reload="fetchData" edit="UserEdit" view="UserView" :params="{ id: record.id }"
+          <RowOperations v-if="record.id>1" :record="record" :reload="fetchData" edit="UserEdit" view="UserView" :params="{ id: record.id }"
             :deleteAction="deleteUserItem">
             <a-button type="outline" size="mini" status="normal" @click="$router.push({ name: 'UserTenantRole', params: { id: record.id } })">角色分配</a-button>
           </RowOperations>
