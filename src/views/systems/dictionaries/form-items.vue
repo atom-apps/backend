@@ -15,11 +15,11 @@
 
   <a-form-item field="items" v-for="(item, index) in form.items" :label="`选项 ${index}`">
     <a-space>
-      <a-input v-model="item.value" placeholder="请输入值">
-        <template #prepend>值</template>
-      </a-input>
       <a-input v-model="item.label" placeholder="请输入标签">
-        <template #prepend>标签</template>
+        <template #prepend>Label</template>
+      </a-input>
+      <a-input v-model="item.value" placeholder="请输入值">
+        <template #prepend>Value</template>
       </a-input>
       <a-button @click.prevent="deleteItem(index)" type="outline" status="danger">删除</a-button>
     </a-space>
