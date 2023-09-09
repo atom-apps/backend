@@ -16,6 +16,13 @@ const SYSTEM: AppRouteRecordRaw = {
     { path: 'dictionaries/edit/:id', name: 'DictionaryEdit', component: () => import('@/views/systems/dictionaries/edit.vue'), meta: { title: '字典编辑', requiresAuth: true, hideInMenu: true } },
     { path: 'dictionaries/create', name: 'DictionaryCreate', component: () => import('@/views/systems/dictionaries/create.vue'), meta: { title: '字典创建', requiresAuth: true, hideInMenu: true } },
 
+    // 菜单管理 
+    { path: 'menus', name: 'MenuList', component: () => import('@/views/systems/menus/list.vue'), meta: { title: '菜单列表', requiresAuth: true, hideInMenu: false } },
+    { path: 'menus/:id/sub', name: 'MenuSubList', component: () => import('@/views/systems/menus/sub-list.vue'), meta: { title: '子菜单列表', requiresAuth: true, hideInMenu: false } },
+    { path: 'menus/view/:id', name: 'MenuView', component: () => import('@/views/systems/menus/view.vue'), meta: { title: '菜单详情', requiresAuth: true, hideInMenu: true } },
+    { path: 'menus/edit/:id', name: 'MenuEdit', component: () => import('@/views/systems/menus/edit.vue'), meta: { title: '菜单编辑', requiresAuth: true, hideInMenu: true } },
+    { path: 'menus/create', name: 'MenuCreate', component: () => import('@/views/systems/menus/create.vue'), meta: { title: '菜单创建', requiresAuth: true, hideInMenu: true } },
+
   ],
 };
 
