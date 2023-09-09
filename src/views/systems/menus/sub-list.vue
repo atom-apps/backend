@@ -34,7 +34,7 @@
             <a-form-item>
               <a-space>
                 <a-button type="primary" html-type="submit" size="large" :loading="submitting">提交</a-button>
-                <a-button size="large" @click="form=undefined">取消</a-button>
+                <a-button size="large" @click="form = undefined">取消</a-button>
               </a-space>
             </a-form-item>
           </a-form>
@@ -144,7 +144,7 @@ const onClickDeleteItem = async (nodeData: TreeNodeData) => {
   }
 }
 
-const onNodeSelect = async (selectedKeys, { node }) => {
+const onNodeSelect = async (selectedKeys: any, { node }: any) => {
   console.log(selectedKeys, node)
 
   setSubmitting(true)
