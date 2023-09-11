@@ -23,6 +23,13 @@ const SYSTEM: AppRouteRecordRaw = {
     { path: 'menus/edit/:id', name: 'MenuEdit', component: () => import('@/views/systems/menus/edit.vue'), meta: { title: '菜单编辑', requiresAuth: true, hideInMenu: true } },
     { path: 'menus/create', name: 'MenuCreate', component: () => import('@/views/systems/menus/create.vue'), meta: { title: '菜单创建', requiresAuth: true, hideInMenu: true } },
 
+
+    // 区域
+    { path: 'locations', name: 'LocationList', component: () => import('@/views/systems/locations/list.vue'), meta: { title: '区域列表', requiresAuth: true, hideInMenu: false } },
+    { path: 'locations/view/:id', name: 'LocationView', component: () => import('@/views/systems/locations/view.vue'), meta: { title: '区域详情', requiresAuth: true, hideInMenu: true } },
+    { path: 'locations/edit/:id', name: 'LocationEdit', component: () => import('@/views/systems/locations/edit.vue'), meta: { title: '区域编辑', requiresAuth: true, hideInMenu: true } },
+    { path: 'locations/create', name: 'LocationCreate', component: () => import('@/views/systems/locations/create.vue'), meta: { title: '区域创建', requiresAuth: true, hideInMenu: true } },
+
   ],
 };
 
