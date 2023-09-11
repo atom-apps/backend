@@ -24,7 +24,7 @@ export interface LocationItem {
 export const tableLocationFilters = (): Filter[] => {
   return [
     { type: FilterType.String, name: 'code', label: '行政代码' },
-    { type: FilterType.String, name: 'town', label: '乡镇' }, 
+    { type: FilterType.String, name: 'town', label: '乡镇' },
   ]
 }
 
@@ -38,7 +38,7 @@ export const tableLocationColumns = (): Columns => {
       { title: '省/直辖市', dataIndex: 'province', slotName: 'province' },
       { title: '市', dataIndex: 'city', slotName: 'city' },
       { title: '区县', dataIndex: 'area', slotName: 'area' },
-      { title: '乡镇', dataIndex: 'town', slotName: 'town' }, 
+      { title: '乡镇', dataIndex: 'town', slotName: 'town' },
     ],
     hidden: [
       'uuid', 'created_at', 'updated_at', 'deleted_at'
@@ -55,7 +55,7 @@ export const tableLocationLabels = (): Record<string, string> => {
     'province': '省/直辖市',
     'city': '市',
     'area': '区县',
-    'town': '乡镇', 
+    'town': '乡镇',
   }
 }
 
@@ -77,4 +77,17 @@ export function getLocationItem(id: number) {
 
 export function deleteLocationItem(id: number) {
   return axios.delete(`/v1/systems/locations/${id}`);
+}
+export function getProvinces() {
+  return axios.get<LocationItem[]>(`/v1/systems/locations/provinces`);
+}
+
+export function getCities(province: string) {
+  return axios.get<LocationItem[]>(`/v1/systems/locations/provinces/${province}/cities`);
+}
+export function getAreas(province: string, city: string) {
+  return axios.get<LocationItem[]>(`/v1/systems/locations/provinces/${province}/cities/${city}/areas`);
+}
+export function getTowns(province: string, city: string, area: string) {
+  return axios.get<LocationItem[]>(`/v1/systems/locations/provinces/${province}/cities/${city}/areas/${area}/towns`);
 }

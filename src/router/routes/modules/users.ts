@@ -11,6 +11,12 @@ const USER: AppRouteRecordRaw = {
     { path: 'users/create', name: 'UserCreate', component: () => import('@/views/users/users/create.vue'), meta: { title: '用户创建', requiresAuth: true, hideInMenu: true } },
     { path: 'users/:id/tenant-role', name: 'UserTenantRole', component: () => import('@/views/users/users/tenant-role.vue'), meta: { title: '角色分配', requiresAuth: true, hideInMenu: true } },
 
+    // 用户地址
+    { path: 'users/users/:user_id/addresses', name: 'UserAddressList', component: () => import('@/views/users/users/addresses/list.vue'), meta: { title: '用户地址列表', requiresAuth: true, hideInMenu: false } },
+    { path: 'users/users/:user_id/addresses/view/:id', name: 'UserAddressView', component: () => import('@/views/users/users/addresses/view.vue'), meta: { title: '用户地址详情', requiresAuth: true, hideInMenu: true } },
+    { path: 'users/users/:user_id/addresses/edit/:id', name: 'UserAddressEdit', component: () => import('@/views/users/users/addresses/edit.vue'), meta: { title: '用户地址编辑', requiresAuth: true, hideInMenu: true } },
+    { path: 'users/users/:user_id/addresses/create', name: 'UserAddressCreate', component: () => import('@/views/users/users/addresses/create.vue'), meta: { title: '用户地址创建', requiresAuth: true, hideInMenu: true } },
+
     // role
     { path: 'roles', name: 'RoleList', component: () => import('@/views/users/roles/list.vue'), meta: { title: '角色列表', requiresAuth: true }, },
     { path: 'roles/view/:id', name: 'RoleView', component: () => import('@/views/users/roles/view.vue'), meta: { title: '角色详情', requiresAuth: true, hideInMenu: true } },
