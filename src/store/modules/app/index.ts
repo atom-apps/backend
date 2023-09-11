@@ -7,7 +7,7 @@ import type { RouteRecordNormalized } from 'vue-router';
 import { AppState } from './types';
 
 const useAppStore = defineStore('app', {
-  state: (): AppState => ({ ...defaultSettings}),
+  state: (): AppState => ({ ...defaultSettings }),
 
   getters: {
     appCurrentSetting(state: AppState): AppState {
@@ -49,16 +49,31 @@ const useAppStore = defineStore('app', {
       try {
         notifyInstance = Notification.info({
           id: 'menuNotice', // Keep the instance id the same
-          content: 'loading',
+          content: 'loading menus',
           closable: true,
         });
         const { data } = await getMenuList();
         this.serverMenu = data;
         notifyInstance = Notification.success({
           id: 'menuNotice',
-          content: 'success',
+          content: 'menus loaded success',
           closable: true,
         });
+
+        const getMenuIDs = (menus: RouteRecordNormalized[]): string[] => {
+          const ids: string[] = [];
+          menus.forEach((menu) => {
+            ids.push(menu.name?.toString() || '');
+
+            if (menu.children) {
+              ids.push(...getMenuIDs(menu.children as RouteRecordNormalized[]));
+            }
+          });
+          return ids;
+        };
+
+        this.authMenus = getMenuIDs(data);
+
       } catch (error) {
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         notifyInstance = Notification.error({

@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="用户管理">
-      <ActionCreate :to="{ name: 'RoleCreate' }" />
-      <ActionImport />
-      <ActionExport />
+      <ActionCreate v-can="'RoleCreate'" :to="{ name: 'RoleCreate' }" />
+      <ActionImport v-can="'RoleImport'" />
+      <ActionExport v-can="'RoleDownload'" />
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn
@@ -65,6 +65,7 @@
           :reload="fetchData"
           edit="RoleEdit"
           view="RoleView"
+          remove="RoleDelete"
           :params="{ id: record.id }"
           :deleteAction="deleteRoleItem"
         />

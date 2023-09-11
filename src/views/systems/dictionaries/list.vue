@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="系统管理">
-      <ActionCreate :to="{ name: 'DictionaryCreate' }" />
-      <ActionImport />
-      <ActionExport />
+      <ActionCreate v-can="'DictionaryCreate'" :to="{ name: 'DictionaryCreate' }" />
+      <ActionImport v-can="'DictionaryImport'"/>
+      <ActionExport v-can="'DictionaryDownload'"/>
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn
@@ -39,6 +39,7 @@
           :record="record"
           :reload="fetchData"
           edit="DictionaryEdit"
+          remove="DictionaryDelete"
           :view="false"
           :params="{ id: record.id }"
           :deleteAction="deleteDictionaryItem"

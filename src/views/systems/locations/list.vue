@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="系统管理">
-      <ActionCreate :to="{ name: 'LocationCreate' }" />
-      <ActionImport />
-      <ActionExport />
+      <ActionCreate v-can="'LocationCreate'" :to="{ name: 'LocationCreate' }" />
+      <ActionImport  v-can="'LocationImport'"/>
+      <ActionExport  v-can="'LocationDelete'"/>
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn

@@ -9,7 +9,6 @@ export enum RouteType {
 
 export interface RouteListQuery extends Pagination {
   id?: number; // 
-  type?: string; // 类型
   parent_id?: number; // 父级ID
   name?: string; // 名称
   path?: string; // 路径
@@ -19,7 +18,6 @@ export interface RouteListQuery extends Pagination {
 
 export interface RouteItem {
   id?: number; // 
-  type?: string; // 类型
   parent_id?: number; // 父级ID
   name?: string; // 名称
   path?: string; // 路径
@@ -29,12 +27,6 @@ export interface RouteItem {
 
 export const tableRouteFilters = (): Filter[] => {
   return [
-    {
-      type: FilterType.String, name: 'type', label: '类型', items: [
-        { label: '页面', value: RouteType.Page },
-        { label: '接口', value: RouteType.Api },
-      ]
-    },
     { type: FilterType.String, name: 'name', label: '名称' },
     { type: FilterType.String, name: 'path', label: '路径' },
   ]
@@ -43,8 +35,7 @@ export const tableRouteFilters = (): Filter[] => {
 export const tableRouteColumns = (): Columns => {
   return {
     columns: [
-      { title: '', dataIndex: 'id', slotName: 'id' },
-      { title: '类型', dataIndex: 'type', slotName: 'type' },
+      { title: 'ID', dataIndex: 'id', slotName: 'id' },
       { title: '名称', dataIndex: 'name', slotName: 'name' },
       { title: '路径', dataIndex: 'path', slotName: 'path' },
       { title: '元数据', dataIndex: 'metadata', slotName: 'metadata' },

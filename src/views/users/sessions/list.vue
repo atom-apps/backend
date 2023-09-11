@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="用户管理">
-      <ActionCreate :to="{ name: 'SessionCreate' }" />
-      <ActionImport />
-      <ActionExport />
+      <ActionCreate v-can="'SessionCreate'" :to="{ name: 'SessionCreate' }" />
+      <ActionImport v-can="'SessionImport'"/>
+      <ActionExport v-can="'SessionDownload'"/>
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn
@@ -44,6 +44,7 @@
           :reload="fetchData"
           edit="SessionEdit"
           view="SessionView"
+          remove="SessionDelete"
           :params="{ id: record.id }"
           :deleteAction="deleteSessionItem"
         />

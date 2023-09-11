@@ -12,5 +12,6 @@
   "globalSettings": false,
   "device": "desktop",
   "tabBar": false,
-  "serverMenu": []
+  "serverMenu": [],
+  "authMenus": []
 }

@@ -8,9 +8,9 @@
           <a-tree class="tree-demo" blockNode :data="treeData" :showLine="true" v-model:expanded-keys="expandedKeys"
             @select="onNodeSelect">
             <template #extra="nodeData">
-              <a-button type="text" size="mini" @click="() => onClickNewItem(nodeData)">[添加]</a-button>
+              <a-button v-can="'MenuSubCreate'" type="text" size="mini" @click="() => onClickNewItem(nodeData)">[添加]</a-button>
 
-              <a-popconfirm content="确认删除？" type="warning" :ok-loading="loading" @ok="() => onClickDeleteItem(nodeData)"
+              <a-popconfirm  v-can="'MenuDelete'" content="确认删除？" type="warning" :ok-loading="loading" @ok="() => onClickDeleteItem(nodeData)"
                 position="lt">
                 <a-button type="text" status="danger" size="mini">[删除]</a-button>
               </a-popconfirm>
@@ -20,7 +20,7 @@
       </a-col>
 
       <a-col :span="12">
-        <Container v-if="form">
+        <Container v-if="form" v-can="'MenuEdit'">
           <a-form :model="form" @submit="handleSubmit" class="w-full mt-5">
             <a-form-item field="name" label="名称" :rules="[{ required: true, message: '名称必填' }]">
               <a-input v-model="form.name" placeholder="请输入名称" />

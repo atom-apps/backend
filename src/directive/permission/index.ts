@@ -1,22 +1,14 @@
-import { useUserStore } from '@/store';
+import { useAppStore } from '@/store';
 import { DirectiveBinding } from 'vue';
 
 function checkPermission(el: HTMLElement, binding: DirectiveBinding) {
   const { value } = binding;
-  const userStore = useUserStore();
-  const { role } = userStore.profile;
+  const appStore = useAppStore();
 
-  if (Array.isArray(value)) {
-    if (value.length > 0) {
-      const permissionValues = value;
-
-      const hasPermission = permissionValues.includes(role);
-      if (!hasPermission && el.parentNode) {
-        el.parentNode.removeChild(el);
-      }
+  if (value.length > 0) {
+    if (!appStore.authMenus.includes(value) && el.parentNode) {
+      el.parentNode.removeChild(el);
     }
-  } else {
-    throw new Error(`need roles! Like v-permission="['admin','user']"`);
   }
 }
 

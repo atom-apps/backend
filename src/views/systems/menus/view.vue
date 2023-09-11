@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="系统管理" :back="true" :loading="loading">
-      <a-button type="primary" @click="$router.push({ name: 'MenuEdit', params: { id: route.params.id } })">编辑</a-button>
+      <a-button v-can="'MenuEdit'" type="primary" @click="$router.push({ name: 'MenuEdit', params: { id: route.params.id } })">编辑</a-button>
 
-      <a-popconfirm content="确认删除？" type="warning" :ok-loading="deleting" @ok="handleConfirmDelete" position="lt">
+      <a-popconfirm v-can="'MenuDelete'" content="确认删除？" type="warning" :ok-loading="deleting" @ok="handleConfirmDelete" position="lt">
         <a-tooltip content="删除">
           <a-button type="outline" status="danger">删除</a-button>
         </a-tooltip>
@@ -31,21 +31,21 @@ const title=ref<string>("Title")
 
 const { loading, setLoading } = useLoading();
 const renderData = ref<DescData[]>([]);
-const userInfo = ref<MenuItem>({});
+const itemInfo = ref<MenuItem>({});
 const labels = tableMenuLabels();
 
 const fetchData = async () => {
   try {
     setLoading(true);
     const { data: profile } = await getMenuItem(Number(route.params.id))
-    userInfo.value = profile
+    itemInfo.value = profile
 
     let items:DescData[] = [];
     for (const key in profile) {
       if (Object.prototype.hasOwnProperty.call(labels, key)) {
         items.push({
           label: labels[key],
-          value: profile[key]
+          value: profile[key],
         }) 
       }
     }

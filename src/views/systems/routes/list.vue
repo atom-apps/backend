@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="系统管理">
-      <ActionCreate :to="{ name: 'RouteCreate' }" />
-      <ActionImport />
-      <ActionExport />
+      <ActionCreate v-can="'RouteCreate'" :to="{ name: 'RouteCreate' }" />
+      <ActionImport v-can="'RouteImport'"/>
+      <ActionExport v-can="'RouteDownload'" />
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn
@@ -41,6 +41,7 @@
             :reload="fetchData"
             edit="RouteEdit"
             view="RouteView"
+            remove="RouteDelete"
             :params="{ id: record.id }"
             :deleteAction="deleteRouteItem"
           />

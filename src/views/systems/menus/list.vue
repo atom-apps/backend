@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="系统管理">
-      <ActionCreate :to="{ name: 'MenuCreate' }" />
-      <ActionImport />
-      <ActionExport />
+      <ActionCreate v-can="'MenuCreate'" :to="{ name: 'MenuCreate' }" />
+      <ActionImport v-can="'MenuImport'" />
+      <ActionExport v-can="'MenuDownload'" />
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn
@@ -28,6 +28,7 @@
           :record="record"
           :reload="fetchData"
           edit="MenuEdit"
+          remove="MenuDelete"
           :view="false"
           :params="{ id: record.id }"
           :deleteAction="deleteMenuItem"

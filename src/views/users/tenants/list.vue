@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="用户管理">
-      <ActionCreate :to="{ name: 'TenantCreate' }" />
-      <ActionImport />
-      <ActionExport />
+      <ActionCreate v-can="'TenantCreate'" :to="{ name: 'TenantCreate' }" />
+      <ActionImport v-can="'TenantImport'" />
+      <ActionExport v-can="'TenantDownload'" />
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn
@@ -45,6 +45,7 @@
             :reload="fetchData"
             edit="TenantEdit"
             view="TenantView"
+            remove="TenantDelete"
             :params="{ id: record.id }"
             :deleteAction="deleteTenantItem"
           />

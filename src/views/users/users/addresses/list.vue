@@ -1,7 +1,7 @@
 <template>
   <div>
     <PageHeader subtitle="用户管理">
-      <ActionCreate :to="{ name: 'UserAddressCreate' }" />
+      <ActionCreate v-can="'UserAddressCreate'" :to="{ name: 'UserAddressCreate' }" />
       <ActionRefresh @click="fetchData" />
     </PageHeader>
 
@@ -13,7 +13,7 @@
       <template #deleted_at="{ record }">{{ datetime(record.deleted_at) }}</template>
 
       <template #operations="{ record }">
-        <RowOperations :record="record" :reload="fetchData" edit="UserAddressEdit" :view="false"
+        <RowOperations :record="record" :reload="fetchData" edit="UserAddressEdit" remove="UserAddressDelete" :view="false"
           :params="{ user_id: record.user_id, id: record.id }" :deleteAction="deleteAction" />
       </template>
     </a-table>

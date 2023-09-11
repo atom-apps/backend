@@ -3,14 +3,14 @@
         <slot></slot>
 
         <a-tooltip content="查看" v-if="view">
-            <a-button type="outline" size="mini" @click="$router.push({ name: String(view), params: params })"
+            <a-button type="outline" size="mini" v-can="view" @click="$router.push({ name: String(view), params: params })"
                 status="normal"><template #icon><icon-eye /></template></a-button>
         </a-tooltip>
-        <a-tooltip content="编辑" v-if="edit">
+        <a-tooltip content="编辑" v-if="edit" v-can="edit">
             <a-button type="outline" size="mini" @click="$router.push({ name: String(edit), params: params })"
                 status="success"><template #icon><icon-edit /></template></a-button>
         </a-tooltip>
-        <a-popconfirm v-if="deleteAction" content="确认删除？" type="warning" :ok-loading="loading" @ok="handleOk(record.id)"
+        <a-popconfirm v-if="remove" v-can="remove" content="确认删除？" type="warning" :ok-loading="loading" @ok="handleOk(record.id)"
             position="lt" :data-id="record.id">
             <a-tooltip content="删除">
                 <a-button type="outline" size="mini" status="danger">
@@ -31,6 +31,7 @@ const route = useRoute();
 const props = defineProps<{
     edit: string | string;
     view: string | boolean;
+    remove: string | boolean;
     params: any;
     record: any;
     reload: () => void;

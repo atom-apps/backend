@@ -1,9 +1,9 @@
 <template>
   <div>
     <PageHeader subtitle="用户管理">
-      <ActionCreate :to="{ name: 'UserCreate' }" />
-      <ActionImport />
-      <ActionExport />
+      <ActionCreate v-can="'UserCreate'" :to="{ name: 'UserCreate' }" />
+      <ActionImport v-can="'UserImport'"/>
+      <ActionExport v-can="'UserDownload'"/>
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn :columns="allColumns" :hidden="hiddenColumns" v-model:clone="showColumns" />
@@ -36,15 +36,15 @@
       </template>
 
       <template #operations="{ record }">
-        <RowOperations v-if="record.id > 1" :record="record" :reload="fetchData" edit="UserEdit" view="UserView"
+        <RowOperations v-if="record.id > 1" :record="record" :reload="fetchData" edit="UserEdit" view="UserView" remove="UserDelete"
           :params="{ id: record.id }" :deleteAction="deleteUserItem">
-          <a-button type="outline" size="mini" status="normal"
+          <a-button v-can="'UserAddressList'" type="outline" size="mini" status="normal"
             @click="$router.push({ name: 'UserAddressList', params: { user_id: record.id } })">地址管理</a-button>
 
-          <a-button type="outline" size="mini" status="normal"
+          <a-button v-can="'UserTenantRole'" type="outline" size="mini" status="normal"
             @click="$router.push({ name: 'UserTenantRole', params: { id: record.id } })">角色分配</a-button>
 
-          <a-popconfirm content="确认重置用户密码？" type="warning" :ok-loading="passwordReseting"
+          <a-popconfirm v-if="'UserResetPassword'" content="确认重置用户密码？" type="warning" :ok-loading="passwordReseting"
             @ok="handlerResetPassword(record.id)" position="lt" :data-id="record.id">
             <a-button type="outline" size="mini">重置密码</a-button>
           </a-popconfirm>
