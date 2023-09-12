@@ -30,6 +30,13 @@ const SYSTEM: AppRouteRecordRaw = {
     { path: 'locations/edit/:id', name: 'LocationEdit', component: () => import('@/views/systems/locations/edit.vue'), meta: { title: '区域编辑', requiresAuth: true, hideInMenu: true } },
     { path: 'locations/create', name: 'LocationCreate', component: () => import('@/views/systems/locations/create.vue'), meta: { title: '区域创建', requiresAuth: true, hideInMenu: true } },
 
+
+    // 存储驱动
+    { path: 'drivers', name: 'DriverList', component: () => import('@/views/systems/drivers/list.vue'), meta: { title: '存储驱动', requiresAuth: true, hideInMenu: false } },
+    { path: 'drivers/view/:id', name: 'DriverView', component: () => import('@/views/systems/drivers/view.vue'), meta: { title: '存储驱动详情', requiresAuth: true, hideInMenu: true } },
+    { path: 'drivers/edit/:id', name: 'DriverEdit', component: () => import('@/views/systems/drivers/edit.vue'), meta: { title: '存储驱动编辑', requiresAuth: true, hideInMenu: true } },
+    { path: 'drivers/create', name: 'DriverCreate', component: () => import('@/views/systems/drivers/create.vue'), meta: { title: '存储驱动创建', requiresAuth: true, hideInMenu: true } },
+
   ],
 };
 
