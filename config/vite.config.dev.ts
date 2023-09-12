@@ -7,7 +7,7 @@ export default mergeConfig(
     server: {
       open: true,
       proxy: {
-        "^/v1/.*": { target: 'http://127.0.0.1:9800', changeOrigin: true },
+        "^/v1/.*": { target: 'http://127.0.0.1:9080', changeOrigin: true },
       },
       fs: { strict: true },
     },
