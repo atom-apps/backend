@@ -1,8 +1,14 @@
 <template>
   <div class="h-full relative">
     <PageHeader subtitle="存储管理">
-      <ActionRefresh @click="fetchData" />
+      <a-button type="primary" @click="showUploadModal = true">上传文件</a-button>
+      <a-button type="outline" @click="() => fetchData(pagination)">刷新</a-button>
     </PageHeader>
+
+    <a-modal v-model:visible="showUploadModal" simple :footer="false" :width="600" :hideTitle="true"
+      body-style="overflow:hidden;">
+      <a-upload draggable :action="uploadAction" :multiple="true" :headers="uploadHeaders" @success="uploadSuccess" />
+    </a-modal>
 
     <div class="border-t border-b absolute left-0 right-0 bottom-0"
       style="top: 63px;background-color: var(--color-bg-2);">
@@ -44,12 +50,12 @@
 <script lang="ts" setup>
 import { FilesystemItem, FilesystemListQuery, getFilesystemDirectoryTree, queryFilesystemList } from "@/api/storages/filesystems";
 import { PageHeader } from "@/components/layout";
-import { ActionRefresh } from "@/components/table";
 import useLoading from "@/hooks/loading";
 import { Pagination } from "@/types/global";
-import { PaginationProps, TreeNodeData } from "@arco-design/web-vue";
+import { getToken } from "@/utils/auth";
+import { FileItem, PaginationProps, TreeNodeData } from "@arco-design/web-vue";
 import IconFont from '@components/icon/icon.vue';
-import { h, reactive, ref } from "vue";
+import { computed, h, reactive, ref } from "vue";
 
 const queryForm = ref<FilesystemListQuery>({
   parent_id: 0
@@ -59,8 +65,20 @@ const size = ref('300px');
 // fetch table data
 const { loading, setLoading } = useLoading(true);
 
-const dirs = ref<FilesystemItem[]>([]);
-const files = ref<FilesystemItem[]>([]);
+const showUploadModal = ref<boolean>(true);
+
+const uploadAction = computed(() => `/v1/storages/uploads/${queryForm.value.parent_id}`)
+const uploadHeaders = computed(() => {
+  const token = getToken()
+  return {
+    Authorization: `Bearer ${token}`
+  }
+})
+const uploadSuccess = (file: FileItem) => {
+  const response = file.response as FilesystemItem;
+  renderData.value.push(response)
+}
+
 const tree = ref<FilesystemItem[]>([]);
 const renderTreeData = ref<TreeNodeData[]>([]);
 
