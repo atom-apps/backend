@@ -4,21 +4,24 @@
       <ActionRefresh @click="fetchData" />
     </PageHeader>
 
-    <div class="bg-white border-t border-b absolute left-0 right-0 bottom-0" style="top: 63px">
-      <a-split v-model:size="size" min="80px" :style="{ minHeight: '100px', height: '100%' }">
+    <div class="border-t border-b absolute left-0 right-0 bottom-0"
+      style="top: 63px;background-color: var(--color-bg-2);">
+      <a-split v-model:size="size" min="150px" :style="{ minHeight: '100px', height: '100%' }">
+
         <template #first>
-          <a-spin :loading="loading" tip="加载中" class="w-full p-5">
-            <a-tree showLine blockNode :data="renderTreeData" id="file-tree"/>
-          </a-spin>
+          <a-tree showLine blockNode :data="renderTreeData" id="file-tree" v-model:expanded-keys="expandedKeys"
+            @select="onFolderSelect" />
         </template>
+
         <template #second>
           <a-spin :loading="loading" tip="加载中" class="w-full overflow-auto">
-            <a-grid :gutter="16" :row-gap="10" :col-gap="10" class="m-5">
+            <a-empty v-if="renderData.length == 0" />
+            <a-grid v-else :gutter="16" :row-gap="10" :col-gap="10" class="m-5">
               <a-grid-item v-for="item in renderData" :span=12 class="cursor-pointer">
 
                 <a-card hoverable>
                   <div class="flex justify-between items-center">
-                    <IconFolder/>
+                    <IconFolder />
 
                     <div class="flex-1 flex flex-col items-start">
                       <span class="ml-5">{{ filename(item) }}</span>
@@ -32,6 +35,7 @@
             </a-grid>
           </a-spin>
         </template>
+
       </a-split>
     </div>
   </div>
@@ -47,8 +51,10 @@ import { PaginationProps, TreeNodeData } from "@arco-design/web-vue";
 import IconFont from '@components/icon/icon.vue';
 import { h, reactive, ref } from "vue";
 
-const queryForm = ref();
-const size = ref('200px');
+const queryForm = ref<FilesystemListQuery>({
+  parent_id: 0
+});
+const size = ref('300px');
 
 // fetch table data
 const { loading, setLoading } = useLoading(true);
@@ -61,6 +67,7 @@ const renderTreeData = ref<TreeNodeData[]>([]);
 const filename = (item: FilesystemItem) => {
   return item.filename + (item.ext ? "." + item.ext : "");
 };
+const expandedKeys = ref<string[]>(['0']);
 
 const genTree = (items: FilesystemItem[], parent_id: number) => {
   let tree: TreeNodeData[] = []
@@ -74,9 +81,9 @@ const genTree = (items: FilesystemItem[], parent_id: number) => {
 
       if (item.children?.length) {
         nodeItem.children = genTree(item.children ?? [], Number(item.id))
-        nodeItem.switcherIcon = () => h(IconFont,{type:'folder-open',size:16})
+        nodeItem.switcherIcon = () => h(IconFont, { type: 'folder-open', size: 16 })
       } else {
-        nodeItem.switcherIcon = () => h(IconFont,{type:'folder',size:16})
+        nodeItem.switcherIcon = () => h(IconFont, { type: 'folder', size: 16 })
       }
       tree.push(nodeItem)
     }
@@ -85,14 +92,21 @@ const genTree = (items: FilesystemItem[], parent_id: number) => {
   return tree
 }
 
+const pagination: Pagination = reactive<PaginationProps>({ current: 1, pageSize: 50 });
+
 // 加载目录列表
 const loadTree = async () => {
   setLoading(true);
   try {
     const { data } = await getFilesystemDirectoryTree()
     tree.value = data
-    renderTreeData.value = genTree(data, 0)
-    console.log(renderTreeData.value)
+    renderTreeData.value = [{
+      key: '0',
+      title: "根目录",
+      switcherIcon: () => h(IconFont, { type: 'folder-open', size: 16 }),
+      children: genTree(data, 0),
+    }]
+
 
   } finally {
     setLoading(false)
@@ -102,35 +116,36 @@ loadTree()
 
 const renderData = ref<FilesystemItem[]>([]);
 
-const pagination: Pagination = reactive<PaginationProps>({ current: 1, pageSize: 50 });
-
 const fetchData = async (pg: Pagination = pagination) => {
   setLoading(true);
   try {
     const pages = { page: pg.current, limit: pg.pageSize };
     const params = ({
       ...pages,
-      ...queryForm.value?.filterItems(),
+      ...queryForm.value,
     } as unknown) as FilesystemListQuery;
     console.log(params);
 
     const { data } = await queryFilesystemList(params);
     renderData.value = data.items;
-    // pagination.current = data.page;
-    // pagination.pageSize = data.limit;
-  } catch (err) {
-    // you can report use errorHandler or other
   } finally {
     setLoading(false);
   }
 };
 fetchData(pagination);
 
+const onFolderSelect = (newSelectedKeys: any, event: any) => {
+  if (event.node.key != queryForm.value.parent_id) {
+    queryForm.value.parent_id = event.node.key
+    fetchData(pagination)
+  }
+  console.log('onFolderSelect', event.node.key)
+}
 </script>
 
 
 <style>
-#file-tree .arco-tree-node-switcher-icon svg{
+#file-tree .arco-tree-node-switcher-icon svg {
   transform: rotate(0) !important;
 }
 </style>

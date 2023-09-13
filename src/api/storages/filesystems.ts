@@ -3,8 +3,8 @@ import axios from 'axios';
 
 
 export interface FilesystemListQuery extends Pagination {
+  parent_id: number; // 父级ID
   filename?: string; // 文件名
-  parent_id?: number; // 父级ID
   mime?: string; // MIME
   ext?: string; // 后缀名
 }
