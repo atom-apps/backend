@@ -22,6 +22,8 @@ export interface FilesystemItem {
   status?: string; // 状态
   mime?: string; // MIME
   ext?: string; // 后缀名
+  size?: number; // 后缀名
+  md5?: string; // 后缀名
   share_uuid?: string; // 共享ID
   metadata?: string; // 元数据
 }

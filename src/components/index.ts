@@ -1,16 +1,17 @@
-import { App } from 'vue';
-import { use } from 'echarts/core';
-import { CanvasRenderer } from 'echarts/renderers';
 import { BarChart, LineChart, PieChart, RadarChart } from 'echarts/charts';
 import {
-  GridComponent,
-  TooltipComponent,
-  LegendComponent,
   DataZoomComponent,
   GraphicComponent,
+  GridComponent,
+  LegendComponent,
+  TooltipComponent,
 } from 'echarts/components';
-import Chart from './chart/index.vue';
+import { use } from 'echarts/core';
+import { CanvasRenderer } from 'echarts/renderers';
+import { App } from 'vue';
 import Breadcrumb from './breadcrumb/index.vue';
+import Chart from './chart/index.vue';
+import IconFont from './icon/icon.vue';
 
 // Manually introduce ECharts modules to reduce packing size
 
@@ -30,6 +31,7 @@ use([
 export default {
   install(Vue: App) {
     Vue.component('Chart', Chart);
+    Vue.component('IconFont', IconFont);
     Vue.component('Breadcrumb', Breadcrumb);
   },
 };

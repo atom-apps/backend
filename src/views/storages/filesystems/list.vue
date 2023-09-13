@@ -1,16 +1,40 @@
 <template>
-  <div>
+  <div class="h-full relative">
     <PageHeader subtitle="存储管理">
       <ActionRefresh @click="fetchData" />
     </PageHeader>
 
-    <a-grid :gutter="16" :row-gap="10" :col-gap="10" class="m-5">
-      <a-grid-item v-for="item in renderData" :span=3 class="cursor-pointer">
-        <a-card :bordered="false" class="hover:shadow">
-            <a-typography-text>{{ item.filename }}</a-typography-text>
-        </a-card>
-      </a-grid-item>
-    </a-grid>
+    <div class="bg-white border-t border-b absolute left-0 right-0 bottom-0" style="top: 63px">
+      <a-split v-model:size="size" min="80px" :style="{minHeight:'100px',height: '100%'}">
+        <template #first>
+          <a-spin :loading="loading" tip="加载中" class="w-full">
+            hello
+            <!-- <a-tree blockNode :data="leftTree" /> -->
+          </a-spin>
+        </template>
+        <template #second>
+          <a-spin :loading="loading" tip="加载中" class="w-full overflow-auto">
+            <a-grid :gutter="16" :row-gap="10" :col-gap="10" class="m-5">
+              <a-grid-item v-for="item in renderData" :span=12 class="cursor-pointer">
+
+                <a-card hoverable>
+                  <div class="flex justify-between items-center">
+                    <IconFont type="file" />
+
+                    <div class="flex-1 flex flex-col items-start">
+                      <span class="ml-5">{{ filename(item) }}</span>
+                    </div>
+
+                    <a-link>More</a-link>
+                  </div>
+                </a-card>
+
+              </a-grid-item>
+            </a-grid>
+          </a-spin>
+        </template>
+      </a-split>
+    </div>
   </div>
 </template>
 
@@ -24,23 +48,23 @@ import { PaginationProps } from "@arco-design/web-vue";
 import { reactive, ref } from "vue";
 
 const queryForm = ref();
+const size = ref('200px');
 
 // fetch table data
 const { loading, setLoading } = useLoading(true);
+
+const dirs = ref<FilesystemItem[]>([]);
+const files = ref<FilesystemItem[]>([]);
+
+const filename = (item: FilesystemItem) => {
+  return item.filename + (item.ext ? "." + item.ext : "");
+};
+
 const renderData = ref<FilesystemItem[]>([]);
 
-const basePagination: Pagination = { current: 1, pageSize: 20 };
-const pagination = reactive<PaginationProps>({
-  ...basePagination,
-  showPageSize: true,
-  showJumper: true,
-  showTotal: true,
-  simple: false,
-  hideOnSinglePage: true,
-  showMore: true,
-});
+const pagination: Pagination = reactive<PaginationProps>({ current: 1, pageSize: 50 });
 
-const fetchData = async (pg: Pagination = basePagination) => {
+const fetchData = async (pg: Pagination = pagination) => {
   setLoading(true);
   try {
     const pages = { page: pg.current, limit: pg.pageSize };
@@ -52,7 +76,6 @@ const fetchData = async (pg: Pagination = basePagination) => {
 
     const { data } = await queryFilesystemList(params);
     renderData.value = data.items;
-    pagination.total = data.total;
     // pagination.current = data.page;
     // pagination.pageSize = data.limit;
   } catch (err) {
@@ -61,6 +84,6 @@ const fetchData = async (pg: Pagination = basePagination) => {
     setLoading(false);
   }
 };
-fetchData(basePagination);
+fetchData(pagination);
 
 </script>
