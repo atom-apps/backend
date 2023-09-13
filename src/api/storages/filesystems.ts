@@ -26,6 +26,7 @@ export interface FilesystemItem {
   md5?: string; // 后缀名
   share_uuid?: string; // 共享ID
   metadata?: string; // 元数据
+  children?: FilesystemItem[]; // 元数据
 }
 
 export const tableFilesystemFilters = (): Filter[] => {
@@ -58,8 +59,8 @@ export const tableFilesystemColumns = (): Columns => {
       { title: 'MIME', dataIndex: 'mime', slotName: 'mime' },
       { title: '后缀名', dataIndex: 'ext', slotName: 'ext' },
       { title: '共享ID', dataIndex: 'share_uuid', slotName: 'share_uuid' },
-      { title: '元数据', dataIndex: 'metadata', slotName: 'metadata' }, 
-      { title: '操作', dataIndex: 'operations' ,slotName: 'operations', align: 'right' },
+      { title: '元数据', dataIndex: 'metadata', slotName: 'metadata' },
+      { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
       'uuid', 'created_at', 'updated_at', 'deleted_at'
@@ -83,7 +84,7 @@ export const tableFilesystemLabels = (): Record<string, string> => {
     'mime': 'MIME',
     'ext': '后缀名',
     'share_uuid': '共享ID',
-    'metadata': '元数据', 
+    'metadata': '元数据',
   }
 }
 
@@ -105,4 +106,8 @@ export function getFilesystemItem(id: number) {
 
 export function deleteFilesystemItem(id: number) {
   return axios.delete(`/v1/storages/filesystems/${id}`);
+}
+
+export function getFilesystemDirectoryTree() {
+  return axios.get<FilesystemItem[]>(`/v1/storages/filesystems/directories/tree`);
 }
