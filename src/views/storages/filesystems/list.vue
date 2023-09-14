@@ -7,7 +7,7 @@
 
     <a-modal v-model:visible="showUploadModal" simple :footer="false" :width="600" :hideTitle="true"
       body-style="overflow:hidden;">
-      <a-upload draggable :action="uploadAction" :multiple="true" :headers="uploadHeaders" @success="uploadSuccess" />
+      <a-upload directory draggable :action="uploadAction" :multiple="true" :headers="uploadHeaders" @success="uploadSuccess" />
     </a-modal>
 
     <div class="border-t border-b absolute left-0 right-0 bottom-0"
