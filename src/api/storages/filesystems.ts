@@ -111,3 +111,8 @@ export function deleteFilesystemItem(id: number) {
 export function getFilesystemDirectoryTree() {
   return axios.get<FilesystemItem[]>(`/v1/storages/filesystems/directories/tree`);
 }
+
+export function createFilesystemSubDirectory(parent:number,name:string) {
+  const params = {"name":name}
+  return axios.post(`/v1/storages/filesystems/${parent}/directory`,params);
+}
