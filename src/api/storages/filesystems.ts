@@ -8,6 +8,11 @@ export interface FilesystemListQuery extends Pagination {
   mime?: string; // MIME
   ext?: string; // 后缀名
 }
+export interface Metadata {
+  file_info?: any;
+  share_password?: string;
+  thumbnail?: string;
+}
 
 export interface FilesystemItem {
   id?: number; // ID
@@ -17,6 +22,7 @@ export interface FilesystemItem {
   user_id?: number; // 用户ID
   driver_id?: number; // 驱动
   filename?: string; // 文件名
+  real_name?: string; // 文件名
   type?: string; // 类型
   parent_id?: number; // 父级ID
   status?: string; // 状态
@@ -25,7 +31,7 @@ export interface FilesystemItem {
   size?: number; // 后缀名
   md5?: string; // 后缀名
   share_uuid?: string; // 共享ID
-  metadata?: string; // 元数据
+  metadata?: Metadata; // 元数据
   children?: FilesystemItem[]; // 元数据
 }
 

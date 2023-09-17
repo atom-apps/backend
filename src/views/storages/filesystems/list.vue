@@ -16,8 +16,7 @@
     <!-- modal upload -->
     <a-modal v-model:visible="showUploadModal" simple :footer="false" :width="600" :hideTitle="true"
       body-style="overflow:hidden;">
-      <a-upload directory draggable :action="uploadAction" :multiple="true" :headers="uploadHeaders"
-        @success="uploadSuccess" />
+      <a-upload draggable :action="uploadAction" :multiple="true" :headers="uploadHeaders" @success="uploadSuccess" />
     </a-modal>
 
     <!-- model create  -->
@@ -51,16 +50,27 @@
             <a-empty v-if="renderData.length == 0" />
 
             <a-row v-else>
-              <a-col v-for="item in renderData" :span="4" class="cursor-pointer p-5" :key="item.id">
+              <a-col :span="8" v-for="item in renderData" class="cursor-pointer p-3" :key="item.id">
                 <div @click="() => toggleSelectFile(Number(item.id))"
-                  class="p-5 rounded hover:bg-gray-100 hover:shadow flex flex-col items-center"
+                  class="rounded hover:shadow border flex justify-center items-center pr-5"
                   :class="{ 'border-sky-500 bg-gray-100 border': isFileSelected(Number(item.id)) }">
-                  <IconFont type="file" :size=56 />
 
-                  <div class="flex-1 flex flex-col items-start mt-5">
-                    <div class="mb-1">{{ filename(item) }}</div>
+                  <div class="preview bg-gray-100 flex items-center justify-center text-gray-500"
+                    style="width: 100px; height: 100px">
+                    <div style="padding:1px" v-if="item.metadata?.thumbnail">
+                      <img :src="item.metadata?.thumbnail">
+                    </div>
+                    <IconFont v-else type="file" :size=48 />
                   </div>
 
+                  <div class="flex-1 flex flex-col ml-5">
+                    <div class="mb-1">{{ filename(item) }}</div>
+                    <small class="text-gray-500">{{ item.mime }}</small>
+                    <small class="text-gray-500">{{ item.real_name }}</small>
+                    <small class="text-gray-500">{{ datetime(item.created_at?.toString()) }}</small>
+                  </div>
+
+                  <a-button href="">预览</a-button>
                 </div>
               </a-col>
 
