@@ -8,7 +8,7 @@ import { Icon } from '@arco-design/web-vue';
 defineProps({
   size: {
     type: Number,
-    default: '32',
+    default: 32,
   },
   type: {
     type: String,

@@ -1,6 +1,14 @@
 <template>
   <div class="h-full relative">
     <PageHeader subtitle="存储管理">
+
+      <a-button :disabled="!(currentSelectFile.length > 0 && cutFiles.length == 0)" @click="doCopyFiles"
+        class="w-full">复制</a-button>
+      <a-button :disabled="!(currentSelectFile.length > 0 && copyFiles.length == 0)" @click="doCutFiles"
+        class="w-full">剪切</a-button>
+      <a-button :disabled="!canPaste" @click="doPasteFiles" class="w-full">粘贴</a-button>
+      <div class="px-10"></div>
+
       <a-button @click="showCreateDirModal = true" class="w-full">创建目录</a-button>
       <a-button @click="() => fetchData(pagination)">刷新</a-button>
       <a-button type="primary" @click="showUploadModal = true">上传文件</a-button>
@@ -18,22 +26,23 @@
       @ok="createDir">
       <a-input v-model:model-value="dirName" class="w-full align-center" placeholder="请输入目录名" />
       <small class="mt-2 p-2 block bg-gray-200">
-      <ul class="list-disc">
-        <li>支持 <code>/</code> 分割多级目录创建</li>
-        <li>支持 <code>{a,b,c}</code> 分割同级多目录创建（多个 {} 只对上一次 {} 匹配的最后一个目录生效）</li>
-      </ul>
+        <ul class="list-disc">
+          <li>支持 <code>/</code> 分割多级目录创建</li>
+          <li>
+            支持 <code>{a,b,c}</code> 分割同级多目录创建（多个 {} 只对上一次 {}
+            匹配的最后一个目录生效）
+          </li>
+        </ul>
       </small>
     </a-modal>
 
     <div class="border-t border-b absolute left-0 right-0 bottom-0"
-      style="top: 63px;background-color: var(--color-bg-2);">
-
+      style="top: 63px; background-color: var(--color-bg-2)">
       <a-split id="fs-split" v-model:size="size" min="150px" :style="{ minHeight: '100px', height: '100%' }">
-
         <template #first>
           <div class="m-2">
             <a-tree ref="dirTree" showLine blockNode :data="renderTreeData" v-model:expanded-keys="expandedKeys"
-              v-model:selected-keys="selectedKeys" @select="onFolderSelect" />
+              v-model:selected-keys="currentSelectedDir" @select="onFolderSelect" />
           </div>
         </template>
 
@@ -41,11 +50,11 @@
           <a-spin :loading="loading" tip="加载中" class="w-full overflow-auto">
             <a-empty v-if="renderData.length == 0" />
             <a-grid v-else :gutter="16" :row-gap="10" :col-gap="10" class="m-5">
-              <a-grid-item v-for="item in renderData" :span=12 class="cursor-pointer">
-
-                <a-card hoverable>
+              <a-grid-item v-for="item in renderData" :span="8" class="cursor-pointer" :key="item.id">
+                <a-card hoverable @click="() => toggleSelectFile(Number(item.id))" class="rounded"
+                  :class="{ 'border-sky-500 border-2': isFileSelected(Number(item.id)) }">
                   <div class="flex justify-between items-center">
-                    <IconFolder />
+                    <IconFont type="file" />
 
                     <div class="flex-1 flex flex-col items-start">
                       <span class="ml-5">{{ filename(item) }}</span>
@@ -54,49 +63,54 @@
                     <a-link>More</a-link>
                   </div>
                 </a-card>
-
               </a-grid-item>
             </a-grid>
           </a-spin>
         </template>
-
       </a-split>
-
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { FilesystemItem, FilesystemListQuery, createFilesystemSubDirectory, getFilesystemDirectoryTree, queryFilesystemList } from "@/api/storages/filesystems";
+import {
+FilesystemItem,
+FilesystemListQuery,
+copyFilesystemToDirectory,
+createFilesystemSubDirectory,
+getFilesystemDirectoryTree,
+moveFilesystemToDirectory,
+queryFilesystemList
+} from "@/api/storages/filesystems";
 import { PageHeader } from "@/components/layout";
 import useLoading from "@/hooks/loading";
 import { Pagination } from "@/types/global";
 import { getToken } from "@/utils/auth";
 import { FileItem, PaginationProps, TreeNodeData } from "@arco-design/web-vue";
-import IconFont from '@components/icon/icon.vue';
+import IconFont from "@components/icon/icon.vue";
 import { computed, h, reactive, ref } from "vue";
 
 const queryForm = ref<FilesystemListQuery>({
-  parent_id: 0
+  parent_id: 0,
 });
-const size = ref('300px');
+const size = ref("300px");
 
 // fetch table data
 const { loading, setLoading } = useLoading(true);
 
 const showUploadModal = ref<boolean>(false);
 
-const uploadAction = computed(() => `/v1/storages/uploads/${queryForm.value.parent_id}`)
+const uploadAction = computed(() => `/v1/storages/uploads/${queryForm.value.parent_id}`);
 const uploadHeaders = computed(() => {
-  const token = getToken()
+  const token = getToken();
   return {
-    Authorization: `Bearer ${token}`
-  }
-})
+    Authorization: `Bearer ${token}`,
+  };
+});
 const uploadSuccess = (file: FileItem) => {
   const response = file.response as FilesystemItem;
-  renderData.value.push(response)
-}
+  renderData.value.push(response);
+};
 
 const tree = ref<FilesystemItem[]>([]);
 const renderTreeData = ref<TreeNodeData[]>([]);
@@ -104,53 +118,55 @@ const renderTreeData = ref<TreeNodeData[]>([]);
 const filename = (item: FilesystemItem) => {
   return item.filename + (item.ext ? "." + item.ext : "");
 };
-const expandedKeys = ref<string[]>(['0']);
-const selectedKeys = ref<string[]>(['0']);
+const expandedKeys = ref<string[]>(["0"]);
+const currentSelectedDir = ref<string[]>(["0"]);
 
 const genTree = (items: FilesystemItem[], parent_id: number) => {
-  let tree: TreeNodeData[] = []
+  let tree: TreeNodeData[] = [];
 
   for (const item of items) {
     if (Number(item.parent_id ?? 0) === parent_id) {
       const nodeItem: TreeNodeData = {
         key: item.id,
         title: item.filename,
-        switcherIcon: () => h(IconFont, { type: 'folder', size: 16 }),
-      }
+        switcherIcon: () => h(IconFont, { type: "folder", size: 16 }),
+      };
 
       if (item.children?.length) {
-        nodeItem.children = genTree(item.children ?? [], Number(item.id))
-        nodeItem.switcherIcon=() => h(IconFont, { type: 'folder-add', size: 16 })
+        nodeItem.children = genTree(item.children ?? [], Number(item.id));
+        nodeItem.switcherIcon = () => h(IconFont, { type: "folder-add", size: 16 });
       }
-      tree.push(nodeItem)
+      tree.push(nodeItem);
     }
   }
 
-  return tree
-}
+  return tree;
+};
 
 const pagination: Pagination = reactive<PaginationProps>({ current: 1, pageSize: 50 });
 
-const dirTree = ref()
+const dirTree = ref();
 // 加载目录列表
 const loadTree = async () => {
   setLoading(true);
   try {
-    const { data } = await getFilesystemDirectoryTree()
-    tree.value = data
-    renderTreeData.value = [{
-      key: '0',
-      title: "根目录",
-      switcherIcon: () => h(IconFont, { type: 'folder-add', size: 16 }),
-      children: genTree(data, 0),
-    }]
+    const { data } = await getFilesystemDirectoryTree();
+    tree.value = data;
+    renderTreeData.value = [
+      {
+        key: "0",
+        title: "根目录",
+        switcherIcon: () => h(IconFont, { type: "folder-add", size: 16 }),
+        children: genTree(data, 0),
+      },
+    ];
 
     // setTimeout(() => dirTree.value.expandAll(), 1000)
   } finally {
-    setLoading(false)
+    setLoading(false);
   }
-}
-loadTree()
+};
+loadTree();
 
 const renderData = ref<FilesystemItem[]>([]);
 
@@ -174,31 +190,101 @@ fetchData(pagination);
 
 const onFolderSelect = (newSelectedKeys: any, event: any) => {
   if (event.node.key != queryForm.value.parent_id) {
-    queryForm.value.parent_id = event.node.key
-    fetchData(pagination)
+    queryForm.value.parent_id = event.node.key;
+    fetchData(pagination);
   }
-  selectedKeys.value = [event.node.key]
-  dirTree.value.expandNode(event.node.key, true)
-  console.log('onFolderSelect', event.node.key)
+  currentSelectedDir.value = [event.node.key];
+  dirTree.value.expandNode(event.node.key, true);
+  console.log("onFolderSelect", event.node.key);
+};
+
+// create dir modal
+const dirName = ref<string>("子目录");
+const { loading: createDirLoading, setLoading: setCreateDirLoading } = useLoading(false);
+const showCreateDirModal = ref<boolean>(false);
+const createDir = async () => {
+  setCreateDirLoading(true);
+  try {
+    await createFilesystemSubDirectory(Number(currentSelectedDir.value[0]), dirName.value);
+    dirName.value = "子目录";
+    loadTree();
+  } finally {
+    setCreateDirLoading(false);
+  }
+};
+
+const currentSelectFile = ref<number[]>([]);
+const copyFiles = ref<number[]>([]);
+const cutFiles = ref<number[]>([]);
+
+const canPaste = computed(() => {
+  return copyFiles.value.length > 0 || cutFiles.value.length > 0;
+});
+
+const isFileSelected = (id: number) => currentSelectFile.value?.includes(id);
+
+const toggleSelectFile = (fileID: number) => {
+  if (currentSelectFile.value?.includes(fileID)) {
+    currentSelectFile.value.splice(currentSelectFile.value.indexOf(fileID), 1);
+  } else {
+    currentSelectFile.value?.push(fileID);
+  }
+
+  if (copyFiles.value?.includes(fileID) && copyFiles.value.length > 0) {
+    copyFiles.value.splice(copyFiles.value.indexOf(fileID), 1);
+  }
+
+  if (cutFiles.value?.includes(fileID) && cutFiles.value.length > 0) {
+    cutFiles.value.splice(cutFiles.value.indexOf(fileID), 1);
+  }
+
+};
+
+const doCopyFiles = () => {
+  if (currentSelectFile.value.length == 0) {
+    return
+  }
+
+  let files = []
+  for (const item of currentSelectFile.value) {
+    files.push(item)
+  }
+  copyFiles.value = files
+  cutFiles.value = []
 }
 
 
-// create dir modal
-const dirName = ref<string>('子目录')
-const { loading: createDirLoading, setLoading: setCreateDirLoading } = useLoading(false)
-const showCreateDirModal = ref<boolean>(false)
-const createDir = async () => {
-  setCreateDirLoading(true)
+const doCutFiles = () => {
+  if (currentSelectFile.value.length == 0) {
+    return
+  }
+
+  let files = []
+  for (const item of currentSelectFile.value) {
+    files.push(item)
+  }
+  cutFiles.value = files
+  copyFiles.value = []
+}
+
+const doPasteFiles = async () => {
   try {
-    await createFilesystemSubDirectory(Number(selectedKeys.value[0]), dirName.value)
-    dirName.value = "子目录"
-    loadTree()
-  } finally {
-    setCreateDirLoading(false)
+    if (cutFiles.value && cutFiles.value?.length > 0) {
+      await moveFilesystemToDirectory(Number(currentSelectedDir.value[0]), cutFiles.value)
+    } else if (copyFiles.value && copyFiles.value?.length > 0) {
+      await copyFilesystemToDirectory(Number(currentSelectedDir.value[0]), copyFiles.value)
+    }
+
+    cutFiles.value = []
+    copyFiles.value = []
+    currentSelectFile.value = []
+
+    fetchData()
+  } catch (e) {
+    console.log(e)
   }
 }
 </script>
-
 
 <style>
 #fs-split .arco-tree-node-switcher-icon svg {

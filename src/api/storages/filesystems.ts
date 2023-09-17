@@ -112,7 +112,17 @@ export function getFilesystemDirectoryTree() {
   return axios.get<FilesystemItem[]>(`/v1/storages/filesystems/directories/tree`);
 }
 
-export function createFilesystemSubDirectory(parent:number,name:string) {
-  const params = {"name":name}
-  return axios.post(`/v1/storages/filesystems/${parent}/directory`,params);
+export function createFilesystemSubDirectory(parent: number, name: string) {
+  const params = { "name": name }
+  return axios.post(`/v1/storages/filesystems/${parent}/directory`, params);
+}
+
+export function moveFilesystemToDirectory(parent: number, files: number[]) {
+  const params = { "id": files }
+  return axios.post(`/v1/storages/filesystems/${parent}/move`, params);
+}
+
+export function copyFilesystemToDirectory(parent: number, files: number[]) {
+  const params = { "id": files }
+  return axios.post(`/v1/storages/filesystems/${parent}/copy`, params);
 }
