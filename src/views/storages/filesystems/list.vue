@@ -1,7 +1,6 @@
 <template>
   <div class="h-full relative">
     <PageHeader subtitle="存储管理">
-
       <a-button :disabled="!(currentSelectFile.length > 0 && cutFiles.length == 0)" @click="doCopyFiles"
         class="w-full">复制</a-button>
       <a-button :disabled="!(currentSelectFile.length > 0 && copyFiles.length == 0)" @click="doCutFiles"
@@ -48,23 +47,25 @@
 
         <template #second>
           <a-spin :loading="loading" tip="加载中" class="w-full overflow-auto">
+
             <a-empty v-if="renderData.length == 0" />
-            <a-grid v-else :gutter="16" :row-gap="10" :col-gap="10" class="m-5">
-              <a-grid-item v-for="item in renderData" :span="8" class="cursor-pointer" :key="item.id">
-                <a-card hoverable @click="() => toggleSelectFile(Number(item.id))" class="rounded"
-                  :class="{ 'border-sky-500 border-2': isFileSelected(Number(item.id)) }">
-                  <div class="flex justify-between items-center">
-                    <IconFont type="file" />
 
-                    <div class="flex-1 flex flex-col items-start">
-                      <span class="ml-5">{{ filename(item) }}</span>
-                    </div>
+            <a-row v-else>
+              <a-col v-for="item in renderData" :span="4" class="cursor-pointer p-5" :key="item.id">
+                <div @click="() => toggleSelectFile(Number(item.id))"
+                  class="p-5 rounded hover:bg-gray-100 hover:shadow flex flex-col items-center"
+                  :class="{ 'border-sky-500 bg-gray-100 border': isFileSelected(Number(item.id)) }">
+                  <IconFont type="file" :size=56 />
 
-                    <a-link>More</a-link>
+                  <div class="flex-1 flex flex-col items-start mt-5">
+                    <div class="mb-1">{{ filename(item) }}</div>
                   </div>
-                </a-card>
-              </a-grid-item>
-            </a-grid>
+
+                </div>
+              </a-col>
+
+            </a-row>
+
           </a-spin>
         </template>
       </a-split>
@@ -80,15 +81,18 @@ copyFilesystemToDirectory,
 createFilesystemSubDirectory,
 getFilesystemDirectoryTree,
 moveFilesystemToDirectory,
-queryFilesystemList
+queryFilesystemList,
 } from "@/api/storages/filesystems";
 import { PageHeader } from "@/components/layout";
+import useDatetime from "@/hooks/datetime";
 import useLoading from "@/hooks/loading";
 import { Pagination } from "@/types/global";
 import { getToken } from "@/utils/auth";
 import { FileItem, PaginationProps, TreeNodeData } from "@arco-design/web-vue";
 import IconFont from "@components/icon/icon.vue";
 import { computed, h, reactive, ref } from "vue";
+
+const { datetime } = useDatetime()
 
 const queryForm = ref<FilesystemListQuery>({
   parent_id: 0,
@@ -205,7 +209,10 @@ const showCreateDirModal = ref<boolean>(false);
 const createDir = async () => {
   setCreateDirLoading(true);
   try {
-    await createFilesystemSubDirectory(Number(currentSelectedDir.value[0]), dirName.value);
+    await createFilesystemSubDirectory(
+      Number(currentSelectedDir.value[0]),
+      dirName.value
+    );
     dirName.value = "子目录";
     loadTree();
   } finally {
@@ -237,53 +244,57 @@ const toggleSelectFile = (fileID: number) => {
   if (cutFiles.value?.includes(fileID) && cutFiles.value.length > 0) {
     cutFiles.value.splice(cutFiles.value.indexOf(fileID), 1);
   }
-
 };
 
 const doCopyFiles = () => {
   if (currentSelectFile.value.length == 0) {
-    return
+    return;
   }
 
-  let files = []
+  let files = [];
   for (const item of currentSelectFile.value) {
-    files.push(item)
+    files.push(item);
   }
-  copyFiles.value = files
-  cutFiles.value = []
-}
-
+  copyFiles.value = files;
+  cutFiles.value = [];
+};
 
 const doCutFiles = () => {
   if (currentSelectFile.value.length == 0) {
-    return
+    return;
   }
 
-  let files = []
+  let files = [];
   for (const item of currentSelectFile.value) {
-    files.push(item)
+    files.push(item);
   }
-  cutFiles.value = files
-  copyFiles.value = []
-}
+  cutFiles.value = files;
+  copyFiles.value = [];
+};
 
 const doPasteFiles = async () => {
   try {
     if (cutFiles.value && cutFiles.value?.length > 0) {
-      await moveFilesystemToDirectory(Number(currentSelectedDir.value[0]), cutFiles.value)
+      await moveFilesystemToDirectory(
+        Number(currentSelectedDir.value[0]),
+        cutFiles.value
+      );
     } else if (copyFiles.value && copyFiles.value?.length > 0) {
-      await copyFilesystemToDirectory(Number(currentSelectedDir.value[0]), copyFiles.value)
+      await copyFilesystemToDirectory(
+        Number(currentSelectedDir.value[0]),
+        copyFiles.value
+      );
     }
 
-    cutFiles.value = []
-    copyFiles.value = []
-    currentSelectFile.value = []
+    cutFiles.value = [];
+    copyFiles.value = [];
+    currentSelectFile.value = [];
 
-    fetchData()
+    fetchData();
   } catch (e) {
-    console.log(e)
+    console.log(e);
   }
-}
+};
 </script>
 
 <style>
