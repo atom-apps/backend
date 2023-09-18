@@ -49,11 +49,13 @@ axios.interceptors.response.use(
           Modal.error({
             title: '登录失效',
             content: '请重新登录',
-            okText: 'Re-Login',
+            okText: '前往登录',
             async onOk() {
               const userStore = useUserStore();
 
-              await userStore.logout();
+              if (getToken()) {
+                await userStore.logout();
+              }
               window.location.reload();
             },
           });
