@@ -1,7 +1,7 @@
 import { DEFAULT_LAYOUT } from '../base';
 import { AppRouteRecordRaw } from '../types';
 
-const SYSTEM: AppRouteRecordRaw = {
+const POSTS: AppRouteRecordRaw = {
   path: '/posts', name: 'posts', component: DEFAULT_LAYOUT, meta: { title: '内容管理', requiresAuth: true, icon: 'icon-book', order: 1 },
   children: [
     // 书籍
@@ -25,4 +25,4 @@ const SYSTEM: AppRouteRecordRaw = {
   ],
 };
 
-export default SYSTEM;
+export default POSTS;

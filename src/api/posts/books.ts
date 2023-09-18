@@ -36,16 +36,9 @@ export interface BookItem {
 export const tableBookFilters = (): Filter[] => {
   return [
     { type: FilterType.List, name: "ids", label: "ID" },
-    { type: FilterType.Date, name: 'created_at', label: '创建时间' },
-    { type: FilterType.Date, name: 'updated_at', label: '更新时间' },
-    { type: FilterType.Date, name: 'deleted_at', label: '删除时间' },
     { type: FilterType.Number, name: 'tenant_id', label: '租户ID' },
     { type: FilterType.Number, name: 'user_id', label: '用户ID' },
     { type: FilterType.String, name: 'title', label: '书名' },
-    { type: FilterType.String, name: 'description', label: '简介' },
-    { type: FilterType.String, name: 'content', label: '详细介绍' },
-    { type: FilterType.String, name: 'author', label: '原作者' },
-    { type: FilterType.String, name: 'source', label: '原书地址' },
     { type: FilterType.String, name: 'isbn', label: 'ISBN' },
     { type: FilterType.Number, name: 'price', label: '价格' }, 
   ]
@@ -60,9 +53,8 @@ export const tableBookColumns = (): Columns => {
       { title: '删除时间', dataIndex: 'deleted_at', slotName: 'deleted_at' },
       { title: '租户ID', dataIndex: 'tenant_id', slotName: 'tenant_id' },
       { title: '用户ID', dataIndex: 'user_id', slotName: 'user_id' },
+      { title: '封面', dataIndex: 'thumbnail', slotName: 'thumbnail' },
       { title: '书名', dataIndex: 'title', slotName: 'title' },
-      { title: '简介', dataIndex: 'description', slotName: 'description' },
-      { title: '详细介绍', dataIndex: 'content', slotName: 'content' },
       { title: '原作者', dataIndex: 'author', slotName: 'author' },
       { title: '原书地址', dataIndex: 'source', slotName: 'source' },
       { title: 'ISBN', dataIndex: 'isbn', slotName: 'isbn' },

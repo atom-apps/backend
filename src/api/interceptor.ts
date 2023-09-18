@@ -1,6 +1,6 @@
 import { useUserStore } from '@/store';
 import { getToken } from '@/utils/auth';
-import { Message, Modal } from '@arco-design/web-vue';
+import { Message } from '@arco-design/web-vue';
 import type { AxiosRequestConfig, AxiosResponse } from 'axios';
 import axios from 'axios';
 
@@ -43,22 +43,20 @@ axios.interceptors.response.use(
     console.log("ERROR", error)
 
     if (error.response) {
+    console.log("ERROR", error.response)
       const resp = error.response.data
       switch (error.response.status) {
         case 401:
-          Modal.error({
-            title: '登录失效',
-            content: '请重新登录',
-            okText: '前往登录',
-            async onOk() {
-              const userStore = useUserStore();
+          Message.error({ content: '登录失效,请重新登录', });
 
-              if (getToken()) {
-                await userStore.logout();
-              }
-              window.location.reload();
-            },
-          });
+          const f = async () => {
+            const userStore = useUserStore();
+            if (getToken()) {
+              await userStore.logout();
+            }
+            window.location.reload();
+          }
+          f()
           break;
         default:
           if (!resp.message) {
