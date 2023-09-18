@@ -51,27 +51,24 @@ export interface ArticleItem {
 
 export const tableArticleFilters = (): Filter[] => {
   return [
-    { type: FilterType.List, name: "ids", label: "ID" },
-    { type: FilterType.Date, name: 'created_at', label: '创建时间' },
     { type: FilterType.Date, name: 'updated_at', label: '更新时间' },
-    { type: FilterType.Date, name: 'deleted_at', label: '删除时间' },
-    { type: FilterType.Number, name: 'tenant_id', label: '租户ID' },
-    { type: FilterType.Number, name: 'user_id', label: '用户ID' },
-    { type: FilterType.String, name: 'uuid', label: 'UUID' },
-    { type: FilterType.Number, name: 'book_id', label: '书ID' },
-    { type: FilterType.Number, name: 'chapter_id', label: '章节ID' },
+    { type: FilterType.Date, name: 'publish_at', label: '发布时间' },
     { type: FilterType.Number, name: 'category_id', label: '分类' },
-    { type: FilterType.String, name: 'publish_at', label: '发布时间' },
-    { type: FilterType.Number, name: 'type', label: '文章类型' },
-    { type: FilterType.Number, name: 'format', label: '文章格式' },
+    {
+      type: FilterType.Number, name: 'type', label: '文章类型', items: [
+        { label: '图文', value: '0' },
+        { label: '图片', value: '1' },
+        { label: '视频', value: '2' },
+        { label: '音频', value: '3' },
+      ]
+    },
+    {
+      type: FilterType.Number, name: 'format', label: '文章格式', items: [
+        { label: 'HTML', value: '0' },
+        { label: 'Markdown', value: '1' },
+      ]
+    },
     { type: FilterType.String, name: 'title', label: '标题' },
-    { type: FilterType.String, name: 'keyword', label: '关键词' },
-    { type: FilterType.String, name: 'description', label: '简介' },
-    { type: FilterType.String, name: 'thumbnails', label: '缩略图' },
-    { type: FilterType.String, name: 'videos', label: '视频' },
-    { type: FilterType.String, name: 'audios', label: '音频' },
-    { type: FilterType.String, name: 'post_ip', label: '发布IP' },
-    { type: FilterType.Number, name: 'weight', label: '权重' }, 
   ]
 }
 
@@ -79,27 +76,19 @@ export const tableArticleColumns = (): Columns => {
   return {
     columns: [
       { title: 'ID', dataIndex: 'id', slotName: 'id' },
+      { title: '标题', dataIndex: 'title', slotName: 'title' },
       { title: '创建时间', dataIndex: 'created_at', slotName: 'created_at' },
       { title: '更新时间', dataIndex: 'updated_at', slotName: 'updated_at' },
-      { title: '删除时间', dataIndex: 'deleted_at', slotName: 'deleted_at' },
+      { title: '发布时间', dataIndex: 'publish_at', slotName: 'publish_at' },
       { title: '租户ID', dataIndex: 'tenant_id', slotName: 'tenant_id' },
       { title: '用户ID', dataIndex: 'user_id', slotName: 'user_id' },
-      { title: 'UUID', dataIndex: 'uuid', slotName: 'uuid' },
-      { title: '书ID', dataIndex: 'book_id', slotName: 'book_id' },
-      { title: '章节ID', dataIndex: 'chapter_id', slotName: 'chapter_id' },
       { title: '分类', dataIndex: 'category_id', slotName: 'category_id' },
-      { title: '发布时间', dataIndex: 'publish_at', slotName: 'publish_at' },
       { title: '文章类型', dataIndex: 'type', slotName: 'type' },
       { title: '文章格式', dataIndex: 'format', slotName: 'format' },
-      { title: '标题', dataIndex: 'title', slotName: 'title' },
-      { title: '关键词', dataIndex: 'keyword', slotName: 'keyword' },
       { title: '简介', dataIndex: 'description', slotName: 'description' },
-      { title: '缩略图', dataIndex: 'thumbnails', slotName: 'thumbnails' },
-      { title: '视频', dataIndex: 'videos', slotName: 'videos' },
-      { title: '音频', dataIndex: 'audios', slotName: 'audios' },
       { title: '发布IP', dataIndex: 'post_ip', slotName: 'post_ip' },
-      { title: '权重', dataIndex: 'weight', slotName: 'weight' }, 
-      { title: '操作', dataIndex: 'operations' ,slotName: 'operations', align: 'right' },
+      { title: '权重', dataIndex: 'weight', slotName: 'weight' },
+      { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
       'uuid', 'created_at', 'updated_at', 'deleted_at'
@@ -129,7 +118,7 @@ export const tableArticleLabels = (): Record<string, string> => {
     'videos': '视频',
     'audios': '音频',
     'post_ip': '发布IP',
-    'weight': '权重', 
+    'weight': '权重',
   }
 }
 

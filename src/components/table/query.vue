@@ -1,6 +1,6 @@
 <template>
   <Container>
-    <a-row>
+    <a-row :gutter="16">
       <a-col :flex="1">
         <a-form
           :model="formModel"
@@ -51,9 +51,8 @@
           </a-row>
         </a-form>
       </a-col>
-      <a-divider style="height: 84px" direction="vertical" />
-      <a-col :flex="'86px'" style="text-align: right">
-        <a-space direction="vertical" :size="18">
+      <a-col style="text-align: right">
+        <a-space :size="18">
           <a-button type="primary" @click="emit('search')">
             <template #icon>
               <icon-search />

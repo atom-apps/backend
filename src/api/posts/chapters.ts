@@ -46,12 +46,6 @@ export const tableChapterColumns = (): Columns => {
   return {
     columns: [
       { title: 'ID', dataIndex: 'id', slotName: 'id' },
-      { title: '创建时间', dataIndex: 'created_at', slotName: 'created_at' },
-      { title: '更新时间', dataIndex: 'updated_at', slotName: 'updated_at' },
-      { title: '删除时间', dataIndex: 'deleted_at', slotName: 'deleted_at' },
-      { title: '租户ID', dataIndex: 'tenant_id', slotName: 'tenant_id' },
-      { title: '用户ID', dataIndex: 'user_id', slotName: 'user_id' },
-      { title: '书ID', dataIndex: 'book_id', slotName: 'book_id' },
       { title: '章节名', dataIndex: 'title', slotName: 'title' },
       { title: '简介', dataIndex: 'description', slotName: 'description' },
       { title: '详细介绍', dataIndex: 'content', slotName: 'content' },

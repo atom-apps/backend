@@ -2,8 +2,8 @@
   <div>
     <PageHeader subtitle="内容管理">
       <ActionCreate v-can="'ChapterCreate'" :to="{ name: 'ChapterCreate' }" />
-      <ActionImport v-can="'ChapterImport'"/>
-      <ActionExport v-can="'ChapterDownload'"/>
+      <ActionImport v-can="'ChapterImport'" />
+      <ActionExport v-can="'ChapterDownload'" />
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
       <ActionColumn
@@ -12,13 +12,6 @@
         v-model:clone="showColumns"
       />
     </PageHeader>
-
-    <QueryForm
-      class="m-5 pt-5"
-      ref="queryForm"
-      @search="fetchData"
-      :filters="tableChapterFilters()"
-    />
 
     <a-table
       class="m-5"
@@ -42,8 +35,8 @@
           edit="ChapterEdit"
           view="ChapterView"
           remove="ChapterDelete"
-          :params="{ id: record.id }"
-          :deleteAction="deleteChapterItem"
+          :params="{ book_id: Number(route.params.id), id: record.id }"
+          :deleteAction="deleteAction"
         />
       </template>
     </a-table>
@@ -56,10 +49,9 @@ ChapterItem,
 ChapterListQuery,
 deleteChapterItem,
 queryChapterList,
-tableChapterColumns,
-tableChapterFilters,
+tableChapterColumns
 } from "@/api/posts/chapters";
-import { Container, PageHeader } from "@/components/layout";
+import { PageHeader } from "@/components/layout";
 import {
 ActionColumn,
 ActionCreate,
@@ -67,8 +59,7 @@ ActionDensity,
 ActionExport,
 ActionImport,
 ActionRefresh,
-QueryForm,
-RowOperations,
+RowOperations
 } from "@/components/table";
 import { SizeProps } from "@/components/table/types";
 import useDatetime from "@/hooks/datetime";
@@ -80,7 +71,9 @@ TableColumnData,
 TableRowSelection,
 } from "@arco-design/web-vue";
 import { onMounted, reactive, ref } from "vue";
+import { useRoute } from "vue-router";
 
+const route = useRoute();
 const { date } = useDatetime();
 
 const size = ref<SizeProps>("large");
@@ -121,7 +114,7 @@ const fetchData = async (pg: Pagination = basePagination) => {
     } as unknown) as ChapterListQuery;
     console.log(params);
 
-    const { data } = await queryChapterList(params);
+    const { data } = await queryChapterList(Number(route.params.book_id), params);
     renderData.value = data.items;
     pagination.total = data.total;
     // pagination.current = data.page;
@@ -151,4 +144,15 @@ const rowSelection = reactive<TableRowSelection>({
   showCheckedAll: true,
   onlyCurrent: false,
 });
+
+const deleteAction = async (id: number) => {
+  setLoading(true);
+  try {
+    await deleteChapterItem(Number(route.params.book_id), id);
+  } catch (err) {
+    // you can report use errorHandler or other
+  } finally {
+    setLoading(false);
+  }
+};
 </script>

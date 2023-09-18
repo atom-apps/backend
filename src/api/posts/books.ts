@@ -35,12 +35,9 @@ export interface BookItem {
 
 export const tableBookFilters = (): Filter[] => {
   return [
-    { type: FilterType.List, name: "ids", label: "ID" },
-    { type: FilterType.Number, name: 'tenant_id', label: '租户ID' },
     { type: FilterType.Number, name: 'user_id', label: '用户ID' },
     { type: FilterType.String, name: 'title', label: '书名' },
     { type: FilterType.String, name: 'isbn', label: 'ISBN' },
-    { type: FilterType.Number, name: 'price', label: '价格' }, 
   ]
 }
 
@@ -55,9 +52,6 @@ export const tableBookColumns = (): Columns => {
       { title: '用户ID', dataIndex: 'user_id', slotName: 'user_id' },
       { title: '封面', dataIndex: 'thumbnail', slotName: 'thumbnail' },
       { title: '书名', dataIndex: 'title', slotName: 'title' },
-      { title: '原作者', dataIndex: 'author', slotName: 'author' },
-      { title: '原书地址', dataIndex: 'source', slotName: 'source' },
-      { title: 'ISBN', dataIndex: 'isbn', slotName: 'isbn' },
       { title: '价格', dataIndex: 'price', slotName: 'price' }, 
       { title: '操作', dataIndex: 'operations' ,slotName: 'operations', align: 'right' },
     ],
