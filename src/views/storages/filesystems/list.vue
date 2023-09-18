@@ -68,6 +68,7 @@
                     <small class="text-gray-500">{{ item.mime }}</small>
                     <small class="text-gray-500">{{ item.real_name }}</small>
                     <small class="text-gray-500">{{ datetime(item.created_at?.toString()) }}</small>
+                    <small class="text-gray-500">{{ item.metadata?.human_file_size }}</small>
                   </div>
 
                   <a-button href="">预览</a-button>

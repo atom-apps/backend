@@ -12,6 +12,7 @@ export interface Metadata {
   file_info?: any;
   share_password?: string;
   thumbnail?: string;
+  human_file_size?: string;
 }
 
 export interface FilesystemItem {
