@@ -50,14 +50,17 @@
             <a-empty v-if="renderData.length == 0" />
 
             <a-row v-else>
-              <a-col :span="8" v-for="item in renderData" class="cursor-pointer p-3" :key="item.id">
+              <a-col :xs="24" :sm="24" :md="24" :lg="12" :xl="8" :xxl="8"
+               v-for="item in renderData"
+              class="cursor-pointer p-3" 
+               :key="item.id">
                 <div @click="() => toggleSelectFile(Number(item.id))"
                   class="rounded hover:shadow border flex justify-center items-center pr-5"
                   :class="{ 'border-sky-500 bg-gray-100 border': isFileSelected(Number(item.id)) }">
 
                   <div class="preview bg-gray-100 flex items-center justify-center text-gray-500"
                     style="width: 100px; height: 100px">
-                    <div style="padding:1px" v-if="item.metadata?.thumbnail">
+                    <div class="rounded-lg overflow-hidden" style="padding:1px" v-if="item.metadata?.thumbnail">
                       <img :src="item.metadata?.thumbnail">
                     </div>
                     <IconFont v-else type="file" :size=48 />
