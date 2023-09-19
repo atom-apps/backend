@@ -11,10 +11,10 @@ const POSTS: AppRouteRecordRaw = {
     { path: 'books/create', name: 'BookCreate', component: () => import('@/views/posts/books/create.vue'), meta: { title: '书籍创建', requiresAuth: true, hideInMenu: true } },
 
     // 章节
-    { path: 'chapters', name: 'ChapterList', component: () => import('@/views/posts/chapters/list.vue'), meta: { title: '章节列表', requiresAuth: true, hideInMenu: false } },
-    { path: 'chapters/view/:id', name: 'ChapterView', component: () => import('@/views/posts/chapters/view.vue'), meta: { title: '章节详情', requiresAuth: true, hideInMenu: true } },
-    { path: 'chapters/edit/:id', name: 'ChapterEdit', component: () => import('@/views/posts/chapters/edit.vue'), meta: { title: '章节编辑', requiresAuth: true, hideInMenu: true } },
-    { path: 'chapters/create', name: 'ChapterCreate', component: () => import('@/views/posts/chapters/create.vue'), meta: { title: '章节创建', requiresAuth: true, hideInMenu: true } },
+    { path: 'books/:book_id/chapters', name: 'ChapterList', component: () => import('@/views/posts/chapters/list.vue'), meta: { title: '章节列表', requiresAuth: true, hideInMenu: false } },
+    { path: 'books/:book_id/chapters/view/:id', name: 'ChapterView', component: () => import('@/views/posts/chapters/view.vue'), meta: { title: '章节详情', requiresAuth: true, hideInMenu: true } },
+    { path: 'books/:book_id/chapters/edit/:id', name: 'ChapterEdit', component: () => import('@/views/posts/chapters/edit.vue'), meta: { title: '章节编辑', requiresAuth: true, hideInMenu: true } },
+    { path: 'books/:book_id/chapters/create', name: 'ChapterCreate', component: () => import('@/views/posts/chapters/create.vue'), meta: { title: '章节创建', requiresAuth: true, hideInMenu: true } },
 
     // 文章
     { path: 'articles', name: 'ArticleList', component: () => import('@/views/posts/articles/list.vue'), meta: { title: '文章列表', requiresAuth: true, hideInMenu: false } },

@@ -45,10 +45,10 @@ export const tableChapterFilters = (): Filter[] => {
 export const tableChapterColumns = (): Columns => {
   return {
     columns: [
-      { title: 'ID', dataIndex: 'id', slotName: 'id' },
+      // { title: 'ID', dataIndex: 'id', slotName: 'id' },
       { title: '章节名', dataIndex: 'title', slotName: 'title' },
-      { title: '简介', dataIndex: 'description', slotName: 'description' },
-      { title: '详细介绍', dataIndex: 'content', slotName: 'content' },
+      // { title: '简介', dataIndex: 'description', slotName: 'description' },
+      // { title: '详细介绍', dataIndex: 'content', slotName: 'content' },
       { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
@@ -73,7 +73,7 @@ export const tableChapterLabels = (): Record<string, string> => {
 }
 
 export function queryChapterList(book_id: number, params: ChapterListQuery) {
-  return axios.get<PaginationResp<ChapterItem>>('/v1/posts/books/${book_id}/chapters', { params });
+  return axios.get<PaginationResp<ChapterItem>>(`/v1/posts/books/${book_id}/chapters`, { params });
 }
 
 export function createChapterItem(book_id: number, data: ChapterItem) {

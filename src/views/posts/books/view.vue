@@ -1,9 +1,11 @@
 <template>
   <div>
     <PageHeader subtitle="内容管理" :back="true" :loading="loading">
-      <a-button v-can="'BookEdit'" type="primary" @click="$router.push({ name: 'BookEdit', params: { id: route.params.id } })">编辑</a-button>
+      <a-button v-can="'BookEdit'" type="primary"
+        @click="$router.push({ name: 'BookEdit', params: { id: route.params.id } })">编辑</a-button>
 
-      <a-popconfirm v-can="'BookDelete'" content="确认删除？" type="warning" :ok-loading="deleting" @ok="handleConfirmDelete" position="lt">
+      <a-popconfirm v-can="'BookDelete'" content="确认删除？" type="warning" :ok-loading="deleting" @ok="handleConfirmDelete"
+        position="lt">
         <a-tooltip content="删除">
           <a-button type="outline" status="danger">删除</a-button>
         </a-tooltip>
@@ -11,7 +13,7 @@
     </PageHeader>
 
     <Container :loading="loading" :rows="2">
-      <a-descriptions :data="renderData" :column="3" :align="{ label: 'right' }" size="large" :title="title" />
+      <a-descriptions :data="renderData" bordered :column="1" :align="{ label: 'right' }" size="large" :title="title" />
     </Container>
   </div>
 </template>
@@ -27,7 +29,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
-const title=ref<string>("Title")
+const title = ref<string>('')
 
 const { loading, setLoading } = useLoading();
 const renderData = ref<DescData[]>([]);
@@ -40,13 +42,18 @@ const fetchData = async () => {
     const { data: profile } = await getBookItem(Number(route.params.id))
     itemInfo.value = profile
 
-    let items:DescData[] = [];
+    let items: DescData[] = [];
     for (const key in profile) {
       if (Object.prototype.hasOwnProperty.call(labels, key)) {
+
+        if (key == "title") {
+          title.value = profile[key]
+        }
+
         items.push({
           label: labels[key],
           value: profile[key]
-        }) 
+        })
       }
     }
     renderData.value = items;

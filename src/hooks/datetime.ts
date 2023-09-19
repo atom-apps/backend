@@ -21,7 +21,7 @@ export default function useDatetime() {
       return ''
     }
 
-    return dayjs(datetime).locale('zh-cn').format('YYYY-MM-DD HH:mm:ss')
+    return dayjs(datetime).locale('zh-cn').format('YY/MM/DD HH:mm:ss')
   }
 
   return { date, time, datetime }

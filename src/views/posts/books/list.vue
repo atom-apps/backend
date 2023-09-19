@@ -2,49 +2,31 @@
   <div>
     <PageHeader subtitle="内容管理">
       <ActionCreate v-can="'BookCreate'" :to="{ name: 'BookCreate' }" />
-      <ActionImport v-can="'BookImport'"/>
-      <ActionExport v-can="'BookDownload'"/>
+      <ActionImport v-can="'BookImport'" />
+      <ActionExport v-can="'BookDownload'" />
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
-      <ActionColumn
-        :columns="allColumns"
-        :hidden="hiddenColumns"
-        v-model:clone="showColumns"
-      />
+      <ActionColumn :columns="allColumns" :hidden="hiddenColumns" v-model:clone="showColumns" />
     </PageHeader>
 
-    <QueryForm
-      class="m-5 pt-5"
-      ref="queryForm"
-      @search="fetchData"
-      :filters="tableBookFilters()"
-    />
+    <QueryForm class="m-5 pt-5" ref="queryForm" @search="fetchData" :filters="tableBookFilters()" />
 
-    <a-table
-      class="m-5"
-      row-key="id"
-      :hoverable="true"
-      :stripe="true"
-      :row-selection="rowSelection"
-      v-model:selectedKeys="selectedKeys"
-      :loading="loading"
-      :pagination="pagination"
-      :columns="showColumns"
-      :data="renderData"
-      :size="size"
-      @page-change="onPageChange"
-      @page-size-change="onPageSizeChange"
-    >
+    <a-table class="m-5" row-key="id" :hoverable="true" :stripe="true" :row-selection="rowSelection"
+      v-model:selectedKeys="selectedKeys" :loading="loading" :pagination="pagination" :columns="showColumns"
+      :data="renderData" :size="size" @page-change="onPageChange" @page-size-change="onPageSizeChange">
+
+      <template #created_at="{ record }"> {{ datetime(record.created_at) }} </template>
+      <template #updated_at="{ record }"> {{ datetime(record.updated_at) }} </template>
+
+      <template #price="{ record }"> {{ price(record.price) }} </template>
+
+      <template #chapter_article_count="{ record }"> {{ record.chapter_count }}/{{ record.article_count }}</template>
+
       <template #operations="{ record }">
-        <RowOperations
-          :record="record"
-          :reload="fetchData"
-          edit="BookEdit"
-          view="BookView"
-          remove="BookDelete"
-          :params="{ id: record.id }"
-          :deleteAction="deleteBookItem"
-        />
+        <RowOperations :record="record" :size="size" :reload="fetchData" edit="BookEdit" view="BookView" remove="BookDelete"
+          :params="{ id: record.id }" :deleteAction="deleteBookItem">
+          <a-button type="text" :size="size" @click="$router.push({name:'ChapterList', params:{ book_id: record.id }})">章节管理</a-button>
+          </RowOperations>
       </template>
     </a-table>
   </div>
@@ -59,7 +41,7 @@ queryBookList,
 tableBookColumns,
 tableBookFilters,
 } from "@/api/posts/books";
-import { Container, PageHeader } from "@/components/layout";
+import { PageHeader } from "@/components/layout";
 import {
 ActionColumn,
 ActionCreate,
@@ -73,6 +55,7 @@ RowOperations,
 import { SizeProps } from "@/components/table/types";
 import useDatetime from "@/hooks/datetime";
 import useLoading from "@/hooks/loading";
+import usePrice from "@/hooks/price";
 import { Pagination } from "@/types/global";
 import {
 PaginationProps,
@@ -81,7 +64,8 @@ TableRowSelection,
 } from "@arco-design/web-vue";
 import { onMounted, reactive, ref } from "vue";
 
-const { date } = useDatetime();
+const { date, datetime } = useDatetime();
+const { price } = usePrice();
 
 const size = ref<SizeProps>("large");
 const queryForm = ref();

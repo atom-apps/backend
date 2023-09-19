@@ -31,6 +31,8 @@ export interface BookItem {
   source?: string; // 原书地址
   isbn?: string; // ISBN
   price?: number; // 价格
+  chapter_count?: number; // 章节数量
+  article_count?: number; // 文章数量
 }
 
 export const tableBookFilters = (): Filter[] => {
@@ -48,15 +50,16 @@ export const tableBookColumns = (): Columns => {
       { title: '创建时间', dataIndex: 'created_at', slotName: 'created_at' },
       { title: '更新时间', dataIndex: 'updated_at', slotName: 'updated_at' },
       { title: '删除时间', dataIndex: 'deleted_at', slotName: 'deleted_at' },
+      { title: '封面', dataIndex: 'thumbnail', slotName: 'thumbnail' },
+      { title: '章节/文章', dataIndex: 'chapter_article_count', slotName: 'chapter_article_count', align: 'center' },
+      { title: '书名', dataIndex: 'title', slotName: 'title' },
       { title: '租户ID', dataIndex: 'tenant_id', slotName: 'tenant_id' },
       { title: '用户ID', dataIndex: 'user_id', slotName: 'user_id' },
-      { title: '封面', dataIndex: 'thumbnail', slotName: 'thumbnail' },
-      { title: '书名', dataIndex: 'title', slotName: 'title' },
-      { title: '价格', dataIndex: 'price', slotName: 'price' }, 
-      { title: '操作', dataIndex: 'operations' ,slotName: 'operations', align: 'right' },
+      { title: '价格', dataIndex: 'price', slotName: 'price' },
+      { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
-      'uuid', 'created_at', 'updated_at', 'deleted_at'
+      'uuid', 'updated_at', 'deleted_at'
     ],
   }
 }
@@ -75,7 +78,7 @@ export const tableBookLabels = (): Record<string, string> => {
     'author': '原作者',
     'source': '原书地址',
     'isbn': 'ISBN',
-    'price': '价格', 
+    'price': '价格',
   }
 }
 

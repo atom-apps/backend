@@ -1,6 +1,6 @@
 <template>
   <div>
-    <PageHeader subtitle="内容管理">
+    <PageHeader subtitle="内容管理" :back="true">
       <ActionCreate v-can="'ChapterCreate'" :to="{ name: 'ChapterCreate' }" />
       <ActionImport v-can="'ChapterImport'" />
       <ActionExport v-can="'ChapterDownload'" />
@@ -30,6 +30,7 @@
     >
       <template #operations="{ record }">
         <RowOperations
+          :size="size"
           :record="record"
           :reload="fetchData"
           edit="ChapterEdit"
