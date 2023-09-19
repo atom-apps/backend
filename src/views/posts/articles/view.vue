@@ -11,7 +11,7 @@
     </PageHeader>
 
     <Container :loading="loading" :rows="2">
-      <a-descriptions :data="renderData" :column="3" :align="{ label: 'right' }" size="large" :title="title" />
+      <a-descriptions :data="renderData" :column="1" bordered :align="{ label: 'right' }" size="large" :title="title" />
     </Container>
   </div>
 </template>
@@ -43,6 +43,10 @@ const fetchData = async () => {
     let items:DescData[] = [];
     for (const key in profile) {
       if (Object.prototype.hasOwnProperty.call(labels, key)) {
+        if (key == "title"){
+          title.value = profile[key]
+        }
+
         items.push({
           label: labels[key],
           value: profile[key]

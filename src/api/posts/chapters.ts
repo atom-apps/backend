@@ -13,6 +13,7 @@ export interface ChapterListQuery extends Pagination {
   title?: string; // 章节名
   description?: string; // 简介
   content?: string; // 详细介绍
+  article_count?: number; // 文章数量
 }
 
 export interface ChapterItem {
@@ -47,6 +48,7 @@ export const tableChapterColumns = (): Columns => {
     columns: [
       // { title: 'ID', dataIndex: 'id', slotName: 'id' },
       { title: '章节名', dataIndex: 'title', slotName: 'title' },
+      { title: '文章数量', dataIndex: 'article_count', slotName: 'article_count', align: 'center' },
       // { title: '简介', dataIndex: 'description', slotName: 'description' },
       // { title: '详细介绍', dataIndex: 'content', slotName: 'content' },
       { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },

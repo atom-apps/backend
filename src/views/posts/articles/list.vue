@@ -2,49 +2,34 @@
   <div>
     <PageHeader subtitle="内容管理">
       <ActionCreate v-can="'ArticleCreate'" :to="{ name: 'ArticleCreate' }" />
-      <ActionImport v-can="'ArticleImport'"/>
-      <ActionExport v-can="'ArticleDownload'"/>
+      <ActionImport v-can="'ArticleImport'" />
+      <ActionExport v-can="'ArticleDownload'" />
       <ActionRefresh @click="fetchData" />
       <ActionDensity v-model:size="size" />
-      <ActionColumn
-        :columns="allColumns"
-        :hidden="hiddenColumns"
-        v-model:clone="showColumns"
-      />
+      <ActionColumn :columns="allColumns" :hidden="hiddenColumns" v-model:clone="showColumns" />
     </PageHeader>
 
-    <QueryForm
-      class="m-5 pt-5"
-      ref="queryForm"
-      @search="fetchData"
-      :filters="tableArticleFilters()"
-    />
+    <QueryForm class="m-5 pt-5" ref="queryForm" @search="fetchData" :filters="tableArticleFilters()" />
 
-    <a-table
-      class="m-5"
-      row-key="id"
-      :hoverable="true"
-      :stripe="true"
-      :row-selection="rowSelection"
-      v-model:selectedKeys="selectedKeys"
-      :loading="loading"
-      :pagination="pagination"
-      :columns="showColumns"
-      :data="renderData"
-      :size="size"
-      @page-change="onPageChange"
-      @page-size-change="onPageSizeChange"
-    >
+    <a-table class="m-5" row-key="id" :hoverable="true" :stripe="true" :row-selection="rowSelection"
+      v-model:selectedKeys="selectedKeys" :loading="loading" :pagination="pagination" :columns="showColumns"
+      :data="renderData" :size="size" @page-change="onPageChange" @page-size-change="onPageSizeChange">
+      <template #title="{ record }">
+        <template v-if="afterNow(record.publish_at)">
+          <a-tooltip :content="datetime(record.publish_at)">
+            <icon-clock-circle :style="{color:'orange'}" class="mr-2"/>
+          </a-tooltip>
+        </template>
+        {{ record.title }}
+      </template>
+
+      <template #created_at="{ record }">{{ datetime(record.created_at) }}</template>
+      <template #updated_at="{ record }">{{ datetime(record.updated_at) }}</template>
+      <template #type_format="{ record }">{{ record.type_cn }} / {{ record.format_cn }}</template>
+
       <template #operations="{ record }">
-        <RowOperations
-          :record="record"
-          :reload="fetchData"
-          edit="ArticleEdit"
-          view="ArticleView"
-          remove="ArticleDelete"
-          :params="{ id: record.id }"
-          :deleteAction="deleteArticleItem"
-        />
+        <RowOperations :record="record" :reload="fetchData" edit="ArticleEdit" view="ArticleView" remove="ArticleDelete"
+          :params="{ id: record.id }" :deleteAction="deleteArticleItem" />
       </template>
     </a-table>
   </div>
@@ -59,7 +44,7 @@ queryArticleList,
 tableArticleColumns,
 tableArticleFilters,
 } from "@/api/posts/articles";
-import { Container, PageHeader } from "@/components/layout";
+import { PageHeader } from "@/components/layout";
 import {
 ActionColumn,
 ActionCreate,
@@ -81,7 +66,7 @@ TableRowSelection,
 } from "@arco-design/web-vue";
 import { onMounted, reactive, ref } from "vue";
 
-const { date } = useDatetime();
+const { date, datetime, beforeNow, afterNow } = useDatetime();
 
 const size = ref<SizeProps>("large");
 const queryForm = ref();

@@ -24,5 +24,19 @@ export default function useDatetime() {
     return dayjs(datetime).locale('zh-cn').format('YY/MM/DD HH:mm:ss')
   }
 
-  return { date, time, datetime }
+  const beforeNow = (datetime: string | undefined) => {
+    if (!datetime) {
+      return false
+    }
+    return dayjs(datetime) < dayjs()
+  }
+
+  const afterNow = (datetime: string | undefined) => {
+    if (!datetime) {
+      return false
+    }
+    return dayjs(datetime) > dayjs()
+  }
+
+  return { date, time, datetime, beforeNow, afterNow }
 }

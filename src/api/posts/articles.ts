@@ -36,9 +36,11 @@ export interface ArticleItem {
   book_id?: number; // 书ID
   chapter_id?: number; // 章节ID
   category_id?: number; // 分类
-  publish_at?: string; // 发布时间
+  publish_at?: Date; // 发布时间
   type?: number; // 文章类型
+  type_cn?: string; // 文章类型
   format?: number; // 文章格式
+  format_cn?: string; // 文章格式
   title?: string; // 标题
   keyword?: string; // 关键词
   description?: string; // 简介
@@ -77,21 +79,19 @@ export const tableArticleColumns = (): Columns => {
     columns: [
       { title: 'ID', dataIndex: 'id', slotName: 'id' },
       { title: '标题', dataIndex: 'title', slotName: 'title' },
-      { title: '创建时间', dataIndex: 'created_at', slotName: 'created_at' },
+      { title: '创建时间', dataIndex: 'created_at', slotName: 'created_at', align: 'center' },
       { title: '更新时间', dataIndex: 'updated_at', slotName: 'updated_at' },
-      { title: '发布时间', dataIndex: 'publish_at', slotName: 'publish_at' },
+      // { title: '发布', dataIndex: 'publish_at', slotName: 'publish_at' },
       { title: '租户ID', dataIndex: 'tenant_id', slotName: 'tenant_id' },
       { title: '用户ID', dataIndex: 'user_id', slotName: 'user_id' },
       { title: '分类', dataIndex: 'category_id', slotName: 'category_id' },
-      { title: '文章类型', dataIndex: 'type', slotName: 'type' },
-      { title: '文章格式', dataIndex: 'format', slotName: 'format' },
-      { title: '简介', dataIndex: 'description', slotName: 'description' },
+      { title: '类型/格式', dataIndex: 'type_format', slotName: 'type_format', align: 'center' },
       { title: '发布IP', dataIndex: 'post_ip', slotName: 'post_ip' },
       { title: '权重', dataIndex: 'weight', slotName: 'weight' },
       { title: '操作', dataIndex: 'operations', slotName: 'operations', align: 'right' },
     ],
     hidden: [
-      'uuid', 'created_at', 'updated_at', 'deleted_at'
+      'id', 'uuid', 'updated_at', 'deleted_at', 'post_ip', 'weight', 'tenant_id'
     ],
   }
 }

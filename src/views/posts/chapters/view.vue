@@ -1,9 +1,11 @@
 <template>
   <div>
     <PageHeader subtitle="内容管理" :back="true" :loading="loading">
-      <a-button v-can="'ChapterEdit'" type="primary" @click="$router.push({ name: 'ChapterEdit', params: { id: route.params.id } })">编辑</a-button>
+      <a-button v-can="'ChapterEdit'" type="primary"
+        @click="$router.push({ name: 'ChapterEdit', params: { id: route.params.id } })">编辑</a-button>
 
-      <a-popconfirm v-can="'ChapterDelete'" content="确认删除？" type="warning" :ok-loading="deleting" @ok="handleConfirmDelete" position="lt">
+      <a-popconfirm v-can="'ChapterDelete'" content="确认删除？" type="warning" :ok-loading="deleting"
+        @ok="handleConfirmDelete" position="lt">
         <a-tooltip content="删除">
           <a-button type="outline" status="danger">删除</a-button>
         </a-tooltip>
@@ -27,7 +29,7 @@ import { useRoute, useRouter } from 'vue-router';
 const route = useRoute();
 const router = useRouter();
 
-const title=ref<string>("Title")
+const title = ref<string>("Title")
 
 const { loading, setLoading } = useLoading();
 const renderData = ref<DescData[]>([]);
@@ -37,16 +39,16 @@ const labels = tableChapterLabels();
 const fetchData = async () => {
   try {
     setLoading(true);
-    const { data: profile } = await getChapterItem(Number(route.params.id))
+    const { data: profile } = await getChapterItem(Number(route.params.book_id), Number(route.params.id))
     itemInfo.value = profile
 
-    let items:DescData[] = [];
+    let items: DescData[] = [];
     for (const key in profile) {
       if (Object.prototype.hasOwnProperty.call(labels, key)) {
         items.push({
           label: labels[key],
           value: profile[key]
-        }) 
+        })
       }
     }
     renderData.value = items;
@@ -65,7 +67,7 @@ const { loading: deleting, setLoading: setDeleting } = useLoading();
 const handleConfirmDelete = async () => {
   try {
     setDeleting(true);
-    await deleteChapterItem(Number(route.params.id))
+    await deleteChapterItem(Number(route.params.book_id), Number(route.params.id))
 
     Message.success('删除成功');
     router.back()
