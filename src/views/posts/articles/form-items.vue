@@ -60,7 +60,7 @@
             </a-col>
             <a-col :span="2"><a-button @click="removeAudio(index)" class="w-full" size="medium">删除</a-button></a-col>
           </a-row>
-          <a-button @click="addNewAudio" class="w-full mt-5">添加新视频</a-button>
+          <a-button @click="addNewAudio" class="w-full mt-5">添加新音频</a-button>
         </a-tab-pane>
 
         <a-tab-pane key="4">
