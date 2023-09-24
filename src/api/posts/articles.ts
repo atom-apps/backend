@@ -1,6 +1,25 @@
 import { Columns, Filter, FilterType, Pagination, PaginationResp } from '@/types/global';
 import axios from 'axios';
 
+export enum ArticleVideoProvider {
+  Url = 0,
+  Bilibili = 1,
+  Tencent = 2,
+  Youku = 3,
+  YouTube = 4,
+  Iqiyi = 5,
+  Sohu = 6,
+  XiGua = 7,
+  DouYin = 8,
+  WeiShi = 9,
+  Weibo = 10
+}
+
+export enum ArticleAudioProvider {
+  Url = 0,
+  Ximalaya = 1,
+}
+
 export enum ArticleType {
   Text = 0,
   Image = 1,
@@ -17,6 +36,26 @@ export enum ArticlePriceType {
   Content = 0,
   Attachment = 1,
 }
+
+export const ArticleAudioProviders = [
+  { label: "URL", value: ArticleAudioProvider.Url },
+  { label: "喜马拉雅", value: ArticleAudioProvider.Ximalaya },
+]
+
+export const ArticleVideoProviders = [
+  { label: "URL", value: ArticleVideoProvider.Url },
+  { label: "哔哩哔哩", value: ArticleVideoProvider.Bilibili },
+  { label: "腾讯", value: ArticleVideoProvider.Tencent },
+  { label: "优酷", value: ArticleVideoProvider.Youku },
+  { label: "YouTube", value: ArticleVideoProvider.YouTube },
+  { label: "爱奇艺", value: ArticleVideoProvider.Iqiyi },
+  { label: "搜狐", value: ArticleVideoProvider.Sohu },
+  { label: "西瓜", value: ArticleVideoProvider.XiGua },
+  { label: "抖音", value: ArticleVideoProvider.DouYin },
+  { label: "微视", value: ArticleVideoProvider.WeiShi },
+  { label: "微博", value: ArticleVideoProvider.Weibo },
+]
+
 
 export const ArticleTypes = [
   { label: "图文", value: ArticleType.Text },
@@ -84,6 +123,13 @@ export interface ArticleItem {
   forward_source?: ArticleForwardSource;
   payments?: ArticlePaymentItem[];
   tags?: string[];
+  attachments?: ArticleAttachment[];
+}
+
+export interface ArticleAttachment {
+  filesystem_id: number;
+  description: string;
+  password: string;
 }
 
 export interface ArticleForm {
@@ -108,6 +154,7 @@ export interface ArticleForm {
   forward_source: ArticleForwardSource;
   payments: ArticlePaymentItem[];
   tags: string[];
+  attachments: ArticleAttachment[];
 }
 
 export interface ArticleDigItem {
@@ -117,12 +164,12 @@ export interface ArticleDigItem {
 }
 
 export interface ArticleVideo {
-  provider: string;
+  provider: ArticleVideoProvider;
   url: string;
 }
 
 export interface ArticleAudio {
-  provider: string;
+  provider: ArticleAudioProvider;
   url: string;
 }
 

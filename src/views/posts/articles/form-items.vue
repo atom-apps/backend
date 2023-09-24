@@ -1,51 +1,93 @@
 <template>
   <a-row :gutter="50">
     <a-col :span="16">
+      <a-form-item field="title" label="标题" :rules="[{ required: true, message: '标题必填' }]">
+        <a-input v-model="form.title" placeholder="请输入标题" />
+      </a-form-item>
+
+
       <a-row :gutter="20">
-        <a-col :span="16">
-          <a-form-item field="title" label="标题" :rules="[{ required: true, message: '标题必填' }]">
-            <a-input v-model="form.title" placeholder="请输入标题" />
+        <a-col :span="8">
+          <a-form-item field="category_id" label="分类" :rules="[{ required: true, message: '分类必填' }]">
+            <!-- <a-input-number v-model="form.category_id" placeholder="请输入分类" /> -->
+            <a-tree-select :border="true" :scrollbar="false" selectable="leaf" :loading="menuLoading" :data="treeData"
+              v-model="categoryID" @change="changeCategoryID" placeholder="请选择分类" />
+          </a-form-item>
+        </a-col>
+        <a-col :span="8">
+          <a-form-item field="type" label="文章类型" :rules="[{ required: true, message: '文章类型必填' }]">
+            <a-select :options="ArticleTypes" v-model="form.type" placeholder="请输入文章类型" />
           </a-form-item>
         </a-col>
 
         <a-col :span="8">
-          <a-form-item field="category_id" label="分类" :rules="[{ required: true, message: '分类必填' }]">
-            <a-input-number v-model="form.category_id" placeholder="请输入分类" />
+          <a-form-item field="format" label="文章格式" :rules="[{ required: true, message: '文章格式必填' }]">
+            <a-select :options="ArticleFormats" v-model="form.format" placeholder="请输入文章格式" />
           </a-form-item>
         </a-col>
       </a-row>
 
-      <a-tabs>
+      <a-tabs class="mt-10">
         <a-tab-pane key="1">
-          <template #title>图片集</template>
+          <template #title>图片</template>
           <a-form-item field="thumbnails" hide-label>
-            <a-upload list-type="picture-card" action="/" :default-file-list="fileList" image-preview />
-            <!-- <a-input v-model="form.thumbnails" placeholder="请输入缩略图" /> -->
+            <a-upload list-type="picture-card" action="/" :default-file-list="uploadImageList" image-preview />
           </a-form-item>
         </a-tab-pane>
 
         <a-tab-pane key="2">
           <template #title>视频</template>
-          <a-form-item field="videos" hide-label>
-            <!-- <a-input v-model="form.videos" /> -->
-          </a-form-item>
+          <a-row :gutter="20" v-for="(video, index) in videoList" class="mb-5">
+            <a-col :span="4">
+              <a-select :options="ArticleVideoProviders" v-model.lazy="videoList[index].provider" />
+            </a-col>
+            <a-col :span="18">
+              <a-input v-model.lazy="videoList[index].url" class="w-full" />
+            </a-col>
+            <a-col :span="2"><a-button @click="removeVideo(index)" class="w-full" size="medium">删除</a-button></a-col>
+          </a-row>
+          <a-button @click="addNewVideo" class="w-full mt-5">添加新视频</a-button>
         </a-tab-pane>
 
         <a-tab-pane key="3">
           <template #title>音频</template>
-          <a-form-item field="audios" hide-label>
+          <a-row :gutter="20" v-for="(audio, index) in audioList" class="mb-5">
+            <a-col :span="4">
+              <a-select :options="ArticleAudioProviders" v-model.lazy="audioList[index].provider" />
+            </a-col>
+            <a-col :span="18">
+              <a-input v-model.lazy="audioList[index].url" class="w-full" />
+            </a-col>
+            <a-col :span="2"><a-button @click="removeAudio(index)" class="w-full" size="medium">删除</a-button></a-col>
+          </a-row>
+          <a-button @click="addNewAudio" class="w-full mt-5">添加新视频</a-button>
+        </a-tab-pane>
+
+        <a-tab-pane key="4">
+          <template #title>文件</template>
+          <a-form-item field="attachments" hide-label>
             <!-- <a-input v-model="form.audios" /> -->
           </a-form-item>
         </a-tab-pane>
       </a-tabs>
 
-      <a-form-item field="content.free_content" label="免费内容" :rules="[{ required: true, message: '内容必填' }]">
-        <a-textarea v-model="form.content.free_content" placeholder="请输入内容" />
-      </a-form-item>
 
-      <a-form-item field="content.price_content" label="付费内容" :rules="[{ required: true, message: '内容必填' }]">
-        <a-textarea v-model="form.content.price_content" placeholder="请输入内容" />
-      </a-form-item>
+      <a-tabs class="mt-10">
+        <a-tab-pane key="1">
+          <template #title>免费内容</template>
+          <a-form-item field="content.free_content" hide-label :rules="[{ required: true, message: '内容必填' }]">
+            <a-textarea v-model="form.content.free_content" placeholder="请输入内容" />
+          </a-form-item>
+        </a-tab-pane>
+
+        <a-tab-pane key="2">
+          <template #title>付费内容</template>
+          <a-form-item field="content.price_content" hide-label :rules="[{ required: true, message: '内容必填' }]">
+            <a-textarea v-model="form.content.price_content" placeholder="请输入付费内容" />
+          </a-form-item>
+        </a-tab-pane>
+      </a-tabs>
+
 
       <div class="pt-10 article-collapse">
         <a-collapse :default-active-key="['1']">
@@ -104,19 +146,6 @@
     <a-col :span="8" class="article-collapse">
       <a-collapse :default-active-key="['1']">
         <a-collapse-item header="信息" key="1">
-          <a-row :gutter="20">
-            <a-col :span="12">
-              <a-form-item field="type" label="文章类型" :rules="[{ required: true, message: '文章类型必填' }]">
-                <a-select :options="ArticleTypes" v-model="form.type" placeholder="请输入文章类型" />
-              </a-form-item>
-            </a-col>
-
-            <a-col :span="12">
-              <a-form-item field="format" label="文章格式" :rules="[{ required: true, message: '文章格式必填' }]">
-                <a-select :options="ArticleFormats" v-model="form.format" placeholder="请输入文章格式" />
-              </a-form-item>
-            </a-col>
-          </a-row>
           <a-form-item field="tags" label="标签" :rules="[{ required: true, message: '标签必填' }]">
             <a-input-tag v-model="form.tags" unique-value placeholder="请输入标签" />
           </a-form-item>
@@ -168,8 +197,6 @@
           </a-row>
         </a-collapse-item>
 
-
-
       </a-collapse>
 
     </a-col>
@@ -177,25 +204,19 @@
 </template>
 
 <script lang="ts" setup>
-import { ArticleForm, ArticleFormats, ArticlePriceType, ArticleTypes } from '@/api/posts/articles';
-import { TableColumnData } from '@arco-design/web-vue';
+import { ArticleAudio, ArticleAudioProvider, ArticleAudioProviders, ArticleForm, ArticleFormats, ArticlePriceType, ArticleTypes, ArticleVideo, ArticleVideoProvider, ArticleVideoProviders } from '@/api/posts/articles';
+import { getMenuTree } from '@/api/systems/menus';
+import useLoading from '@/hooks/loading';
+import { FileItem, TableColumnData, TreeNodeData } from '@arco-design/web-vue';
+import { ref, watch } from 'vue';
 
 const props = defineProps<{
   form: ArticleForm;
 }>();
 
-const fileList = [
-  {
-    uid: '-2',
-    name: '20200717-103937.png',
-    url: '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/a8c8cdb109cb051163646151a4a5083b.png~tplv-uwbnlip3yd-webp.webp',
-  },
-  {
-    uid: '-1',
-    name: 'hahhahahahaha.png',
-    url: '//p1-arco.byteimg.com/tos-cn-i-uwbnlip3yd/e278888093bef8910e829486fb45dd69.png~tplv-uwbnlip3yd-webp.webp',
-  },
-];
+const uploadImageList = ref<FileItem[]>([]);
+const videoList = ref<ArticleVideo[]>([]);
+const audioList = ref<ArticleAudio[]>([]);
 
 const paymentColumns = (): TableColumnData[] => {
   return [
@@ -206,6 +227,60 @@ const paymentColumns = (): TableColumnData[] => {
     { title: '开始时间', dataIndex: 'discount_start_at', slotName: 'discount_start_at' },
     { title: '结束时间', dataIndex: 'discount_end_at', slotName: 'discount_end_at' },
   ]
+}
+
+const treeData = ref<TreeNodeData[]>([]);
+
+const getFirstLeaf = (tree: TreeNodeData[]): string => {
+  for (let item of tree) {
+    if (item.children && item.children.length > 0) {
+      return getFirstLeaf(item.children)
+    }
+
+    return String(item.key)
+  }
+  return ""
+}
+
+const categoryID = ref("")
+const { loading: menuLoading, setLoading: setMenuLoading } = useLoading(false);
+const getCategoryTree = async () => {
+  setMenuLoading(true);
+  try {
+    const { data } = await getMenuTree(1);
+    treeData.value = data;
+    categoryID.value = getFirstLeaf(data)
+    props.form.category_id = Number(categoryID.value)
+  } finally {
+    setMenuLoading(false);
+  }
+}
+
+const changeCategoryID = (value: any) => {
+  props.form.category_id = Number(value)
+  console.log(props.form.category_id)
+}
+
+getCategoryTree()
+
+watch(videoList.value, async (newValue, oldValue) => {
+  props.form.videos = newValue
+})
+const addNewVideo = () => {
+  videoList.value.push({ provider: ArticleVideoProvider.Url, url: "" })
+}
+const removeVideo = (idx: number) => {
+  videoList.value.splice(idx, 1)
+}
+
+watch(audioList.value, async (newValue, oldValue) => {
+  props.form.audios = newValue
+})
+const addNewAudio = () => {
+  audioList.value.push({ provider: ArticleAudioProvider.Url, url: "" })
+}
+const removeAudio = (idx: number) => {
+  audioList.value.splice(idx, 1)
 }
 </script>
 

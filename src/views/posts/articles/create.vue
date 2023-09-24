@@ -72,6 +72,9 @@ const form = ref<ArticleForm>({
       discount_end_at: new Date(),
     }
   ],
+  attachments: [
+    { filesystem_id: 1, description: "", password: "" },
+  ],
   tags: []
 });
 
