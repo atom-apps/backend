@@ -2,7 +2,7 @@
   <div>
     <PageHeader subtitle="内容管理" :back="true" :loading="false" />
 
-    <Container class="pt-5">
+    <Container>
       <a-form size="large" :model="form" @submit="handleSubmit" layout="vertical">
         <!-- form start -->
         <FormItems :form="form" />

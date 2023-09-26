@@ -1,10 +1,9 @@
 <template>
-  <a-row :gutter="50">
-    <a-col :span="16">
-      <a-form-item field="title" label="标题" :rules="[{ required: true, message: '标题必填' }]">
-        <a-input v-model="form.title" placeholder="请输入标题" />
-      </a-form-item>
-
+  <a-tabs>
+    <a-tab-pane key="1">
+      <template #title>
+        <span class="px-10">配置</span>
+      </template>
 
       <a-row :gutter="20">
         <a-col :span="8">
@@ -72,135 +71,111 @@
       </a-tabs>
 
 
-      <a-tabs class="mt-10">
-        <a-tab-pane key="1">
-          <template #title>免费内容</template>
-          <a-form-item field="content.free_content" hide-label :rules="[{ required: true, message: '内容必填' }]">
-            <a-textarea v-model="form.content.free_content" placeholder="请输入内容" />
+
+
+
+
+
+      <a-form-item field="tags" label="标签" :rules="[{ required: true, message: '标签必填' }]">
+        <a-input-tag v-model="form.tags" unique-value placeholder="请输入标签" />
+      </a-form-item>
+
+      <a-form-item field="keywords" label="关键词" :rules="[{ required: true, message: '关键词必填' }]">
+        <a-input-tag v-model="form.keywords" unique-value placeholder="请输入关键词" />
+      </a-form-item>
+
+      <a-form-item field="description" label="简介" :rules="[{ required: true, message: '简介必填' }]">
+        <a-textarea v-model="form.description" placeholder="请输入简介" :max-length="120" show-word-limit />
+      </a-form-item>
+
+      <a-row :gutter="20">
+        <a-col :span="8">
+          <a-form-item field="publish_at" label="发布时间" :rules="[{ required: true, message: '发布时间必填' }]">
+            <a-date-picker class="w-full" show-time format="YYYY-MM-DD HH:mm" v-model="form.publish_at"
+              placeholder="请输入发布时间" />
           </a-form-item>
-        </a-tab-pane>
-
-        <a-tab-pane key="2">
-          <template #title>付费内容</template>
-          <a-form-item field="content.price_content" hide-label :rules="[{ required: true, message: '内容必填' }]">
-            <a-textarea v-model="form.content.price_content" placeholder="请输入付费内容" />
+        </a-col>
+        <a-col :span="8">
+          <a-form-item field="weight" label="权重" :rules="[{ required: true, message: '权重必填' }]">
+            <a-input-number v-model="form.weight" placeholder="请输入权重" />
           </a-form-item>
-        </a-tab-pane>
-      </a-tabs>
-
-
-      <div class="pt-10 article-collapse">
-        <a-collapse :default-active-key="['1']">
-          <a-collapse-item header="付费" key="1">
-            <a-table :columns="paymentColumns()" :data="form.payments" :pagination="false" id="price-table">
-              <template #price_type="{ record }">
-                <span v-if="record.price_type == ArticlePriceType.Content">内容</span>
-                <span v-else-if="record.price_type == ArticlePriceType.Attachment">附件</span>
-                <span v-else>未知</span>
-              </template>
-
-              <template #token="{ rowIndex, record }">
-                <a-form-item field="payments[rowIndex].token" hide-label>
-                  <a-input v-model="form.payments[rowIndex].token" />
-                </a-form-item>
-              </template>
-
-              <template #price="{ rowIndex, record }">
-                <a-form-item field="payments[rowIndex].price" hide-label>
-                  <a-input-number v-model="form.payments[rowIndex].price" hide-button>
-                    <template #suffix>分</template>
-                  </a-input-number>
-                </a-form-item>
-              </template>
-
-              <template #discount="{ rowIndex, record }">
-                <a-form-item field="payments[rowIndex].discount" hide-label>
-                  <a-input-number v-model="form.payments[rowIndex].discount" :min="1" :max="100" hide-button>
-                    <template #suffix>%</template>
-                  </a-input-number>
-                </a-form-item>
-              </template>
-
-              <template #discount_start_at="{ rowIndex, record }">
-                <a-form-item field="payments[rowIndex].discount_start_at" hide-label>
-                  <a-date-picker format="YYYY-MM-DD HH" show-time v-model="form.payments[rowIndex].discount_start_at" />
-                </a-form-item>
-              </template>
-
-              <template #discount_end_at="{ rowIndex, record }">
-                <a-form-item field="payments[rowIndex].discount_end_at" hide-label>
-                  <a-date-picker format="YYYY-MM-DD HH" show-time v-model="form.payments[rowIndex].discount_end_at" />
-                </a-form-item>
-              </template>
-
-
-            </a-table>
-          </a-collapse-item>
-        </a-collapse>
-
-      </div>
-
-    </a-col>
-
-
-    <a-col :span="8" class="article-collapse">
-      <a-collapse :default-active-key="['1']">
-        <a-collapse-item header="信息" key="1">
-          <a-form-item field="tags" label="标签" :rules="[{ required: true, message: '标签必填' }]">
-            <a-input-tag v-model="form.tags" unique-value placeholder="请输入标签" />
+        </a-col>
+      </a-row>
+      <a-row :gutter="20">
+        <a-col :span="8">
+          <a-form-item field="dig.weight" label="阅读数">
+            <a-input-number v-model="form.dig.views" />
           </a-form-item>
-
-          <a-form-item field="keywords" label="关键词" :rules="[{ required: true, message: '关键词必填' }]">
-            <a-input-tag v-model="form.keywords" unique-value placeholder="请输入关键词" />
+        </a-col>
+        <a-col :span="8">
+          <a-form-item field="dig.likes" label="喜欢">
+            <a-input-number v-model="form.dig.likes" />
           </a-form-item>
-
-          <a-form-item field="description" label="简介" :rules="[{ required: true, message: '简介必填' }]">
-            <a-textarea v-model="form.description" placeholder="请输入简介" :max-length="120" show-word-limit />
+        </a-col>
+        <a-col :span="8">
+          <a-form-item field="dig.dislikes" label="喜欢">
+            <a-input-number v-model="form.dig.dislikes" />
           </a-form-item>
-        </a-collapse-item>
+        </a-col>
+      </a-row>
 
-        <a-collapse-item header="发布" :key="2">
-          <a-row :gutter="20">
-            <a-col :span="12">
-              <a-form-item field="publish_at" label="发布时间" :rules="[{ required: true, message: '发布时间必填' }]">
-                <a-date-picker show-time format="YYYY-MM-DD HH:mm" v-model="form.publish_at" placeholder="请输入发布时间" />
-              </a-form-item>
-            </a-col>
 
-            <a-col :span="12">
-              <a-form-item field="weight" label="权重" :rules="[{ required: true, message: '权重必填' }]">
-                <a-input-number v-model="form.weight" placeholder="请输入权重" />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </a-collapse-item>
 
-        <a-collapse-item header="Dig" key="3">
-          <a-row :gutter="20">
-            <a-col :span="8">
-              <a-form-item field="dig.weight" label="阅读数">
-                <a-input-number v-model="form.dig.views" />
-              </a-form-item>
-            </a-col>
+      <a-table :columns="paymentColumns()" :data="form.payments" :pagination="false" id="price-table">
+        <template #price_type="{ record }">
+          <span v-if="record.price_type == ArticlePriceType.Content">内容</span>
+          <span v-else-if="record.price_type == ArticlePriceType.Attachment">附件</span>
+          <span v-else>未知</span>
+        </template>
 
-            <a-col :span="8">
-              <a-form-item field="dig.likes" label="喜欢">
-                <a-input-number v-model="form.dig.likes" />
-              </a-form-item>
-            </a-col>
+        <template #token="{ rowIndex, record }">
+          <a-form-item field="payments[rowIndex].token" hide-label>
+            <a-input v-model="form.payments[rowIndex].token" />
+          </a-form-item>
+        </template>
 
-            <a-col :span="8">
-              <a-form-item field="dig.dislikes" label="喜欢">
-                <a-input-number v-model="form.dig.dislikes" />
-              </a-form-item>
-            </a-col>
-          </a-row>
-        </a-collapse-item>
+        <template #price="{ rowIndex, record }">
+          <a-form-item field="payments[rowIndex].price" hide-label>
+            <a-input-number v-model="form.payments[rowIndex].price" hide-button>
+              <template #suffix>分</template>
+            </a-input-number>
+          </a-form-item>
+        </template>
 
-      </a-collapse>
+        <template #discount="{ rowIndex, record }">
+          <a-form-item field="payments[rowIndex].discount" hide-label>
+            <a-input-number v-model="form.payments[rowIndex].discount" :min="1" :max="100" hide-button>
+              <template #suffix>%</template>
+            </a-input-number>
+          </a-form-item>
+        </template>
 
-    </a-col>
-  </a-row>
+        <template #discount_start_at="{ rowIndex, record }">
+          <a-form-item field="payments[rowIndex].discount_start_at" hide-label>
+            <a-date-picker format="YYYY-MM-DD HH" show-time v-model="form.payments[rowIndex].discount_start_at" />
+          </a-form-item>
+        </template>
+
+        <template #discount_end_at="{ rowIndex, record }">
+          <a-form-item field="payments[rowIndex].discount_end_at" hide-label>
+            <a-date-picker format="YYYY-MM-DD HH" show-time v-model="form.payments[rowIndex].discount_end_at" />
+          </a-form-item>
+        </template>
+      </a-table>
+
+    </a-tab-pane>
+    <a-tab-pane key="2">
+      <template #title>
+        <span class="px-10">内容</span>
+      </template>
+      <a-form-item field="title" hide-label :rules="[{ required: true, message: '标题必填' }]">
+        <a-input v-model="form.title" placeholder="请输入标题" />
+      </a-form-item>
+
+      <quill-editor />
+
+    </a-tab-pane>
+  </a-tabs>
 </template>
 
 <script lang="ts" setup>
@@ -209,6 +184,7 @@ import { getMenuTree } from '@/api/systems/menus';
 import useLoading from '@/hooks/loading';
 import { FileItem, TableColumnData, TreeNodeData } from '@arco-design/web-vue';
 import { ref, watch } from 'vue';
+import QuillEditor from './editor.vue';
 
 const props = defineProps<{
   form: ArticleForm;
