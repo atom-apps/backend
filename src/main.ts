@@ -14,6 +14,7 @@ import '@/api/interceptor';
 import '@/assets/style/global.less';
 import './style.css';
 
+
 const app = createApp(App);
 
 app.use(ArcoVue, {});
