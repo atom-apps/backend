@@ -172,7 +172,7 @@
         <a-input v-model="form.title" placeholder="请输入标题" />
       </a-form-item>
 
-      <quill-editor />
+      <TapEditor v-model="editorValue" />
 
     </a-tab-pane>
   </a-tabs>
@@ -183,8 +183,10 @@ import { ArticleAudio, ArticleAudioProvider, ArticleAudioProviders, ArticleForm,
 import { getMenuTree } from '@/api/systems/menus';
 import useLoading from '@/hooks/loading';
 import { FileItem, TableColumnData, TreeNodeData } from '@arco-design/web-vue';
+import TapEditor from '@components/editor/TapEditor.vue';
 import { ref, watch } from 'vue';
-import QuillEditor from './editor.vue';
+
+const editorValue = ref('<p>asdadfa</p>')
 
 const props = defineProps<{
   form: ArticleForm;
