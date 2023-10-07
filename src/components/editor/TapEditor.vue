@@ -161,8 +161,9 @@
         </a-button>
       </a-button-group>
 
-      <a-button @click.prevent="fullscreen" :type="isFullscreen ? 'primary': 'secondary'">
-        <icon-fullscreen />
+      <a-button @click.prevent="fullscreen" :type="isFullscreen ? 'primary' : 'secondary'">
+        <icon-fullscreen-exit v-if="isFullscreen" />
+        <icon-fullscreen v-else />
       </a-button>
     </a-space>
 
@@ -331,6 +332,8 @@ const fullscreen = () => {
   @apply m-0 p-5 outline-none border border-solid border-gray-100;
 
   min-height: 300px;
+  max-height: 500px;
+  overflow-y: auto;
 
   ul,
   ol {
