@@ -1,5 +1,17 @@
 <template>
   <a-tabs default-active-key="content">
+    <!-- contents tab -->
+    <a-tab-pane key="content">
+      <template #title><span class="px-10">内容</span></template>
+
+      <a-form-item field="title" hide-label :rules="[{ required: true, message: '标题必填' }]">
+        <a-input v-model="form.title" placeholder="请输入标题" />
+      </a-form-item>
+
+      <TapEditor v-model="editorValue" />
+
+    </a-tab-pane>
+
     <a-tab-pane key="config">
       <template #title>
         <span class="px-10">配置</span>
@@ -165,16 +177,6 @@
 
     </a-tab-pane>
 
-    <!-- contents tab -->
-    <a-tab-pane key="content">
-      <template #title><span class="px-10">内容</span></template>
-      <a-form-item field="title" hide-label :rules="[{ required: true, message: '标题必填' }]">
-        <a-input v-model="form.title" placeholder="请输入标题" />
-      </a-form-item>
-
-      <TapEditor v-model="editorValue" />
-
-    </a-tab-pane>
   </a-tabs>
 </template>
 

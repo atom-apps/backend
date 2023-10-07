@@ -1,6 +1,6 @@
 <template>
-  <div class="editor-fullscreen-mask"></div>
-  <div id="editor" v-if="editor">
+  <div class="editor-fullscreen-mask" :class="{ 'fullscreen': isFullscreen }"></div>
+  <div id="editor" v-if="editor" :class="{ 'fullscreen': isFullscreen }">
     <bubble-menu class="bubble-menu" :tippy-options="{ duration: 100 }" :editor="editor">
       <a-button-group>
         <a-button @click="editor.chain().focus().toggleBold().run()" :class="{ 'is-active': editor.isActive('bold') }">
@@ -78,7 +78,7 @@
         paragraph
       </button> -->
 
-    <a-space :wrap="true">
+    <a-space :wrap="true" class="buttons">
       <!-- image -->
       <!-- 添加图片 -->
       <a-button @click.prevent="addImage">
@@ -144,7 +144,7 @@
       </a-button-group>
 
       <a-button @click.prevent="editor.chain().focus().toggleHighlight().run()"
-          :type="editor.isActive('highlight') ? 'primary' : 'secondary'">
+        :type="editor.isActive('highlight') ? 'primary' : 'secondary'">
         <icon-highlight />
       </a-button>
 
@@ -159,8 +159,11 @@
           :type="editor.isActive('blockquote') ? 'primary' : 'secondary'">
           <icon-quote />
         </a-button>
-
       </a-button-group>
+
+      <a-button @click.prevent="fullscreen" :type="isFullscreen ? 'primary': 'secondary'">
+        <icon-fullscreen />
+      </a-button>
     </a-space>
 
     <editor-content :editor="editor" />
@@ -168,23 +171,23 @@
 </template>
 
 <script>
-import Table from '@tiptap/extension-table'
-import TableCell from '@tiptap/extension-table-cell'
-import TableHeader from '@tiptap/extension-table-header'
-import TableRow from '@tiptap/extension-table-row'
-import StarterKit from '@tiptap/starter-kit'
-import { BubbleMenu, Editor, EditorContent } from '@tiptap/vue-3'
+import Table from '@tiptap/extension-table';
+import TableCell from '@tiptap/extension-table-cell';
+import TableHeader from '@tiptap/extension-table-header';
+import TableRow from '@tiptap/extension-table-row';
+import StarterKit from '@tiptap/starter-kit';
+import { BubbleMenu, Editor, EditorContent } from '@tiptap/vue-3';
 
-import Highlight from '@tiptap/extension-highlight'
-import TextAlign from '@tiptap/extension-text-align'
-import Typography from '@tiptap/extension-typography'
+import Highlight from '@tiptap/extension-highlight';
+import TextAlign from '@tiptap/extension-text-align';
+import Typography from '@tiptap/extension-typography';
 
-import Blockquote from '@tiptap/extension-blockquote'
-import Document from '@tiptap/extension-document'
-import Dropcursor from '@tiptap/extension-dropcursor'
-import Image from '@tiptap/extension-image'
-import Paragraph from '@tiptap/extension-paragraph'
-import Text from '@tiptap/extension-text'
+import Blockquote from '@tiptap/extension-blockquote';
+import Document from '@tiptap/extension-document';
+import Dropcursor from '@tiptap/extension-dropcursor';
+import Image from '@tiptap/extension-image';
+import Paragraph from '@tiptap/extension-paragraph';
+import Text from '@tiptap/extension-text';
 
 export default {
   methods: {
@@ -260,23 +263,74 @@ export default {
     EditorContent,
     BubbleMenu,
   },
+}
+</script>
 
+<script setup>
+import { ref } from "vue";
+
+const isFullscreen = ref(false)
+
+const fullscreen = () => {
+  isFullscreen.value = !isFullscreen.value
 }
 </script>
 
 
-<style>
-.tiptap {
-}
-</style>
-
 <style lang="scss">
+.editor-fullscreen-mask {
+  display: none;
+  position: fixed;
+
+  &.fullscreen {
+    display: block;
+    background-color: gray;
+    width: 100vw;
+    height: 100vh;
+    z-index: 9999;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+  }
+}
+
+#editor.fullscreen {
+  position: fixed;
+  z-index: 10000;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vw;
+  height: 100vh;
+  background-color: #fdfdfd;
+  overflow: hidden;
+
+  .buttons {
+    padding: 1.25rem;
+    padding-left: 5rem;
+    padding-right: 5rem;
+  }
+
+  .tiptap {
+    padding: 5rem;
+    border: none;
+    position: absolute;
+    left: 0;
+    top: 5rem;
+    bottom: 3rem;
+    right: 0;
+    margin-right: -15px;
+    overflow-y: auto;
+  }
+}
+
+
 /* Basic editor styles */
 .tiptap {
-  @apply m-0 p-5 outline-none border border-solid border-gray-100 ;
+  @apply m-0 p-5 outline-none border border-solid border-gray-100;
 
-  height: 300px;
-  overflow-y: auto;
+  min-height: 300px;
 
   ul,
   ol {
@@ -302,7 +356,6 @@ export default {
     color: #FFF;
     font-family: 'JetBrainsMono', monospace;
     padding: 0.75rem 1rem;
-    border-radius: 0.5rem;
 
     code {
       color: inherit;
@@ -320,6 +373,7 @@ export default {
   blockquote {
     padding-left: 1rem;
     border-left: 2px solid rgba(#0D0D0D, 0.1);
+    margin-inline: 0;
   }
 
   hr {
