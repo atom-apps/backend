@@ -118,7 +118,7 @@ const { loading, setLoading } = useLoading(true);
 
 const showUploadModal = ref<boolean>(false);
 
-const uploadAction = computed(() => `/v1/storages/uploads/${queryForm.value.parent_id}`);
+const uploadAction = computed(() => `/v1/storages/uploads/dir/${queryForm.value.parent_id}`);
 const uploadHeaders = computed(() => {
   const token = getToken();
   return {
